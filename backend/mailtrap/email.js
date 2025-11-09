@@ -1,90 +1,78 @@
+import { mailtrapClient, sender } from "./mailtrap.config.js";
 import {
+  VERIFICATION_EMAIL_TEMPLATE,
   PASSWORD_RESET_REQUEST_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,
-  VERIFICATION_EMAIL_TEMPLATE,
 } from "./emailTemplate.js";
-import { mailtrapClient, sender } from "./mailtrap.config.js";
 
 // Send verification email
 export const sendVerificationEmail = async (email, verificationToken) => {
-  const recipients = [{ email }];
-
+  const to = [{ email }];
   try {
     const response = await mailtrapClient.send({
       from: sender,
-      to: recipients,
+      to,
       subject: "Verify your email",
-      html: VERIFICATION_EMAIL_TEMPLATE.replace(
-        "{verificationCode}",
-        verificationToken
-      ),
+      html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", verificationToken),
       category: "Email Verification",
     });
-    console.log("Verification email sent successfully:", response);
+    console.log("Verification email sent:", response);
+    return response;
   } catch (error) {
-    console.error(" Error sending verification email:", error);
-    throw new Error("Error sending verification email");
+    console.error("Error sending verification email:", error);
+    throw error;
   }
 };
 
-// send welcome email
-
 export const sendWelcomeEmail = async (email, name) => {
-	const recipient = [{ email }];
-
-	try {
-		const response = await mailtrapClient.send({
-			from: sender,
-			to: recipient,
-			template_uuid: "7b79d56a-fa66-474e-b3fa-884e3b18a30a",
-			template_variables: {
-				company_info_name: "Farmer Connect",
-				name: name,
-			},
-		});
-
-		console.log("Welcome email sent successfully", response);
-	} catch (error) {
-		console.error(`Error sending welcome email`, error);
-
-		throw new Error(`Error sending welcome email: ${error}`);
-	}
+  const to = [{ email }];
+  try {
+    const response = await mailtrapClient.send({
+      from: sender,
+      to,
+      template_uuid: "7b79d56a-fa66-474e-b3fa-884e3b18a30a",
+      template_variables: { company_info_name: "Farmer Connect", name },
+    });
+    console.log("Welcome email sent:", response);
+    return response;
+  } catch (error) {
+    console.error("Error sending welcome email:", error);
+    throw error;
+  }
 };
 
-// Send password reset email
 export const sendPasswordResetEmail = async (email, resetURL) => {
-  const recipients = [{ email }];
-
+  const to = [{ email }];
   try {
-    await mailtrapClient.send({
+    const response = await mailtrapClient.send({
       from: sender,
-      to: recipients,
-      subject: "Reset your password",
+      to,
+      subject: "Reset Your Password - SAI",
       html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetURL),
       category: "Password Reset",
     });
-    console.log("Password reset email sent successfully");
+    console.log("Password reset email sent:", response);
+    return response;
   } catch (error) {
-    console.error(" Error sending password reset email:", error);
-    throw new Error("Error sending password reset email");
+    console.error("Error sending password reset email:", error);
+    throw error;
   }
 };
 
-// Send reset success email
 export const sendResetSuccessEmail = async (email) => {
-  const recipients = [{ email }];
-
+  const to = [{ email }];
   try {
-    await mailtrapClient.send({
+    const response = await mailtrapClient.send({
       from: sender,
-      to: recipients,
-      subject: "Password Reset Successful",
+      to,
+      subject: "Your password was reset - SAI",
       html: PASSWORD_RESET_SUCCESS_TEMPLATE,
-      category: "Password Reset",
+      category: "Password Reset Success",
     });
-    console.log("✅ Password reset success email sent successfully");
+    console.log("Password reset success email sent:", response);
+    return response;
   } catch (error) {
-    console.error("❌ Error sending reset success email:", error);
-    throw new Error("Error sending reset success email");
+    console.error("Error sending password reset success email:", error);
+    throw error;
   }
 };
