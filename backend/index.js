@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
   res.send('Hello world 123');
 });
 
+app.use(express.json());
+
 app.use("/api/auth",authRoutes);
 
 const PORT = process.env.PORT || 3000;
