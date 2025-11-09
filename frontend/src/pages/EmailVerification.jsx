@@ -1,19 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-// import { useAuthStore } from "../store/authStore"; // Uncomment when backend ready
-
-const useAuthStore = () => ({
-  error: "",
-  isLoading: false,
-  verifyEmail: async (code) => console.log("Verifying code:", code),
-});
+import { useAuthStore } from "../store/authStore";
 
 const EmailVerification = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+
   const { error, isLoading, verifyEmail } = useAuthStore();
 
   const handleChange = (index, value) => {
@@ -22,9 +17,8 @@ const EmailVerification = () => {
       const pastedCode = value.slice(0, 6).split("");
       for (let i = 0; i < 6; i++) newCode[i] = pastedCode[i] || "";
       setCode(newCode);
-      const lastFilledIndex = newCode.findLastIndex((d) => d !== "");
-      const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5;
-      inputRefs.current[focusIndex]?.focus();
+      const nextIndex = newCode.findIndex((d) => d === "");
+      inputRefs.current[nextIndex !== -1 ? nextIndex : 5]?.focus();
     } else {
       newCode[index] = value;
       setCode(newCode);
@@ -41,18 +35,21 @@ const EmailVerification = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const verificationCode = code.join("");
+
+    if (verificationCode.length < 6) {
+      toast.error("Please enter all 6 digits");
+      return;
+    }
+
     try {
-      await verifyEmail(verificationCode);
-      navigate("/");
-      toast.success("Email verified successfully");
+      const response = await verifyEmail(verificationCode);
+      toast.success("Email verified successfully!");
+      navigate("/"); // ✅ Only navigates when server confirms valid code
     } catch (err) {
-      console.log(err);
+      console.error("Verification failed:", err);
+      toast.error("Invalid or expired verification code!");
     }
   };
-
-  useEffect(() => {
-    if (code.every((digit) => digit !== "")) handleSubmit(new Event("submit"));
-  }, [code]);
 
   return (
     <motion.div

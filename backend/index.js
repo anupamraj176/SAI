@@ -3,10 +3,15 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser"; // Required for reading cookies
 import connectDB from "./db/connectDB.js";
 import authRoutes from "./routes/auth.route.js";
+import cors from 'cors'
 
 dotenv.config();
 
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:5173', // frontend URL
+  credentials: true, // allow cookies to be sent
+}));
 
 //  Middlewares
 app.use(express.json()); // Parse JSON requests
