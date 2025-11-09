@@ -1,23 +1,28 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import { useAuthStore } from "../store/authStore"; // ✅ Import Zustand store
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
+  // ✅ Correct destructuring from Zustand store
+  const { login, isLoading, error } = useAuthStore();
+
+  // ✅ Correct login handler
   const handleLogin = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setTimeout(() => {
-      setIsLoading(false);
-      setError("Invalid credentials"); // demo only
-    }, 1500);
+    try {
+      await login(email, password); // ✅ Call login with proper arguments
+      navigate("/"); // ✅ Redirect after successful login
+    } catch (err) {
+      console.error("Login error:", err);
+    }
   };
 
   return (
@@ -56,8 +61,10 @@ const LoginPage = () => {
             </Link>
           </div>
 
+          {/* Error Display */}
           {error && <p className="text-red-500 font-semibold mb-2">{error}</p>}
 
+          {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

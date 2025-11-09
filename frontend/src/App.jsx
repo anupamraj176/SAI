@@ -1,14 +1,15 @@
 import FloatingShape from "./components/FloatingShape.jsx";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import DashBoard from "./components/DashBoard.jsx";
-import { useAuthStore } from "./store/authStore"; 
+import { useAuthStore } from "./store/authStore";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 
-// ✅ ProtectedRoute component
+// ✅ Protected route for authenticated users only
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
@@ -16,7 +17,6 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Check if user exists before accessing isVerified
   if (user && !user.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
@@ -24,12 +24,12 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// ✅ RedirectAuthenticatedUser component
+// ✅ Redirect users who are already logged in
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (isAuthenticated && user?.isVerified) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
@@ -39,20 +39,18 @@ function App() {
   const { isCheckingAuth, checkAuth, isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
-    checkAuth();
+    checkAuth(); // Check auth on mount
   }, [checkAuth]);
-
-  console.log(isAuthenticated, user);
 
   if (isCheckingAuth) {
     return (
-      <div className="text-white text-xl">Checking authentication...</div>
+      <LoadingSpinner/>
     );
   }
 
   return (
     <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-green-950 to-emerald-900">
-      {/* Floating Glows */}
+      {/* Floating Backgrounds */}
       <FloatingShape
         color="bg-green-400"
         size="w-72 h-72"
@@ -99,24 +97,12 @@ function App() {
         opacity="opacity-20"
       />
 
-      {/* ✅ Routes */}
+      {/* Routes */}
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <DashBoard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <RedirectAuthenticatedUser>
-              <SignUpPage />
-            </RedirectAuthenticatedUser>
-          }
-        />
+        {/* Default route → redirects to login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Login route */}
         <Route
           path="/login"
           element={
@@ -125,7 +111,32 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
+
+        {/* Signup route */}
+        <Route
+          path="/signup"
+          element={
+            <RedirectAuthenticatedUser>
+              <SignUpPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
+        {/* After signup → verify email */}
         <Route path="/verify-email" element={<EmailVerification />} />
+
+        {/* After login → Dashboard (protected) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashBoard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback for unknown paths */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
 
       <Toaster />
