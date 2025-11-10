@@ -10,32 +10,32 @@ import authRoutes from "./routes/auth.route.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load env vars with explicit path
 dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
+// ✅ Connect to MongoDB
 connectDB();
 
-// Middlewares
+// ✅ Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
-// API Routes
+// ✅ Routes
 app.use("/api/auth", authRoutes);
 
-// Serve frontend in production
+// ✅ Serve frontend only in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
-  // Fix: Use regular expression instead of wildcard
-  app.get(/.*/, (req, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
   });
 } else {
@@ -44,6 +44,5 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+// ✅ Start Server
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
