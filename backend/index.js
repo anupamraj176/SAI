@@ -1,41 +1,45 @@
 import express from "express";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser"; // Required for reading cookies
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import connectDB from "./db/connectDB.js";
 import authRoutes from "./routes/auth.route.js";
-import cors from 'cors'
 
-dotenv.config();
+// Fix for __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load env vars
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:5173', // frontend URL
-  credentials: true, // allow cookies to be sent
-}));
+const PORT = process.env.PORT || 5000;
 
-//  Middlewares
-app.use(express.json()); // Parse JSON requests
-app.use(cookieParser()); // Parse cookies from the browser
-
-//  Connect to MongoDB
+// Connect to MongoDB
 connectDB();
 
-//  Basic route
-app.get("/", (req, res) => {
-  res.send("Hello world 123");
-});
+// Middlewares
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
-//  Auth routes
+// API Routes
 app.use("/api/auth", authRoutes);
 
-//  Global error handler (optional but recommended)
-app.use((err, req, res, next) => {
-  console.error("Global Error:", err.stack);
-  res.status(500).json({ success: false, message: "Internal Server Error" });
-});
+// Serve frontend
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
+  
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+  });
+}
 
-//  Start server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(` Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
