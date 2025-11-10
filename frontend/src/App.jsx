@@ -1,15 +1,17 @@
 import FloatingShape from "./components/FloatingShape.jsx";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import EmailVerification from "./pages/EmailVerification.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx"; // ✅ Corrected import
+import ResetPasswordPage from "./pages/ResetPasswordPage.jsx"; // ✅ Added import
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import DashBoard from "./components/DashBoard.jsx";
 import { useAuthStore } from "./store/authStore";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 
-// ✅ Protected route for authenticated users only
+// ✅ Protected route for authenticated users
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
@@ -36,16 +38,14 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 function App() {
-  const { isCheckingAuth, checkAuth, isAuthenticated, user } = useAuthStore();
+  const { isCheckingAuth, checkAuth } = useAuthStore();
 
   useEffect(() => {
-    checkAuth(); // Check auth on mount
+    checkAuth();
   }, [checkAuth]);
 
   if (isCheckingAuth) {
-    return (
-      <LoadingSpinner/>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -97,7 +97,7 @@ function App() {
         opacity="opacity-20"
       />
 
-      {/* Routes */}
+      {/* ✅ All routes INSIDE <Routes> */}
       <Routes>
         {/* Default route → redirects to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -122,10 +122,32 @@ function App() {
           }
         />
 
-        {/* After signup → verify email */}
+        {/* Forgot Password */}
+        <Route
+          path="/forgot-password"
+          element={
+            <RedirectAuthenticatedUser>
+              <ForgotPasswordPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
+        {/* Reset Password ✅ Now inside <Routes> */}
+        <Route
+          path="/reset-password/:token"
+          element={
+            <RedirectAuthenticatedUser>
+              <ResetPasswordPage />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+        {/* Email Verification */}
         <Route path="/verify-email" element={<EmailVerification />} />
 
-        {/* After login → Dashboard (protected) */}
+        {/* Dashboard (Protected) */}
         <Route
           path="/dashboard"
           element={
@@ -135,7 +157,7 @@ function App() {
           }
         />
 
-        {/* Fallback for unknown paths */}
+        {/* Fallback for invalid URLs */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
 
