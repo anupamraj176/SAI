@@ -7,12 +7,11 @@ import { fileURLToPath } from "url";
 import connectDB from "./db/connectDB.js";
 import authRoutes from "./routes/auth.route.js";
 
-// Fix for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load env vars
-dotenv.config({ path: path.join(__dirname, '.env') });
+// Load env vars with explicit path
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,21 +24,26 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   origin: process.env.FRONTEND_URL,
-  credentials: true
+  credentials: true,
 }));
 
 // API Routes
 app.use("/api/auth", authRoutes);
 
-// Serve frontend
+// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
-  
-  app.get("/*", (req, res) => {
+
+  // Fix: Use regular expression instead of wildcard
+  app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running...");
   });
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
