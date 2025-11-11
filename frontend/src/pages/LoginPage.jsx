@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
-import { useAuthStore } from "../store/authStore"; // ✅ Import Zustand store
+import { useAuthStore } from "../store/authStore"; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -11,15 +11,15 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  // ✅ Correct destructuring from Zustand store
+  
   const { login, isLoading, error } = useAuthStore();
 
-  // ✅ Correct login handler
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password); // ✅ Call login with proper arguments
-      navigate("/"); // ✅ Redirect after successful login
+      await login(email, password); 
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err);
     }
