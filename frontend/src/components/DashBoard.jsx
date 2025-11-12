@@ -1,77 +1,155 @@
+"use client";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
-import { formatDate } from "../utils/date";
+import FarmerNavbar from "./FarmerNavbar";
+import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
+import { OrbitControls, Environment, useGLTF, RenderTexture } from "@react-three/drei";
+import { Suspense } from "react";
+
+// 🍃 Floating leaf animation component
+const FloatingLeaves = () => {
+  const leaves = Array.from({ length:15 });
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {leaves.map((_, i) => (
+        <motion.img
+          key={i}
+          src="../assets/leaf.png"
+          alt="Leaf"
+          className="absolute opacity-70"
+          style={{
+            width: `${Math.random() * 15 + 20}px`,
+            height: `${Math.random() * 15 + 20}px`,
+          }}
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: -50,
+            rotate: 0,
+          }}
+          animate={{
+            y: [-50, window.innerHeight + 50],
+            rotate: [0, 360],
+            x: [
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerWidth,
+            ],
+            opacity: [0.7, 0.9, 0.6],
+          }}
+          transition={{
+            duration: 10 + Math.random() * 6,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 5,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// 🌳 Mango Tree 3D model loader
+const MangoTree = () => {
+  const { scene } = useGLTF("/models/mango_tree.glb");
+
+  // Fix dark or black materials
+  scene.traverse((child) => {
+    if (child.isMesh) {
+      child.material.side = THREE.DoubleSide;
+      child.material.toneMapped = true;
+      if (child.material.map) {
+        child.material.map.encoding = THREE.sRGBEncoding;
+      }
+    }
+  });
+
+  return <primitive object={scene} scale={1.5} position={[0, -5, 0]} />;
+};
 
 const Dashboard = () => {
-	const { user, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
-	const handleLogout = () => {
-		logout();
-	};
-	return (
-		<motion.div
-			initial={{ opacity: 0, scale: 0.9 }}
-			animate={{ opacity: 1, scale: 1 }}
-			exit={{ opacity: 0, scale: 0.9 }}
-			transition={{ duration: 0.5 }}
-			className='max-w-md w-full mx-auto mt-10 p-8 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl border border-gray-800'
-		>
-			<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-600 text-transparent bg-clip-text'>
-				Dashboard
-			</h2>
+  const handleLogout = () => {
+    logout();
+  };
 
-			<div className='space-y-6'>
-				<motion.div
-					className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.2 }}
-				>
-					<h3 className='text-xl font-semibold text-green-400 mb-3'>Profile Information</h3>
-					<p className='text-gray-300'>Name: {user.name}</p>
-					<p className='text-gray-300'>Email: {user.email}</p>
-				</motion.div>
-				<motion.div
-					className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.4 }}
-				>
-					<h3 className='text-xl font-semibold text-green-400 mb-3'>Account Activity</h3>
-					<p className='text-gray-300'>
-						<span className='font-bold'>Joined: </span>
-						{new Date(user.createdAt).toLocaleDateString("en-US", {
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						})}
-					</p>
-					<p className='text-gray-300'>
-						<span className='font-bold'>Last Login: </span>
+  return (
+    <>
+      {/* 🌾 Navbar */}
+      <FarmerNavbar onLogout={handleLogout} user={user} />
 
-						{formatDate(user.lastLogin)}
-					</p>
-				</motion.div>
-			</div>
+      {/* 🌿 Dashboard Section */}
+      <section className="bg-[#FFD9A0] relative h-screen flex items-center justify-center overflow-hidden">
+        {/* 🍃 Floating Leaves */}
+        <FloatingLeaves />
 
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ delay: 0.6 }}
-				className='mt-4'
-			>
-				<motion.button
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
-					onClick={handleLogout}
-					className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900'
-				>
-					Logout
-				</motion.button>
-			</motion.div>
-		</motion.div>
-	);
+        {/* 🪴 Dashboard Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="grid max-w-7xl px-6 py-16 md:grid-cols-2 md:items-center gap-10 relative z-10"
+        >
+          {/* 🌱 Left Section */}
+          <div className="max-w-prose space-y-5">
+            <h1 className="text-5xl font-extrabold text-[#8C2F2B] leading-tight sm:text-6xl">
+              Cultivating Growth and{" "}
+              <span className="text-[#FF8C42]">Sustainable</span> Harvests
+            </h1>
+            <p className="text-lg text-[#2B2B2B]/90 leading-relaxed">
+              We connect farmers directly with consumers, offering fresh,
+              locally-sourced produce while ensuring fair practices and soil
+              health for a better tomorrow.
+            </p>
+
+            <div className="flex gap-5 mt-8">
+              <a
+                href="#"
+                className="rounded-xl bg-[#C24C30] px-6 py-3 text-white font-semibold shadow-md hover:bg-[#E66A32] transition-all"
+              >
+                🌿 Shop Produce
+              </a>
+              <a
+                href="#"
+                className="rounded-xl border border-[#FF8C42] px-6 py-3 text-[#8C2F2B] font-semibold shadow-md hover:bg-[#FF8C42] hover:text-white transition-all"
+              >
+                🌳 Meet Our Farmers
+              </a>
+            </div>
+          </div>
+
+          <div className="w-[600px] h-[900px] ml-10 overflow-hidden">
+            <Canvas
+              camera={{ position: [10, 0, 10] }}
+              gl={{ physicallyCorrectLights: true }}
+            >
+              {/* 🌤 Proper lighting setup */}
+              <ambientLight intensity={1.2} />
+              <directionalLight position={[2, 4, 2]} intensity={1.5} />
+
+              {/* 🪴 Load Tree Model */}
+              <Suspense fallback={null}>
+                <MangoTree />
+                <Environment preset="sunset" />
+              </Suspense>
+
+              {/* 🎥 Camera Controls */}
+              <OrbitControls
+                enablePan={false}
+                enableZoom={false}
+                autoRotate
+                autoRotateSpeed={0.8}
+              />
+            </Canvas>
+          </div>
+
+        </motion.div>
+      </section>
+    </>
+  );
 };
+
 export default Dashboard;
+
+// ✅ Preload the model for performance
+useGLTF.preload("/models/mango_tree.glb");
