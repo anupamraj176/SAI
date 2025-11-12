@@ -4,12 +4,12 @@ import { useAuthStore } from "../store/authStore";
 import FarmerNavbar from "./FarmerNavbar";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { OrbitControls, Environment, useGLTF, RenderTexture } from "@react-three/drei";
+import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
 import { Suspense } from "react";
 
 // 🍃 Floating leaf animation component
 const FloatingLeaves = () => {
-  const leaves = Array.from({ length:15 });
+  const leaves = Array.from({ length: 15 });
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {leaves.map((_, i) => (
@@ -48,21 +48,18 @@ const FloatingLeaves = () => {
   );
 };
 
-// 🌳 Mango Tree 3D model loader
+// 🌳 Mango Tree 3D model loader (✅ reverted to original lighting)
 const MangoTree = () => {
   const { scene } = useGLTF("/models/mango_tree.glb");
 
-  // Fix dark or black materials
+  // Keep original properties (no tone mapping changes)
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material.side = THREE.DoubleSide;
-      child.material.toneMapped = true;
-      if (child.material.map) {
-        child.material.map.encoding = THREE.sRGBEncoding;
-      }
     }
   });
 
+  // ✅ same as your original scale & position
   return <primitive object={scene} scale={1.5} position={[0, -5, 0]} />;
 };
 
@@ -75,15 +72,11 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* 🌾 Navbar */}
       <FarmerNavbar onLogout={handleLogout} user={user} />
 
-      {/* 🌿 Dashboard Section */}
       <section className="bg-[#FFD9A0] relative h-screen flex items-center justify-center overflow-hidden">
-        {/* 🍃 Floating Leaves */}
         <FloatingLeaves />
 
-        {/* 🪴 Dashboard Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -118,22 +111,20 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* 🌳 Right Section (✅ original view restored) */}
           <div className="w-[600px] h-[900px] ml-10 overflow-hidden">
             <Canvas
               camera={{ position: [10, 0, 10] }}
               gl={{ physicallyCorrectLights: true }}
             >
-              {/* 🌤 Proper lighting setup */}
               <ambientLight intensity={1.2} />
               <directionalLight position={[2, 4, 2]} intensity={1.5} />
 
-              {/* 🪴 Load Tree Model */}
               <Suspense fallback={null}>
                 <MangoTree />
                 <Environment preset="sunset" />
               </Suspense>
 
-              {/* 🎥 Camera Controls */}
               <OrbitControls
                 enablePan={false}
                 enableZoom={false}
@@ -142,7 +133,6 @@ const Dashboard = () => {
               />
             </Canvas>
           </div>
-
         </motion.div>
       </section>
     </>
@@ -151,5 +141,5 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-// ✅ Preload the model for performance
+// ✅ Preload model
 useGLTF.preload("/models/mango_tree.glb");
