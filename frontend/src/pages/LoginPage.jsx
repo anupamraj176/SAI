@@ -10,15 +10,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-
-  
   const { login, isLoading, error } = useAuthStore();
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password); 
+      await login(email, password);
       navigate("/");
     } catch (err) {
       console.error("Login error:", err);
@@ -30,12 +27,13 @@ const LoginPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="z-40 max-w-md w-full bg-black/40 backdrop-blur-xl border border-white/5 
-                 rounded-2xl shadow-xl overflow-hidden"
+      className="z-40 max-w-md w-full bg-[#2B2B2B]/90 backdrop-blur-xl border border-[#C24C30]/30 
+                 rounded-2xl shadow-2xl overflow-hidden"
     >
       {/* Main Card */}
       <div className="p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r 
+                       from-[#FBC42E] via-[#E66A32] to-[#C24C30] text-transparent bg-clip-text">
           Welcome Back
         </h2>
 
@@ -56,22 +54,22 @@ const LoginPage = () => {
           />
 
           <div className="flex items-center justify-between mb-6">
-            <Link to="/forgot-password" className="text-sm text-green-400 hover:underline">
+            <Link to="/forgot-password" className="text-sm text-[#FFD9A0] hover:text-[#FBC42E] transition-colors">
               Forgot password?
             </Link>
           </div>
 
           {/* Error Display */}
-          {error && <p className="text-red-500 font-semibold mb-2">{error}</p>}
+          {error && <p className="text-[#8C2F2B] font-semibold mb-2">{error}</p>}
 
           {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-                       font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 
-                       focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
-                       focus:ring-offset-gray-900 transition duration-200"
+            className="w-full py-3 px-4 bg-gradient-to-r from-[#E66A32] to-[#C24C30] text-white 
+                       font-bold rounded-lg shadow-lg hover:from-[#C24C30] hover:to-[#8C2F2B] 
+                       focus:outline-none focus:ring-2 focus:ring-[#FBC42E]/60 focus:ring-offset-2 
+                       focus:ring-offset-[#2B2B2B] transition duration-200"
             type="submit"
             disabled={isLoading}
           >
@@ -85,10 +83,10 @@ const LoginPage = () => {
       </div>
 
       {/* Footer */}
-      <div className="px-8 py-4 bg-gray-900 bg-opacity-30 flex justify-center">
-        <p className="text-sm text-gray-400">
+      <div className="px-8 py-4 bg-[#1a1a1a] bg-opacity-60 flex justify-center">
+        <p className="text-sm text-[#FFD9A0]">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-green-400 hover:underline">
+          <Link to="/signup" className="text-[#FBC42E] hover:text-[#E66A32] transition-colors">
             Sign up
           </Link>
         </p>
