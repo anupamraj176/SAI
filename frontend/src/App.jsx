@@ -1,109 +1,101 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
+
+// USER store
 import { useAuthStore } from "./store/authStore";
-import LoadingSpinner from "./components/LoadingSpinner.jsx";
-import DashBoard from "./components/DashBoard.jsx";
 
-import SignUpPage from "./pages/SignUpPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import EmailVerification from "./pages/EmailVerification.jsx";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
-import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
-import AuthLayout from "./layouts/AuthLayout.jsx"; // ✅ NEW IMPORT
+// SELLER store
+import { useSellerAuthStore } from "./seller/store/sellerAuthStore";
 
-// ✅ Protected route
-const ProtectedRoute = ({ children }) => {
+// Layouts
+import AuthLayout from "./layouts/AuthLayout";
+import LoadingSpinner from "./components/LoadingSpinner";
+
+// Public Homepage
+import HomePage from "./pages/HomePage";
+
+// USER pages
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import EmailVerification from "./pages/EmailVerification";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import UserDashboard from "./pages/UserDashboard";
+
+// SELLER pages
+import SellerLogin from "./seller/pages/SellerLogin";
+import SellerSignup from "./seller/pages/SellerSignup";
+import SellerEmailVerification from "./seller/pages/SellerEmailVerification";
+import SellerForgotPassword from "./seller/pages/SellerForgotPassword";
+import SellerResetPassword from "./seller/pages/SellerResetPassword";
+import SellerDashboard from "./seller/pages/SellerDashboard";
+
+// USER Protected Route
+const UserProtected = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user && !user.isVerified) return <Navigate to="/verify-email" replace />;
+  if (!user?.isVerified) return <Navigate to="/verify-email" replace />;
   return children;
 };
 
-// ✅ Redirect logged-in users away from auth pages
-const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  if (isAuthenticated && user?.isVerified) return <Navigate to="/dashboard" replace />;
+// SELLER Protected Route
+const SellerProtected = ({ children }) => {
+  const { isAuthenticated, seller } = useSellerAuthStore();
+  if (!isAuthenticated) return <Navigate to="/seller/login" replace />;
+  if (!seller?.isVerified) return <Navigate to="/seller/verify-email" replace />;
   return children;
 };
 
 function App() {
   const { isCheckingAuth, checkAuth } = useAuthStore();
+  const { isCheckingSellerAuth, checkSellerAuth } = useSellerAuthStore();
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+    checkSellerAuth();
+  }, []);
 
-  if (isCheckingAuth) return <LoadingSpinner />;
+  if (isCheckingAuth || isCheckingSellerAuth) return <LoadingSpinner />;
 
   return (
     <Routes>
-      {/* Redirect root to login */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/* ✅ AUTH ROUTES WITH AuthLayout */}
-      <Route
-        path="/login"
-        element={
-          <AuthLayout>
-            <RedirectAuthenticatedUser>
-              <LoginPage />
-            </RedirectAuthenticatedUser>
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/signup"
-        element={
-          <AuthLayout>
-            <RedirectAuthenticatedUser>
-              <SignUpPage />
-            </RedirectAuthenticatedUser>
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/forgot-password"
-        element={
-          <AuthLayout>
-            <RedirectAuthenticatedUser>
-              <ForgotPasswordPage />
-            </RedirectAuthenticatedUser>
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/reset-password/:token"
-        element={
-          <AuthLayout>
-            <RedirectAuthenticatedUser>
-              <ResetPasswordPage />
-            </RedirectAuthenticatedUser>
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/verify-email"
-        element={
-          <AuthLayout>
-            <EmailVerification />
-          </AuthLayout>
-        }
-      />
+      {/* PUBLIC HOME PAGE */}
+      <Route path="/" element={<HomePage />} />
 
-      {/* ✅ MAIN WEBSITE ROUTES (no background) */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashBoard />
-          </ProtectedRoute>
-        }
-      />
+      {/* USER AUTH ROUTES */}
+      <Route path="/login" element={<AuthLayout><LoginPage /></AuthLayout>} />
+      <Route path="/signup" element={<AuthLayout><SignUpPage /></AuthLayout>} />
+      <Route path="/verify-email" element={<AuthLayout><EmailVerification /></AuthLayout>} />
+      <Route path="/forgot-password" element={<AuthLayout><ForgotPasswordPage /></AuthLayout>} />
+      <Route path="/reset-password/:token" element={<AuthLayout><ResetPasswordPage /></AuthLayout>} />
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* USER DASHBOARD */}
+      <Route path="/user/dashboard" element={
+        <UserProtected>
+          <UserDashboard />
+        </UserProtected>
+      } />
+
+      {/* SELLER AUTH ROUTES */}
+      <Route path="/seller/login" element={<AuthLayout><SellerLogin /></AuthLayout>} />
+      <Route path="/seller/signup" element={<AuthLayout><SellerSignup /></AuthLayout>} />
+      <Route path="/seller/verify-email" element={<AuthLayout><SellerEmailVerification /></AuthLayout>} />
+      <Route path="/seller/forgot-password" element={<AuthLayout><SellerForgotPassword /></AuthLayout>} />
+      <Route path="/seller/reset-password/:token" element={<AuthLayout><SellerResetPassword /></AuthLayout>} />
+
+      {/* SELLER DASHBOARD */}
+      <Route path="/seller/dashboard" element={
+        <SellerProtected>
+          <SellerDashboard />
+        </SellerProtected>
+      } />
+
+      {/* FALLBACK */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }
 
-export default App;
+export default App; 

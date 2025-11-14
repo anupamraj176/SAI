@@ -5,7 +5,9 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./db/connectDB.js";
-import authRoutes from "./routes/auth.route.js";
+
+import userAuthRoutes from "./routes/userAuth.route.js";
+import sellerAuthRoutes from "./routes/sellerAuth.route.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,10 +17,10 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Connect to MongoDB
+// 🔗 Connect DB
 connectDB();
 
-// ✅ Middleware
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -28,21 +30,15 @@ app.use(
   })
 );
 
-// ✅ Routes
-app.use("/api/auth", authRoutes);
+// API Routes
+app.use("/api/user/auth", userAuthRoutes);
+app.use("/api/seller/auth", sellerAuthRoutes);
 
-// ✅ Serve frontend only in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running...");
-  });
-}
-
-// ✅ Start Server
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+// Start Server
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+);

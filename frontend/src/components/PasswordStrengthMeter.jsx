@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import { Check, X } from "lucide-react";
 
 const PasswordCriteria = ({ password }) => {
@@ -13,14 +15,8 @@ const PasswordCriteria = ({ password }) => {
     <div className="mt-2 space-y-1">
       {criteria.map((item) => (
         <div key={item.label} className="flex items-center text-xs">
-          {item.met ? (
-            <Check className="size-4 text-[#FBC42E] mr-2" /> 
-          ) : (
-            <X className="size-4 text-[#C24C30] mr-2" />      
-          )}
-          <span className={item.met ? "text-[#FFD9A0]" : "text-[#8C2F2B]"}>
-            {item.label}
-          </span>
+          {item.met ? <Check className="size-4 text-[#FBC42E] mr-2" /> : <X className="size-4 text-[#C24C30] mr-2" />}
+          <span className={item.met ? "text-[#FFD9A0]" : "text-[#8C2F2B]"}>{item.label}</span>
         </div>
       ))}
     </div>
@@ -39,11 +35,11 @@ const PasswordStrengthMeter = ({ password }) => {
   const strength = getStrength(password);
 
   const getColor = (strength) => {
-    if (strength === 0) return "bg-[#8C2F2B]"; // Deep Maroon
-    if (strength === 1) return "bg-[#C24C30]"; // Brick Rust
-    if (strength === 2) return "bg-[#E66A32]"; // Burnt Paprika
-    if (strength === 3) return "bg-[#FBC42E]"; // Saffron Fire
-    return "bg-[#FFD9A0]"; // Sand Nougat
+    if (strength === 0) return "bg-[#8C2F2B]";
+    if (strength === 1) return "bg-[#C24C30]";
+    if (strength === 2) return "bg-[#E66A32]";
+    if (strength === 3) return "bg-[#FBC42E]";
+    return "bg-[#FFD9A0]";
   };
 
   const getStrengthText = (strength) => {
@@ -63,13 +59,10 @@ const PasswordStrengthMeter = ({ password }) => {
 
       <div className="flex space-x-1">
         {[...Array(4)].map((_, index) => (
-          <div
-            key={index}
-            className={`h-1 w-1/4 rounded-full transition-colors duration-300 
-              ${index < strength ? getColor(strength) : "bg-[#2B2B2B]"}`}
-          />
+          <div key={index} className={`h-1 w-1/4 rounded-full transition-colors duration-300 ${index < strength ? getColor(strength) : "bg-[#2B2B2B]"}`} />
         ))}
       </div>
+
       <PasswordCriteria password={password} />
     </div>
   );

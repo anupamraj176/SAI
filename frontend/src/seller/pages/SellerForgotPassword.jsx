@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import { useSellerAuthStore } from "../store/sellerAuthStore";
 
-const ForgotPasswordPage = () => {
+const SellerForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const { forgotPassword, isLoading } = useAuthStore();
+  const { forgotPassword, isLoading } = useSellerAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,19 +30,19 @@ const ForgotPasswordPage = () => {
           className="text-3xl font-bold mb-6 text-center bg-gradient-to-r 
                      from-[#FBC42E] via-[#E66A32] to-[#C24C30] text-transparent bg-clip-text"
         >
-          Forgot Password
+          Seller Forgot Password
         </h2>
 
         {!submitted ? (
           <form onSubmit={handleSubmit}>
             <p className="text-[#FFD9A0]/80 mb-6 text-center">
-              Enter your email, and we’ll send you a link to reset your password.
+              Enter your seller email, and we’ll send you a link to reset your password.
             </p>
 
             <Input
               icon={Mail}
               type="email"
-              placeholder="Email Address"
+              placeholder="Seller Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -86,14 +86,14 @@ const ForgotPasswordPage = () => {
       {/* Back to Login Footer */}
       <div className="px-8 py-4 bg-[#1a1a1a]/60 flex justify-center">
         <Link
-          to={"/login"}
+          to={"/seller/login"}
           className="text-sm text-[#FBC42E] hover:text-[#E66A32] hover:underline flex items-center transition-colors"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Seller Login
         </Link>
       </div>
     </motion.div>
   );
 };
 
-export default ForgotPasswordPage;
+export default SellerForgotPassword;

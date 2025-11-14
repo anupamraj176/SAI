@@ -1,10 +1,10 @@
-// src/components/LoadingSpinner.jsx
+"use client";
 import { motion } from "framer-motion";
+import React from "react";
 
 const LoadingSpinner = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen 
-                    bg-gradient-to-br from-[#1a1a1a] via-[#2B2B2B] to-[#8C2F2B] text-[#FFD9A0]">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#1a1a1a] via-[#2B2B2B] to-[#8C2F2B] text-[#FFD9A0]">
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
