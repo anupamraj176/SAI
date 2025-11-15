@@ -26,7 +26,7 @@ const EmailVerification = () => {
     try {
       await verifyEmail(finalCode);
       toast.success("Email Verified!");
-      navigate("/user/dashboard");
+      navigate("/login");
     } catch {
       toast.error("Invalid or expired code");
     }
