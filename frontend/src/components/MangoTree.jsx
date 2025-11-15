@@ -8,8 +8,9 @@ const MangoTree = () => {
 
   scene.traverse((child) => {
     if (child.isMesh) {
-      // prevent issues with single-sided materials
       child.material.side = THREE.DoubleSide;
+      child.material.emissive = new THREE.Color("#ffb06b");
+      child.material.emissiveIntensity = 0.03;
     }
   });
 
