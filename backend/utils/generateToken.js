@@ -43,3 +43,27 @@ export const clearUserToken = (res) => {
 export const clearSellerToken = (res) => {
   res.clearCookie("seller_token");
 };
+
+// GENERATE AUTH TOKEN
+export const generateAuthToken = (payload, secret, expiresIn = "7d") => {
+  // payload must include { id, role }
+  const token = jwt.sign(payload, secret, { expiresIn });
+
+  return token;
+};
+
+// GENERATE TOKEN AND SET COOKIE
+export const generateTokenAndSetCookie = (res, userId, role) => {
+  const token = jwt.sign({ userId, role }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  res.cookie("token", token, {
+    httpOnly: true, // prevents XSS attacks
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict", // prevents CSRF attacks
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return token;
+};

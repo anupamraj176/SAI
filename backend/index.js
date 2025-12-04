@@ -1,44 +1,22 @@
 import express from "express";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 import connectDB from "./db/connectDB.js";
+import authRoutes from "./routes/auth.route.js";
 
-import userAuthRoutes from "./routes/userAuth.route.js";
-import sellerAuthRoutes from "./routes/sellerAuth.route.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: path.join(__dirname, ".env") });
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 🔗 Connect DB
-connectDB();
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(express.json()); // allows us to parse incoming requests:req.body
+app.use(cookieParser()); // allows us to parse incoming cookies
 
-// Middleware
-app.use(express.json());
-app.use(cookieParser());
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  })
-);
+app.use("/api/auth", authRoutes);
 
-// API Routes
-app.use("/api/user/auth", userAuthRoutes);
-app.use("/api/seller/auth", sellerAuthRoutes);
-
-app.get("/", (req, res) => {
-  res.send("API is running...");
+app.listen(PORT, () => {
+  connectDB();
+  console.log("Server is running on port: ", PORT);
 });
-
-// Start Server
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);

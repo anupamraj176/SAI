@@ -4,7 +4,7 @@ import { formatDate } from "../utils/date";
 import FarmerNavbar from "../components/FarmerNavbar";
 import { useNavigate } from "react-router-dom";
 
-const UserDashboard = () => {
+const SellerDashboard = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const UserDashboard = () => {
           className="max-w-md w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl border border-[#8C2F2B]/50 p-8"
         >
           <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
-            User Dashboard
+            Seller Dashboard
           </h2>
 
           <div className="space-y-6">
@@ -35,16 +35,11 @@ const UserDashboard = () => {
               transition={{ delay: 0.2 }}
               className="p-4 bg-black/30 rounded-lg border border-[#8C2F2B]/30"
             >
-              <h3 className="text-xl font-semibold text-[#FF8C42] mb-3">
-                Profile Information
-              </h3>
+              <h3 className="text-xl font-semibold text-[#FF8C42] mb-3">Profile Information</h3>
               <p className="text-gray-300">Name: {user.name}</p>
               <p className="text-gray-300">Email: {user.email}</p>
               <p className="text-gray-300">
-                Role:{" "}
-                <span className="uppercase font-bold text-[#E66A32]">
-                  {user.role}
-                </span>
+                Role: <span className="uppercase font-bold text-[#E66A32]">{user.role}</span>
               </p>
             </motion.div>
 
@@ -54,9 +49,7 @@ const UserDashboard = () => {
               transition={{ delay: 0.4 }}
               className="p-4 bg-black/30 rounded-lg border border-[#8C2F2B]/30"
             >
-              <h3 className="text-xl font-semibold text-[#FF8C42] mb-3">
-                Account Activity
-              </h3>
+              <h3 className="text-xl font-semibold text-[#FF8C42] mb-3">Account Activity</h3>
               <p className="text-gray-300">
                 <span className="font-bold">Joined: </span>
                 {new Date(user.createdAt).toLocaleDateString("en-US", {
@@ -93,4 +86,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default SellerDashboard;

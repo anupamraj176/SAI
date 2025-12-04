@@ -1,16 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
-import React from "react";
 
 const LoadingSpinner = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#1a1a1a] via-[#2B2B2B] to-[#8C2F2B] text-[#FFD9A0]">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center relative overflow-hidden">
       <motion.div
+        className="w-16 h-16 border-4 border-t-4 border-t-green-500 border-green-200 rounded-full"
         animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
-        className="w-16 h-16 border-4 border-t-[#FBC42E] border-[#C24C30] rounded-full"
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       />
-      <p className="mt-4 text-lg font-semibold text-[#FBC42E]">Loading...</p>
     </div>
   );
 };

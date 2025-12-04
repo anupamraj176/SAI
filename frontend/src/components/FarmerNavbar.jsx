@@ -3,19 +3,21 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { useAuthStore } from "../store/authStore";
-import { useSellerAuthStore } from "../seller/store/sellerAuthStore";
-import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle, FaLeaf } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function FarmerNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { logout: userLogout } = useAuthStore();
-  const { logout: sellerLogout } = useSellerAuthStore();
+  // Unified Auth Store
+  const { logout, isAuthenticated, user } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await Promise.allSettled([userLogout(), sellerLogout()]);
+      await logout();
+      navigate("/");
+      setMenuOpen(false);
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -42,6 +44,7 @@ export default function FarmerNavbar() {
             src="/assets/farmer-logo.png"
             alt="Farmer Logo"
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-12 md:h-12 drop-shadow-sm"
+            onError={(e) => {e.target.style.display='none'}} // Fallback if image missing
           />
           <span className="text-base sm:text-lg font-bold text-[#C24C30] tracking-wide whitespace-nowrap">
             Farmer<span className="text-[#FF8C42]">Hub</span>
@@ -67,40 +70,58 @@ export default function FarmerNavbar() {
         {/* RIGHT BUTTONS */}
         <div className="flex items-center gap-2 md:gap-3">
 
-          {/* USER BUTTON (hidden on mobile) */}
-          <Link to="/login" className="hidden md:block">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 rounded-xl bg-[#C24C30] px-5 py-2 text-sm 
-              font-semibold text-white shadow-sm hover:bg-[#E66A32] transition-all"
-            >
-              <FaUserAlt /> User
-            </motion.button>
-          </Link>
+          {!isAuthenticated ? (
+            <>
+              {/* USER BUTTON (hidden on mobile) */}
+              <Link to="/login" className="hidden md:block">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-xl bg-[#C24C30] px-5 py-2 text-sm 
+                  font-semibold text-white shadow-sm hover:bg-[#E66A32] transition-all"
+                >
+                  <FaUserAlt /> User
+                </motion.button>
+              </Link>
 
-          {/* SELLER BUTTON (hidden on mobile) */}
-          <Link to="/seller/login" className="hidden md:block">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 rounded-xl border border-[#FF8C42] px-5 py-2 
-              text-sm font-semibold text-[#8C2F2B] hover:bg-[#FF8C42] hover:text-white transition-all"
-            >
-              <FaStore /> Seller
-            </motion.button>
-          </Link>
+              {/* SELLER BUTTON (hidden on mobile) */}
+              <Link to="/login/seller" className="hidden md:block">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-xl border border-[#FF8C42] px-5 py-2 
+                  text-sm font-semibold text-[#8C2F2B] hover:bg-[#FF8C42] hover:text-white transition-all"
+                >
+                  <FaStore /> Seller
+                </motion.button>
+              </Link>
+            </>
+          ) : (
+            <>
+               {/* DASHBOARD BUTTON */}
+               <Link to={user?.role === 'seller' ? "/seller/dashboard" : "/dashboard"} className="hidden md:block">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-xl bg-[#C24C30] px-5 py-2 text-sm 
+                  font-semibold text-white shadow-sm hover:bg-[#E66A32] transition-all"
+                >
+                  <FaLeaf /> Dashboard
+                </motion.button>
+              </Link>
 
-          {/* LOGOUT ALWAYS VISIBLE (unless you want it hidden too) */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleLogout}
-            className="flex items-center gap-2 rounded-xl bg-[#8C2F2B] px-5 py-2 text-sm 
-            font-semibold text-white shadow-sm hover:bg-[#C24C30] transition-all"
-          >
-            <FaSignOutAlt /> Logout
-          </motion.button>
+              {/* LOGOUT ALWAYS VISIBLE IF AUTHENTICATED */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleLogout}
+                className="flex items-center gap-2 rounded-xl bg-[#8C2F2B] px-5 py-2 text-sm 
+                font-semibold text-white shadow-sm hover:bg-[#C24C30] transition-all"
+              >
+                <FaSignOutAlt /> Logout
+              </motion.button>
+            </>
+          )}
 
           {/* MOBILE MENU ICON */}
           <button
@@ -136,43 +157,58 @@ export default function FarmerNavbar() {
                 </li>
               ))}
 
-              {/* MOBILE USER */}
-              <li>
-                <Link
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
-                  font-semibold shadow-md hover:bg-[#E66A32] transition-all"
-                >
-                  <FaUserCircle /> User
-                </Link>
-              </li>
+              {!isAuthenticated ? (
+                <>
+                  {/* MOBILE USER */}
+                  <li>
+                    <Link
+                      to="/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#E66A32] transition-all"
+                    >
+                      <FaUserCircle /> User Login
+                    </Link>
+                  </li>
 
-              {/* MOBILE SELLER */}
-              <li>
-                <Link
-                  to="/seller/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 w-full rounded-md border border-[#FF8C42] px-4 py-2 
-                  text-[#8C2F2B] font-semibold hover:bg-[#FF8C42] hover:text-white transition-all"
-                >
-                  <FaStore /> Seller
-                </Link>
-              </li>
+                  {/* MOBILE SELLER */}
+                  <li>
+                    <Link
+                      to="/login/seller"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 w-full rounded-md border border-[#FF8C42] px-4 py-2 
+                      text-[#8C2F2B] font-semibold hover:bg-[#FF8C42] hover:text-white transition-all"
+                    >
+                      <FaStore /> Seller Login
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                   {/* MOBILE DASHBOARD */}
+                   <li>
+                    <Link
+                      to={user?.role === 'seller' ? "/seller/dashboard" : "/dashboard"}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#E66A32] transition-all"
+                    >
+                      <FaLeaf /> Dashboard
+                    </Link>
+                  </li>
 
-              {/* MOBILE LOGOUT */}
-              <li>
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="flex items-center gap-2 w-full rounded-md bg-[#8C2F2B] px-4 py-2 text-white 
-                  font-semibold shadow-md hover:bg-[#C24C30] transition-all"
-                >
-                  <FaSignOutAlt /> Logout
-                </button>
-              </li>
+                  {/* MOBILE LOGOUT */}
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 w-full rounded-md bg-[#8C2F2B] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#C24C30] transition-all"
+                    >
+                      <FaSignOutAlt /> Logout
+                    </button>
+                  </li>
+                </>
+              )}
 
             </ul>
           </motion.nav>

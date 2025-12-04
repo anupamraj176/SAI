@@ -1,20 +1,20 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useAuthStore } from "../store/authStore";
 import Input from "../components/Input";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage = ({ role = "user" }) => {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { forgotPassword, isLoading } = useAuthStore();
+  const { isLoading, forgotPassword } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await forgotPassword(email);
-    setSubmitted(true);
+    setIsSubmitted(true);
   };
 
   return (
@@ -22,23 +22,18 @@ const ForgotPasswordPage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md w-full bg-[#2B2B2B]/70 backdrop-blur-xl border border-[#C24C30]/40 
-                 rounded-2xl shadow-2xl overflow-hidden"
+      className="max-w-md w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
     >
       <div className="p-8">
-        <h2
-          className="text-3xl font-bold mb-6 text-center bg-gradient-to-r 
-                     from-[#FBC42E] via-[#E66A32] to-[#C24C30] text-transparent bg-clip-text"
-        >
+        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
           Forgot Password
         </h2>
 
-        {!submitted ? (
+        {!isSubmitted ? (
           <form onSubmit={handleSubmit}>
-            <p className="text-[#FFD9A0]/80 mb-6 text-center">
-              Enter your email, and we’ll send you a link to reset your password.
+            <p className="text-gray-300 mb-6 text-center">
+              Enter your email address and we'll send you a link to reset your password.
             </p>
-
             <Input
               icon={Mail}
               type="email"
@@ -47,21 +42,13 @@ const ForgotPasswordPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 px-4 bg-gradient-to-r from-[#E66A32] to-[#C24C30] text-white font-bold 
-                         rounded-lg shadow-lg hover:from-[#C24C30] hover:to-[#8C2F2B] 
-                         focus:outline-none focus:ring-2 focus:ring-[#FBC42E]/60 
-                         focus:ring-offset-2 focus:ring-offset-[#2B2B2B] transition duration-200"
+              className="w-full py-3 px-4 bg-gradient-to-r from-[#C24C30] to-[#E66A32] text-white font-bold rounded-lg shadow-lg hover:from-[#E66A32] hover:to-[#FF8C42] focus:outline-none focus:ring-2 focus:ring-[#FF8C42] focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
               type="submit"
             >
-              {isLoading ? (
-                <Loader className="size-6 animate-spin mx-auto text-[#FBC42E]" />
-              ) : (
-                "Send Reset Link"
-              )}
+              {isLoading ? <Loader className="size-6 animate-spin mx-auto" /> : "Send Reset Link"}
             </motion.button>
           </form>
         ) : (
@@ -70,24 +57,21 @@ const ForgotPasswordPage = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="w-16 h-16 bg-[#FBC42E] rounded-full flex items-center justify-center mx-auto mb-4"
+              className="w-16 h-16 bg-[#FF8C42]/10 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <Mail className="h-8 w-8 text-[#2B2B2B]" />
+              <Mail className="h-8 w-8 text-[#FF8C42]" />
             </motion.div>
-
-            <p className="text-[#FFD9A0]/90 mb-6">
-              If an account exists for{" "}
-              <span className="text-[#FBC42E]">{email}</span>, a reset link has been sent.
+            <p className="text-gray-300 mb-6">
+              If an account exists for {email}, you will receive a password reset link shortly.
             </p>
           </div>
         )}
       </div>
 
-      {/* Back to Login Footer */}
-      <div className="px-8 py-4 bg-[#1a1a1a]/60 flex justify-center">
+      <div className="px-8 py-4 bg-black/20 flex justify-center">
         <Link
-          to={"/login"}
-          className="text-sm text-[#FBC42E] hover:text-[#E66A32] hover:underline flex items-center transition-colors"
+          to={role === "seller" ? "/login/seller" : "/login"}
+          className="text-sm text-[#FF8C42] hover:text-[#FFD9A0] hover:underline flex items-center"
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
         </Link>

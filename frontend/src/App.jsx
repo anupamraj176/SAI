@@ -1,101 +1,135 @@
-import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-
-// USER store
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
+import { Toaster } from "react-hot-toast";
 
-// SELLER store
-import { useSellerAuthStore } from "./seller/store/sellerAuthStore";
-
-// Layouts
-import AuthLayout from "./layouts/AuthLayout";
+// Components
 import LoadingSpinner from "./components/LoadingSpinner";
+import FloatingShape from "./components/FloatingShape";
 
-// Public Homepage
-import HomePage from "./pages/HomePage";
-
-// USER pages
+// Pages
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import EmailVerification from "./pages/EmailVerification";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import EmailVerification from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
+import SellerDashboard from "./pages/SellerDashboard";
+import HomePage from "./pages/HomePage";
 
-// SELLER pages
-import SellerLogin from "./seller/pages/SellerLogin";
-import SellerSignup from "./seller/pages/SellerSignup";
-import SellerEmailVerification from "./seller/pages/SellerEmailVerification";
-import SellerForgotPassword from "./seller/pages/SellerForgotPassword";
-import SellerResetPassword from "./seller/pages/SellerResetPassword";
-import SellerDashboard from "./seller/pages/SellerDashboard";
+// --- Protected Route Component ---
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
 
-// USER Protected Route
-const UserProtected = ({ children }) => {
+  if (isCheckingAuth) return <LoadingSpinner />;
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />; // CHANGED: Redirect to Home instead of Login
+  }
+
+  if (!user.isVerified) {
+    return <Navigate to="/verify-email" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    if (user.role === "seller") {
+      return <Navigate to="/seller/dashboard" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
+// --- Redirect Authenticated Users ---
+const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (!user?.isVerified) return <Navigate to="/verify-email" replace />;
+
+  if (isAuthenticated && user.isVerified) {
+    if (user.role === "seller") {
+      return <Navigate to="/seller/dashboard" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return children;
 };
 
-// SELLER Protected Route
-const SellerProtected = ({ children }) => {
-  const { isAuthenticated, seller } = useSellerAuthStore();
-  if (!isAuthenticated) return <Navigate to="/seller/login" replace />;
-  if (!seller?.isVerified) return <Navigate to="/seller/verify-email" replace />;
-  return children;
-};
+// --- Background Wrapper (Shared) ---
+const BackgroundWrapper = ({ children, className = "" }) => (
+  <div className={`min-h-screen bg-gradient-to-br from-[#2B2B2B] via-[#8C2F2B] to-[#C24C30] relative overflow-hidden ${className}`}>
+    {/* Saffron Fire Shape */}
+    <FloatingShape color="bg-[#FF8C42]" size="w-64 h-64" top="-5%" left="10%" delay={0} />
+    {/* Burnt Paprika Shape */}
+    <FloatingShape color="bg-[#E66A32]" size="w-48 h-48" top="70%" left="80%" delay={5} />
+    {/* Sand Nougat Shape */}
+    <FloatingShape color="bg-[#FFD9A0]" size="w-32 h-32" top="40%" left="-10%" delay={2} />
+    {children}
+  </div>
+);
 
-function App() {
-  const { isCheckingAuth, checkAuth } = useAuthStore();
-  const { isCheckingSellerAuth, checkSellerAuth } = useSellerAuthStore();
+// --- Layouts ---
+const AuthLayout = () => (
+  <BackgroundWrapper className="flex items-center justify-center">
+    <Outlet />
+  </BackgroundWrapper>
+);
+
+const DashboardLayout = () => (
+  <BackgroundWrapper>
+    <Outlet />
+  </BackgroundWrapper>
+);
+
+export default function App() {
+  const { checkAuth, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
-    checkSellerAuth();
-  }, []);
+  }, [checkAuth]);
 
-  if (isCheckingAuth || isCheckingSellerAuth) return <LoadingSpinner />;
+  if (isCheckingAuth) return <LoadingSpinner />;
 
   return (
-    <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
 
-      {/* PUBLIC HOME PAGE */}
-      <Route path="/" element={<HomePage />} />
+        {/* Auth Pages (Centered Layout) */}
+        <Route element={<AuthLayout />}>
+          <Route path="/signup" element={<RedirectAuthenticatedUser><SignUpPage role="user" /></RedirectAuthenticatedUser>} />
+          <Route path="/signup/seller" element={<RedirectAuthenticatedUser><SignUpPage role="seller" /></RedirectAuthenticatedUser>} />
+          <Route path="/login" element={<RedirectAuthenticatedUser><LoginPage role="user" /></RedirectAuthenticatedUser>} />
+          <Route path="/login/seller" element={<RedirectAuthenticatedUser><LoginPage role="seller" /></RedirectAuthenticatedUser>} />
+          <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
+          <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
+          <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
+          <Route path="/verify-email" element={<EmailVerification />} />
+        </Route>
 
-      {/* USER AUTH ROUTES */}
-      <Route path="/login" element={<AuthLayout><LoginPage /></AuthLayout>} />
-      <Route path="/signup" element={<AuthLayout><SignUpPage /></AuthLayout>} />
-      <Route path="/verify-email" element={<AuthLayout><EmailVerification /></AuthLayout>} />
-      <Route path="/forgot-password" element={<AuthLayout><ForgotPasswordPage /></AuthLayout>} />
-      <Route path="/reset-password/:token" element={<AuthLayout><ResetPasswordPage /></AuthLayout>} />
+        {/* Dashboard Pages (Top-aligned Layout for Navbar) */}
+        <Route element={<DashboardLayout />}>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["user"]}>
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/seller/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["seller"]}>
+                <SellerDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-      {/* USER DASHBOARD */}
-      <Route path="/user/dashboard" element={
-        <UserProtected>
-          <UserDashboard />
-        </UserProtected>
-      } />
-
-      {/* SELLER AUTH ROUTES */}
-      <Route path="/seller/login" element={<AuthLayout><SellerLogin /></AuthLayout>} />
-      <Route path="/seller/signup" element={<AuthLayout><SellerSignup /></AuthLayout>} />
-      <Route path="/seller/verify-email" element={<AuthLayout><SellerEmailVerification /></AuthLayout>} />
-      <Route path="/seller/forgot-password" element={<AuthLayout><SellerForgotPassword /></AuthLayout>} />
-      <Route path="/seller/reset-password/:token" element={<AuthLayout><SellerResetPassword /></AuthLayout>} />
-
-      {/* SELLER DASHBOARD */}
-      <Route path="/seller/dashboard" element={
-        <SellerProtected>
-          <SellerDashboard />
-        </SellerProtected>
-      } />
-
-      {/* FALLBACK */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <Toaster />
+    </BrowserRouter>
   );
 }
-
-export default App; 
