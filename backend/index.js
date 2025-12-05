@@ -6,6 +6,7 @@ import connectDB from "./db/connectDB.js";
 import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
 import orderRoutes from "./routes/order.route.js";
+import supportRoutes from "./routes/support.route.js";
 import path from "path";
 
 dotenv.config();
@@ -19,7 +20,8 @@ app.use(cookieParser()); // allows us to parse incoming cookies
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes); // Add this line
+app.use("/api/orders", orderRoutes);
+app.use("/api/support", supportRoutes); // Add this line
 
 // Middleware to serve static files (images)
 const __dirname = path.resolve();

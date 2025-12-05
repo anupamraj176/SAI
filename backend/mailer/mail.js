@@ -4,6 +4,7 @@ import {
   PASSWORD_RESET_REQUEST_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,
   WELCOME_EMAIL_TEMPLATE,
+  SUPPORT_TICKET_TEMPLATE,
 } from "./emailTemplate.js";
 import dotenv from "dotenv";
 
@@ -74,5 +75,26 @@ export const sendResetSuccessEmail = async (email) => {
   } catch (error) {
     console.error("❌ Error sending reset success email:", error);
     throw new Error("Failed to send reset success email");
+  }
+};
+
+// ✅ Send support email
+export const sendSupportEmail = async (name, email, subject, message) => {
+  try {
+    const response = await transporter.sendMail({
+      from: `FarmerHub Support <${process.env.EMAIL_USER}>`,
+      to: "anupamraj176@gmail.com", 
+      replyTo: email, 
+      subject: `[Support] ${subject} - from ${name}`,
+      html: SUPPORT_TICKET_TEMPLATE
+        .replace("{name}", name)
+        .replace("{email}", email)
+        .replace("{subject}", subject)
+        .replace("{message}", message),
+    });
+    console.log("Support email sent successfully", response);
+  } catch (error) {
+    console.error("Error sending support email", error);
+    // We don't throw error here to prevent blocking the UI if email fails
   }
 };

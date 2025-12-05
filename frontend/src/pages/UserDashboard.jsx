@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";
 import { useCartStore } from "../store/cartStore";
 import { useOrderStore } from "../store/orderStore";
+import SupportSection from "../components/SupportSection"; // Import
 
 // Import Components
 import UserSidebar from "../components/user/UserSidebar";
@@ -37,6 +38,7 @@ const UserDashboard = () => {
                 {activeSection === "market" && <UserMarketplace />}
                 {activeSection === "cart" && <UserCart setActiveSection={setActiveSection} />}
                 {activeSection === "orders" && <UserOrders />}
+                {activeSection === "support" && <SupportSection />}
             </main>
         </div>
     );

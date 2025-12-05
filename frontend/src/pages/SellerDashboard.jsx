@@ -8,6 +8,7 @@ import { HelpCircle, Sparkles } from "lucide-react";
 import SellerSidebar from "../components/seller/SellerSidebar";
 import SellerProducts from "../components/seller/SellerProducts";
 import SellerOrders from "../components/seller/SellerOrders";
+import SupportSection from "../components/SupportSection"; // Import the new component
 
 const SellerDashboard = () => {
     const { logout } = useAuthStore();
@@ -42,12 +43,7 @@ const SellerDashboard = () => {
                 
                 {activeSection === "orders" && <SellerOrders />}
 
-                {activeSection === "faqs" && (
-                    <div className="h-full flex flex-col items-center justify-center text-[#C24C30]/60">
-                        <HelpCircle className="w-16 h-16 mb-4 opacity-40" />
-                        <p className="text-lg">FAQ section coming soon.</p>
-                    </div>
-                )}
+                {activeSection === "faqs" && <SupportSection />}
 
                 {activeSection === "ai" && (
                     <div className="h-full flex flex-col items-center justify-center text-[#C24C30]/60">

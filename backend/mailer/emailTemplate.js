@@ -137,3 +137,37 @@ export const WELCOME_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
+
+// ✅ 5. Support Ticket Template
+export const SUPPORT_TICKET_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Support Ticket</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(to right, #C24C30, #FF8C42); padding: 20px; text-align: center;">
+    <h1 style="color: white; margin: 0;">New Support Request</h1>
+  </div>
+  <div style="background-color: #FDF6E9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <p>Hello Admin,</p>
+    <p>You have received a new support ticket from <strong>{name}</strong>.</p>
+    
+    <div style="background-color: #fff; border-left: 4px solid #C24C30; padding: 15px; margin: 20px 0;">
+      <p><strong>From:</strong> {email}</p>
+      <p><strong>Subject:</strong> {subject}</p>
+      <p><strong>Message:</strong></p>
+      <p style="white-space: pre-wrap;">{message}</p>
+    </div>
+
+    <p>Please log in to the dashboard or reply to this email to assist the user.</p>
+    <p>Best regards,<br>FarmerHub System</p>
+  </div>
+  <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
+    <p>This is an automated message from FarmerHub.</p>
+  </div>
+</body>
+</html>
+`;
