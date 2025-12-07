@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingBag, HelpCircle, Sparkles, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, LogOut, Sparkles, Bot } from "lucide-react"; // Import Bot
 
 const SellerSidebar = ({ activeSection, setActiveSection, onLogout }) => {
     const SidebarItem = ({ id, icon: Icon, label }) => (
@@ -23,10 +23,9 @@ const SellerSidebar = ({ activeSection, setActiveSection, onLogout }) => {
                 </h2>
                 <nav className="space-y-1">
                     <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
-                    <SidebarItem id="products" icon={Package} label="Your Products" />
-                    <SidebarItem id="orders" icon={ShoppingBag} label="Your Orders" />
-                    <SidebarItem id="faqs" icon={HelpCircle} label="Your FAQs" />
-                    <SidebarItem id="ai" icon={Sparkles} label="CropSense AI" />
+                    <SidebarItem id="products" icon={Package} label="My Products" />
+                    <SidebarItem id="orders" icon={ShoppingBag} label="Orders" />
+                    <SidebarItem id="ai" icon={Bot} label="CropSense AI" /> {/* Add this line */}
                 </nav>
             </div>
             <div className="mt-auto p-6 border-t border-[#2B2B2B]">
