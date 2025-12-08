@@ -12,10 +12,11 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EmailVerification from "./pages/EmailVerification";
+import EmailVerificationPage from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import HomePage from "./pages/HomePage";
+import EducationPage from "./pages/EducationPage"; // Import this
 
 // --- Protected Route Component ---
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -94,6 +95,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        
+        {/* Add the Education Route */}
+        <Route path="/education" element={<EducationPage />} />
 
         {/* Auth Pages (Centered Layout) */}
         <Route element={<AuthLayout />}>
@@ -104,7 +108,7 @@ export default function App() {
           <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
           <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
           <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
-          <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
         </Route>
 
         {/* Dashboard Pages (Top-aligned Layout for Navbar) */}

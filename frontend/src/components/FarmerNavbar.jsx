@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { useAuthStore } from "../store/authStore";
 import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle, FaLeaf } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function FarmerNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,6 +12,7 @@ export default function FarmerNavbar() {
   // Unified Auth Store
   const { logout, isAuthenticated, user } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -25,10 +26,11 @@ export default function FarmerNavbar() {
 
   const navItems = [
     { name: "Home", link: "/" },
-    { name: "Crops", link: "#crops" },
-    { name: "Fertilizers", link: "#fertilizers" },
-    { name: "Market", link: "#market" },
-    { name: "Support", link: "#support" },
+    { name: "Crops", link: "/#crops" },
+    { name: "Fertilizers", link: "/#fertilizers" },
+    { name: "Market", link: "/#market" },
+    { name: "Education", link: "/education" }, // Added Education
+    { name: "Support", link: "/#support" },
   ];
 
   return (
@@ -56,12 +58,21 @@ export default function FarmerNavbar() {
           <ul className="flex items-center gap-4 md:gap-8 text-xs sm:text-sm font-medium">
             {navItems.map((item, i) => (
               <li key={i}>
-                <a
-                  href={item.link}
-                  className="text-[#8C2F2B]/80 hover:text-[#C24C30] transition-all duration-200"
-                >
-                  {item.name}
-                </a>
+                {item.link.startsWith("/#") ? (
+                  <a
+                    href={item.link}
+                    className="text-[#8C2F2B]/80 hover:text-[#C24C30] transition-all duration-200"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    to={item.link}
+                    className={`text-[#8C2F2B]/80 hover:text-[#C24C30] transition-all duration-200 ${location.pathname === item.link ? 'font-bold text-[#C24C30]' : ''}`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -147,13 +158,23 @@ export default function FarmerNavbar() {
               {/* MOBILE NAV ITEMS */}
               {navItems.map((item, i) => (
                 <li key={i}>
-                  <a
-                    href={item.link}
-                    onClick={() => setMenuOpen(false)}
-                    className="block text-[#8C2F2B]/90 hover:text-[#C24C30] transition-all"
-                  >
-                    {item.name}
-                  </a>
+                  {item.link.startsWith("/#") ? (
+                    <a
+                      href={item.link}
+                      onClick={() => setMenuOpen(false)}
+                      className="block text-[#8C2F2B]/90 hover:text-[#C24C30] transition-all"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.link}
+                      onClick={() => setMenuOpen(false)}
+                      className="block text-[#8C2F2B]/90 hover:text-[#C24C30] transition-all"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
 
