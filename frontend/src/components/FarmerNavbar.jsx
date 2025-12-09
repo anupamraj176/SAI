@@ -29,8 +29,7 @@ export default function FarmerNavbar() {
     { name: "Crops", link: "/#crops" },
     { name: "Fertilizers", link: "/#fertilizers" },
     { name: "Market", link: "/#market" },
-    { name: "Education", link: "/education" }, // Added Education
-    { name: "Support", link: "/#support" },
+    { name: "Education", link: "/education" },
   ];
 
   return (
