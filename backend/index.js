@@ -9,25 +9,43 @@ import orderRoutes from "./routes/order.route.js";
 import supportRoutes from "./routes/support.route.js";
 import aiRoutes from "./routes/ai.route.js";
 import path from "path";
+import fileUpload from "express-fileupload";
+import { cloudinaryConnect } from "./config/cloudinary.js";
+import uploadRoutes from "./routes/upload.route.js"; 
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve(); // Define __dirname
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(express.json()); // allows us to parse incoming requests:req.body
-app.use(cookieParser()); // allows us to parse incoming cookies
+// 2. Connect Cloudinary
+cloudinaryConnect();
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.use(express.json());
+app.use(cookieParser()); 
+
+// FIX: Use absolute path for temp files and create parent path
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: path.join(__dirname, 'tmp'), // Saves to d:\SAI\backend\tmp
+    createParentPath: true, // Creates folder if missing
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/support", supportRoutes);
-app.use("/api/ai", aiRoutes); // Add this line
-
-// Middleware to serve static files (images)
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/api/ai", aiRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.listen(PORT, () => {
   connectDB();

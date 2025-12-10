@@ -1,22 +1,25 @@
 import express from "express";
 import { 
-    addProduct, 
+    createProduct, // Changed from addProduct to createProduct
     getSellerProducts, 
+    getAllProducts, 
     deleteProduct, 
-    updateProduct, 
-    getAllProducts // Import the new function
+    updateProduct 
 } from "../controllers/product.controller.js";
-import { verifyAuth } from "../middleware/verifyAuth.js";
-import { upload } from "../middleware/upload.middleware.js";
+import { verifyAuth } from "../middleware/verifyAuth.js"; // Ensure you import your auth middleware
 
 const router = express.Router();
 
-// Route to get ALL products for the marketplace
-router.get("/all", getAllProducts); 
+// Route to create a product (Protected)
+router.post("/create", verifyAuth, createProduct);
 
-router.post("/add", verifyAuth, upload.single("image"), addProduct);
+// Route to get logged-in seller's products (Protected)
 router.get("/my-products", verifyAuth, getSellerProducts);
-router.put("/:id", verifyAuth, upload.single("image"), updateProduct);
+
+// Route to get all products (Public)
+router.get("/", getAllProducts);
+
+// Route to delete a product (Protected)
 router.delete("/:id", verifyAuth, deleteProduct);
 
 export default router;

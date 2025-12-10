@@ -1,118 +1,120 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, Package, ShoppingCart } from "lucide-react";
-import { useProductStore } from "../../store/productStore";
-import { useCartStore } from "../../store/cartStore";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, ShoppingCart } from 'lucide-react';
+import { useProductStore } from '../../store/productStore';
+import { useCartStore } from '../../store/cartStore';
 
 const UserMarketplace = () => {
-    const { products, isLoading } = useProductStore();
-    const { addToCart } = useCartStore();
-    const [searchTerm, setSearchTerm] = useState("");
+  const { products, fetchAllProducts, isLoading } = useProductStore(); // Get fetchAllProducts
+  const { addToCart } = useCartStore();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-    const filteredProducts = products?.filter(product => {
-        const name = product.name?.toLowerCase() || "";
-        const category = product.category?.toLowerCase() || "";
-        const search = searchTerm.toLowerCase();
-        return name.includes(search) || category.includes(search);
-    }) || [];
+  // ✅ FIX: Fetch products when component mounts
+  useEffect(() => {
+    fetchAllProducts();
+  }, [fetchAllProducts]);
 
-    return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-                <div>
-                    <h1 className="text-4xl font-extrabold text-[#8C2F2B] tracking-tight">Fresh Market</h1>
-                    <p className="text-[#C24C30] mt-2 font-medium">Quality produce directly from farmers</p>
-                </div>
+  const categories = ["All", "Vegetables", "Fruits", "Grains", "Seeds", "Fertilizers"];
 
-                {/* Search Box */}
-                <div className="relative w-full md:w-96">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Search fresh produce..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="block w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF8C42] transition-all duration-300"
-                    />
-                </div>
-            </div>
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-            {/* Loader */}
-            {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF8C42]"></div>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {filteredProducts.map((product) => (
-                        <motion.div
-                            key={product._id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100 flex flex-col"
-                        >
-                            {/* Image */}
-                            <div className="relative h-64 bg-gray-100">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover"
-                                />
-
-                                {/* Category Badge */}
-                                <span className="absolute top-4 left-4 bg-white shadow-sm px-3 py-1 rounded-full text-xs font-semibold text-[#8C2F2B] uppercase tracking-wider">
-                                    {product.category}
-                                </span>
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    {product.name}
-                                </h3>
-                                <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed mb-4">
-                                    {product.description}
-                                </p>
-
-                                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200">
-                                    <div>
-                                        <span className="text-xs text-gray-500 uppercase">Price</span>
-                                        <p className="text-2xl font-bold text-[#C24C30]">₹{product.price}</p>
-                                    </div>
-
-                                    <button
-                                        onClick={() => {
-                                            addToCart(product);
-                                            toast.success("Added to cart");
-                                        }}
-                                        className="bg-[#FF8C42] text-white px-5 py-2 rounded-xl font-medium shadow-sm transition active:scale-95"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <ShoppingCart size={18} />
-                                            <span>Add</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            )}
-
-            {/* No Items */}
-            {filteredProducts.length === 0 && !isLoading && (
-                <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-3xl border-2 border-dashed border-gray-300">
-                    <Package className="w-14 h-14 text-[#FF8C42] mb-3" />
-                    <h3 className="text-lg font-semibold text-gray-700 mb-1">No products found</h3>
-                    <p className="text-gray-500">Try adjusting your search terms.</p>
-                </div>
-            )}
+  return (
+    <div className="p-6">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-[#2B2B2B]">Marketplace</h2>
+          <p className="text-gray-500">Fresh produce directly from farmers</p>
         </div>
-    );
+        
+        <div className="flex gap-3 w-full md:w-auto">
+          <div className="relative flex-1 md:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-[#FFD9A0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C42]"
+            />
+          </div>
+          
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="pl-10 pr-8 py-2 border border-[#FFD9A0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8C42] appearance-none bg-white cursor-pointer"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div className="text-center py-20 text-gray-500">Loading products...</div>
+      ) : filteredProducts.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div key={product._id} className="bg-white rounded-xl shadow-sm border border-[#FFD9A0] overflow-hidden hover:shadow-md transition-shadow group">
+              <div className="h-48 overflow-hidden relative">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                />
+                {product.stock < 10 && (
+                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    Low Stock
+                  </span>
+                )}
+              </div>
+              
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="font-bold text-lg text-[#2B2B2B]">{product.name}</h3>
+                    <p className="text-xs text-gray-500">{product.category}</p>
+                  </div>
+                  <span className="bg-[#FFF4E6] text-[#FF8C42] text-xs font-bold px-2 py-1 rounded-md">
+                    {product.stock} left
+                  </span>
+                </div>
+                
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
+                  <button 
+                    onClick={() => addToCart(product)}
+                    className="bg-[#FF8C42] text-white p-2 rounded-lg hover:bg-[#e67e3b] transition-colors flex items-center gap-2 text-sm font-medium"
+                  >
+                    <ShoppingCart size={18} /> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+          <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+          <button 
+            onClick={() => {setSearchTerm(""); setSelectedCategory("All")}}
+            className="mt-4 text-[#FF8C42] font-bold hover:underline"
+          >
+            Reset Filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default UserMarketplace;

@@ -13,8 +13,13 @@ export const verifyAuth = (req, res, next) => {
       return res.status(401).json({ success: false, message: "Unauthorized - invalid token" });
     }
     
-    req.userId = decoded.userId;
-    req.userRole = decoded.role; // Attach role to request
+    // ✅ FIX: Set BOTH formats to prevent errors in different controllers
+    req.userId = decoded.userId; // Old format
+    req.user = {                 // New format (used in product controller)
+        userId: decoded.userId,
+        role: decoded.role
+    };
+    
     next();
   } catch (error) {
     console.log("Error in verifyAuth ", error);

@@ -1,123 +1,130 @@
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Plus, X, DollarSign, Upload, Loader, Edit, Trash2, Package } from "lucide-react";
 import { useProductStore } from "../../store/productStore";
 
 const SellerProducts = () => {
-    const { products, addProduct, deleteProduct, updateProduct, isLoading } = useProductStore();
-    const [isAddingProduct, setIsAddingProduct] = useState(false);
-    const [editingProduct, setEditingProduct] = useState(null);
-    const [formData, setFormData] = useState({ name: "", description: "", price: "", category: "", stock: "", image: null });
+  const { products, fetchSellerProducts, addProduct, deleteProduct, isLoading } = useProductStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
+    image: null // Store file object here
+  });
 
-    const resetForm = () => {
-        setFormData({ name: "", description: "", price: "", category: "", stock: "", image: null });
-        setEditingProduct(null);
-        const fileInput = document.getElementById("fileInput");
-        if(fileInput) fileInput.value = "";
-    };
+  useEffect(() => {
+    fetchSellerProducts();
+  }, [fetchSellerProducts]);
 
-    const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-    const handleImageChange = (e) => setFormData({ ...formData, image: e.target.files[0] });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const data = new FormData();
-        Object.keys(formData).forEach(key => {
-            if (formData[key]) data.append(key, formData[key]);
-        });
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };
 
-        if (editingProduct) {
-            await updateProduct(editingProduct._id, data);
-        } else {
-            await addProduct(data);
-        }
-        resetForm();
-        setIsAddingProduct(false);
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // 🚨 CRITICAL FIX: Prevents page reload
 
-    const handleEditClick = (product) => {
-        setEditingProduct(product);
-        setFormData({ ...product, image: null });
-        setIsAddingProduct(true);
-    };
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("price", formData.price);
+    data.append("category", formData.category);
+    data.append("stock", formData.stock);
+    if (formData.image) {
+      data.append("image", formData.image); // Must match backend req.files.image
+    }
 
-    const handleDelete = async (id) => {
-        if (window.confirm("Delete this product?")) await deleteProduct(id);
-    };
+    const result = await addProduct(data);
+    if (result.success) {
+      setIsModalOpen(false);
+      setFormData({ name: "", description: "", price: "", category: "", stock: "", image: null });
+    }
+  };
 
-    return (
-        <div>
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-[#8C2F2B]">Your Products</h1>
-                {!isAddingProduct && (
-                    <button onClick={() => { setIsAddingProduct(true); resetForm(); }} className="bg-[#FF8C42] hover:bg-[#E66A32] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-md">
-                        <Plus size={20} /> Add Product
-                    </button>
-                )}
+  return (
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-[#2B2B2B]">My Products</h2>
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-[#FF8C42] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#e67e3b]"
+        >
+          <Plus size={20} /> Add Product
+        </button>
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {products.map((product) => (
+          <div key={product._id} className="bg-white rounded-xl shadow-sm border border-[#FFD9A0] overflow-hidden">
+            <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+            <div className="p-4">
+              <h3 className="font-bold text-lg">{product.name}</h3>
+              <p className="text-gray-500 text-sm mb-2">{product.category}</p>
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-[#8C2F2B] font-bold">₹{product.price}</span>
+                <button onClick={() => deleteProduct(product._id)} className="text-red-500 hover:bg-red-50 p-2 rounded-full">
+                  <Trash2 size={18} />
+                </button>
+              </div>
             </div>
+          </div>
+        ))}
+      </div>
 
-            {isAddingProduct ? (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-[#FFD9A0] rounded-xl p-6 shadow-lg max-w-3xl mx-auto">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-bold text-[#C24C30]">{editingProduct ? "Edit Product" : "Add New Product"}</h2>
-                        <button onClick={() => { setIsAddingProduct(false); resetForm(); }} className="text-gray-400 hover:text-[#8C2F2B]"><X size={24} /></button>
-                    </div>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Product Name</label>
-                                <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-[#FDF6E9] border border-[#FFD9A0] rounded-lg px-4 py-2" required />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Category</label>
-                                <input type="text" name="category" value={formData.category} onChange={handleInputChange} className="w-full bg-[#FDF6E9] border border-[#FFD9A0] rounded-lg px-4 py-2" required />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Description</label>
-                            <textarea name="description" value={formData.description} onChange={handleInputChange} className="w-full bg-[#FDF6E9] border border-[#FFD9A0] rounded-lg px-4 py-2 h-32 resize-none" required />
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Price (₹)</label>
-                                <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full bg-[#FDF6E9] border border-[#FFD9A0] rounded-lg px-4 py-2" required />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Stock</label>
-                                <input type="number" name="stock" value={formData.stock} onChange={handleInputChange} className="w-full bg-[#FDF6E9] border border-[#FFD9A0] rounded-lg px-4 py-2" required />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-[#8C2F2B] mb-1">Image</label>
-                            <input id="fileInput" type="file" accept="image/*" onChange={handleImageChange} className="w-full" required={!editingProduct} />
-                        </div>
-                        <button type="submit" disabled={isLoading} className="w-full bg-[#C24C30] hover:bg-[#A03B23] text-white font-bold py-3 px-4 rounded-lg flex justify-center items-center">
-                            {isLoading ? <Loader className="animate-spin" /> : (editingProduct ? "Update" : "Add")}
-                        </button>
-                    </form>
-                </motion.div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products.map((product) => (
-                        <motion.div key={product._id} layout className="bg-white rounded-xl overflow-hidden shadow-md border border-[#FFD9A0] flex flex-col">
-                            <img src={product.image} alt={product.name} className="h-48 w-full object-cover" />
-                            <div className="p-5 flex-1 flex flex-col">
-                                <h3 className="text-lg font-bold text-[#2B2B2B]">{product.name}</h3>
-                                <p className="text-[#8C2F2B]/80 text-sm mb-4 line-clamp-2">{product.description}</p>
-                                <div className="flex justify-between items-center text-sm mb-4">
-                                    <span className="font-bold text-[#C24C30]">₹{product.price}</span>
-                                    <span className="text-[#E66A32]">{product.stock} left</span>
-                                </div>
-                                <div className="flex gap-3 mt-auto">
-                                    <button onClick={() => handleEditClick(product)} className="flex-1 bg-[#FFD9A0]/30 text-[#E66A32] border border-[#FFD9A0] py-2 rounded-lg flex items-center justify-center gap-2"><Edit size={16} /> Edit</button>
-                                    <button onClick={() => handleDelete(product._id)} className="flex-1 bg-[#8C2F2B]/10 text-[#8C2F2B] border border-[#8C2F2B]/30 py-2 rounded-lg flex items-center justify-center gap-2"><Trash2 size={16} /> Delete</button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-            )}
+      {/* Add Product Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 relative">
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+              <X size={24} />
+            </button>
+            
+            <h3 className="text-xl font-bold mb-4">Add New Product</h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" name="name" placeholder="Product Name" value={formData.name} onChange={handleInputChange} className="w-full p-3 border rounded-lg" required />
+              <textarea name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} className="w-full p-3 border rounded-lg" required />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <input type="number" name="price" placeholder="Price (₹)" value={formData.price} onChange={handleInputChange} className="w-full p-3 border rounded-lg" required />
+                <input type="number" name="stock" placeholder="Stock Qty" value={formData.stock} onChange={handleInputChange} className="w-full p-3 border rounded-lg" required />
+              </div>
+
+              <select name="category" value={formData.category} onChange={handleInputChange} className="w-full p-3 border rounded-lg" required>
+                <option value="">Select Category</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Grains">Grains</option>
+                <option value="Seeds">Seeds</option>
+                <option value="Fertilizers">Fertilizers</option>
+              </select>
+
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50">
+                <input type="file" name="image" onChange={handleFileChange} className="hidden" id="file-upload" accept="image/*" />
+                <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center gap-2 text-gray-500">
+                  <Upload size={24} />
+                  <span>{formData.image ? formData.image.name : "Upload Product Image"}</span>
+                </label>
+              </div>
+
+              <button type="submit" disabled={isLoading} className="w-full bg-[#FF8C42] text-white py-3 rounded-lg font-bold hover:bg-[#e67e3b] disabled:opacity-50">
+                {isLoading ? "Adding..." : "Add Product"}
+              </button>
+            </form>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
+
 export default SellerProducts;

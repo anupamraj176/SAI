@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/support";
+const API_URL = "http://localhost:5001/api/support";
 axios.defaults.withCredentials = true;
 
 export const useSupportStore = create((set) => ({
@@ -11,6 +11,7 @@ export const useSupportStore = create((set) => ({
     createTicket: async (formData) => {
         set({ isLoading: true, error: null });
         try {
+            // FIX: Ensure no manual headers here either
             const response = await axios.post(`${API_URL}/create`, formData);
             set({ isLoading: false });
             return { success: true, message: response.data.message };
