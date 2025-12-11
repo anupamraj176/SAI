@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import { Toaster } from "react-hot-toast";
-
-// Components
 import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
 
@@ -16,16 +14,16 @@ import EmailVerificationPage from "./pages/EmailVerification";
 import UserDashboard from "./pages/UserDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import HomePage from "./pages/HomePage";
-import EducationPage from "./pages/EducationPage"; // Import this
+import EducationPage from "./pages/EducationPage"; 
 
-// --- Protected Route Component ---
+
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
 
   if (isCheckingAuth) return <LoadingSpinner />;
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />; // CHANGED: Redirect to Home instead of Login
+    return <Navigate to="/" replace />;
   }
 
   if (!user.isVerified) {
@@ -59,11 +57,8 @@ const RedirectAuthenticatedUser = ({ children }) => {
 // --- Background Wrapper (Shared) ---
 const BackgroundWrapper = ({ children, className = "" }) => (
   <div className={`min-h-screen bg-gradient-to-br from-[#2B2B2B] via-[#8C2F2B] to-[#C24C30] relative overflow-hidden ${className}`}>
-    {/* Saffron Fire Shape */}
     <FloatingShape color="bg-[#FF8C42]" size="w-64 h-64" top="-5%" left="10%" delay={0} />
-    {/* Burnt Paprika Shape */}
     <FloatingShape color="bg-[#E66A32]" size="w-48 h-48" top="70%" left="80%" delay={5} />
-    {/* Sand Nougat Shape */}
     <FloatingShape color="bg-[#FFD9A0]" size="w-32 h-32" top="40%" left="-10%" delay={2} />
     {children}
   </div>
