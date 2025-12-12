@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, ShoppingCart, Map as MapIcon, List, ArrowLeft } from 'lucide-react';
+import { Search, ShoppingCart, Map as MapIcon, List, ArrowLeft, Heart } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useProductStore } from '../../store/productStore';
 import { useCartStore } from '../../store/cartStore';
+import { useWishlistStore } from '../../store/wishlistStore';
 import MapComponent from '../MapComponent';
 import vegetableImage from '../../../assets/vegetable.jpg';
 import fruitsImage from '../../../assets/fruits.webp';
@@ -43,6 +44,7 @@ const CATEGORIES = [
 const UserMarketplace = () => {
   const { products, fetchAllProducts, isLoading } = useProductStore();
   const { addToCart } = useCartStore();
+  const { fetchWishlist, toggleWishlist, isInWishlist } = useWishlistStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
@@ -53,7 +55,8 @@ const UserMarketplace = () => {
   // Fetch products
   useEffect(() => {
     fetchAllProducts();
-  }, [fetchAllProducts]);
+    fetchWishlist();
+  }, [fetchAllProducts, fetchWishlist]);
 
   // Filter Products
   const filteredProducts = useMemo(() => {
@@ -198,6 +201,19 @@ const UserMarketplace = () => {
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist(product._id);
+                      }}
+                      className="absolute top-2 left-2 bg-white/80 p-1.5 rounded-full hover:bg-white transition-colors z-10"
+                    >
+                      <Heart 
+                        size={18} 
+                        className={isInWishlist(product._id) ? "fill-red-500 text-red-500" : "text-gray-600"} 
+                      />
+                    </button>
 
                     {product.stock < 10 && (
                       <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">

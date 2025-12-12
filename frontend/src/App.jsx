@@ -109,7 +109,7 @@ export default function App() {
         {/* Dashboard Pages (Top-aligned Layout for Navbar) */}
         <Route element={<DashboardLayout />}>
           <Route
-            path="/dashboard"
+            path="/dashboard/*"
             element={
               <ProtectedRoute allowedRoles={["user"]}>
                 <UserDashboard />

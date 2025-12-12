@@ -46,6 +46,10 @@ const accountSchema = new mongoose.Schema(
       },
       address: String,
     },
+    wishlist: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product"
+    }],
   },
   { timestamps: true }
 );

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Plus, X, Upload, Trash2 } from "lucide-react";
 import { useProductStore } from "../../store/productStore";
 
-// CATEGORY OPTIONS WITH EMOJIS (Shown in dropdown)
 const CATEGORY_OPTIONS = [
   { id: "Vegetables", label: "Vegetables", icon: "🥦" },
   { id: "Fruits", label: "Fruits", icon: "🍎" },

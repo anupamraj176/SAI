@@ -1,4 +1,4 @@
-import { ShoppingBag, ShoppingCart, LayoutDashboard, LogOut, Sparkles, HelpCircle } from "lucide-react";
+import { ShoppingBag, ShoppingCart, LayoutDashboard, LogOut, Sparkles, HelpCircle, Heart } from "lucide-react";
 
 const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCount }) => {
     const SidebarItem = ({ id, icon: Icon, label }) => (
@@ -30,6 +30,7 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
                 <nav className="space-y-1">
                     <SidebarItem id="market" icon={ShoppingBag} label="Marketplace" />
                     <SidebarItem id="cart" icon={ShoppingCart} label="My Cart" />
+                    <SidebarItem id="wishlist" icon={Heart} label="Wishlist" />
                     <SidebarItem id="orders" icon={LayoutDashboard} label="My Orders" />
                     <SidebarItem id="support" icon={HelpCircle} label="Support" /> {/* Add this line */}
                 </nav>

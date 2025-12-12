@@ -10,6 +10,7 @@ import UserSidebar from "../components/user/UserSidebar";
 import UserMarketplace from "../components/user/UserMarketplace";
 import UserCart from "../components/user/UserCart";
 import UserOrders from "../components/user/UserOrders";
+import UserWishlist from "../components/user/UserWishlist";
 
 const UserDashboard = () => {
     const { logout, user } = useAuthStore();
@@ -38,6 +39,7 @@ const UserDashboard = () => {
                 {activeSection === "market" && <UserMarketplace />}
                 {activeSection === "cart" && <UserCart setActiveSection={setActiveSection} />}
                 {activeSection === "orders" && <UserOrders />}
+                {activeSection === "wishlist" && <UserWishlist />}
                 {activeSection === "support" && <SupportSection />}
             </main>
         </div>
