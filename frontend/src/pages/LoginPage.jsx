@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,8 +8,20 @@ import { useAuthStore } from "../store/authStore";
 const LoginPage = ({ role = "user" }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, isAuthenticated, user } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated && user?.isVerified && user?.role === role) {
+      if (role === "seller") {
+        navigate("/seller/dashboard");
+      } else if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+  }, [isAuthenticated, user, role, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,6 +29,8 @@ const LoginPage = ({ role = "user" }) => {
       await login(email, password, role);
       if (role === "seller") {
         navigate("/seller/dashboard");
+      } else if (role === "admin") {
+        navigate("/admin/dashboard");
       } else {
         navigate("/dashboard");
       }
@@ -34,7 +48,7 @@ const LoginPage = ({ role = "user" }) => {
     >
       <div className="p-8">
         <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
-          {role === "seller" ? "Seller Login" : "User Login"}
+          {role === "seller" ? "Seller Login" : role === "admin" ? "Admin Login" : "User Login"}
         </h2>
 
         <form onSubmit={handleLogin}>

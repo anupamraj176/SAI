@@ -22,10 +22,16 @@ const ResetPasswordPage = () => {
       return;
     }
     try {
-      await resetPassword(token, password);
+      const response = await resetPassword(token, password);
       toast.success("Password reset successfully, redirecting to login...");
       setTimeout(() => {
-        navigate("/login");
+        if (response.role === "seller") {
+          navigate("/login/seller");
+        } else if (response.role === "admin") {
+          navigate("/login/admin");
+        } else {
+          navigate("/login");
+        }
       }, 2000);
     } catch (error) {
       console.error(error);

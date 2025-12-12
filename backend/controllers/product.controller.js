@@ -1,8 +1,15 @@
 import {Product} from "../models/product.model.js";
+import { Account } from "../models/account.model.js";
 import { v2 as cloudinary } from "cloudinary";
 
 export const createProduct = async (req, res) => {
     try {
+        // Check if seller is verified
+        const seller = await Account.findById(req.user.userId);
+        if (!seller || !seller.isVerified) {
+            return res.status(403).json({ success: false, message: "You must be a verified seller to add products." });
+        }
+
         console.log("Creating product...", req.body);
         const { name, description, price, category, stock } = req.body;
 

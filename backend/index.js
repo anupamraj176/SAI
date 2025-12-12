@@ -13,6 +13,7 @@ import fileUpload from "express-fileupload";
 import { cloudinaryConnect } from "./config/cloudinary.js";
 import uploadRoutes from "./routes/upload.route.js"; 
 import wishlistRoutes from "./routes/wishlist.route.js";
+import adminRoutes from "./routes/admin.route.js";
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use("/api/support", supportRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(PORT, () => {
   connectDB();

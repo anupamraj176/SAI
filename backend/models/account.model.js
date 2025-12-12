@@ -19,7 +19,7 @@ const accountSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["user", "seller"],
+      enum: ["user", "seller", "admin"],
       default: "user",
     },
     lastLogin: {

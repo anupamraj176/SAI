@@ -8,6 +8,7 @@ import FloatingShape from "./components/FloatingShape";
 // Pages
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import AdminDashboard from "./pages/AdminDashboard";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import EmailVerificationPage from "./pages/EmailVerification";
@@ -34,6 +35,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     if (user.role === "seller") {
       return <Navigate to="/seller/dashboard" replace />;
     }
+    if (user.role === "admin") {
+      return <Navigate to="/admin/dashboard" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -48,6 +52,9 @@ const RedirectAuthenticatedUser = ({ children }) => {
     if (user.role === "seller") {
       return <Navigate to="/seller/dashboard" replace />;
     }
+    if (user.role === "admin") {
+      return <Navigate to="/admin/dashboard" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -55,24 +62,28 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 // --- Background Wrapper (Shared) ---
-const BackgroundWrapper = ({ children, className = "" }) => (
+const BackgroundWrapper = ({ children, className = "", showShapes = false }) => (
   <div className={`min-h-screen bg-gradient-to-br from-[#2B2B2B] via-[#8C2F2B] to-[#C24C30] relative overflow-hidden ${className}`}>
-    <FloatingShape color="bg-[#FF8C42]" size="w-64 h-64" top="-5%" left="10%" delay={0} />
-    <FloatingShape color="bg-[#E66A32]" size="w-48 h-48" top="70%" left="80%" delay={5} />
-    <FloatingShape color="bg-[#FFD9A0]" size="w-32 h-32" top="40%" left="-10%" delay={2} />
+    {showShapes && (
+      <>
+        <FloatingShape color="bg-[#FF8C42]" size="w-64 h-64" top="-5%" left="10%" delay={0} />
+        <FloatingShape color="bg-[#E66A32]" size="w-48 h-48" top="70%" left="80%" delay={5} />
+        <FloatingShape color="bg-[#FFD9A0]" size="w-32 h-32" top="40%" left="-10%" delay={2} />
+      </>
+    )}
     {children}
   </div>
 );
 
 // --- Layouts ---
 const AuthLayout = () => (
-  <BackgroundWrapper className="flex items-center justify-center">
+  <BackgroundWrapper className="flex items-center justify-center" showShapes={true}>
     <Outlet />
   </BackgroundWrapper>
 );
 
 const DashboardLayout = () => (
-  <BackgroundWrapper>
+  <BackgroundWrapper showShapes={false}>
     <Outlet />
   </BackgroundWrapper>
 );
@@ -96,10 +107,11 @@ export default function App() {
 
         {/* Auth Pages (Centered Layout) */}
         <Route element={<AuthLayout />}>
-          <Route path="/signup" element={<RedirectAuthenticatedUser><SignUpPage role="user" /></RedirectAuthenticatedUser>} />
-          <Route path="/signup/seller" element={<RedirectAuthenticatedUser><SignUpPage role="seller" /></RedirectAuthenticatedUser>} />
-          <Route path="/login" element={<RedirectAuthenticatedUser><LoginPage role="user" /></RedirectAuthenticatedUser>} />
-          <Route path="/login/seller" element={<RedirectAuthenticatedUser><LoginPage role="seller" /></RedirectAuthenticatedUser>} />
+          <Route path="/signup" element={<SignUpPage role="user" />} />
+          <Route path="/signup/seller" element={<SignUpPage role="seller" />} />
+          <Route path="/login" element={<LoginPage role="user" />} />
+          <Route path="/login/seller" element={<LoginPage role="seller" />} />
+          <Route path="/login/admin" element={<LoginPage role="admin" />} />
           <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
           <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
           <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
@@ -121,6 +133,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={["seller"]}>
                 <SellerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

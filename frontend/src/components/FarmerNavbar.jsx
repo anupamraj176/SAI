@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { useAuthStore } from "../store/authStore";
-import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle, FaLeaf } from "react-icons/fa";
+import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle, FaLeaf, FaUserShield } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function FarmerNavbar() {
@@ -105,11 +105,30 @@ export default function FarmerNavbar() {
                   <FaStore /> Seller
                 </motion.button>
               </Link>
+
+              {/* ADMIN BUTTON (hidden on mobile) */}
+              <Link to="/login/admin" className="hidden md:block">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 rounded-xl border border-[#8C2F2B] px-5 py-2 
+                  text-sm font-semibold text-[#8C2F2B] hover:bg-[#8C2F2B] hover:text-white transition-all"
+                >
+                  <FaUserShield /> Admin
+                </motion.button>
+              </Link>
             </>
           ) : (
             <>
                {/* DASHBOARD BUTTON */}
-               <Link to={user?.role === 'seller' ? "/seller/dashboard" : "/dashboard"} className="hidden md:block">
+               <Link 
+                 to={
+                   user?.role === 'seller' ? "/seller/dashboard" : 
+                   user?.role === 'admin' ? "/admin/dashboard" : 
+                   "/dashboard"
+                 } 
+                 className="hidden md:block"
+               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -202,13 +221,29 @@ export default function FarmerNavbar() {
                       <FaStore /> Seller Login
                     </Link>
                   </li>
+
+                  {/* MOBILE ADMIN */}
+                  <li>
+                    <Link
+                      to="/login/admin"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 w-full rounded-md border border-[#8C2F2B] px-4 py-2 
+                      text-[#8C2F2B] font-semibold hover:bg-[#8C2F2B] hover:text-white transition-all"
+                    >
+                      <FaUserShield /> Admin Login
+                    </Link>
+                  </li>
                 </>
               ) : (
                 <>
                    {/* MOBILE DASHBOARD */}
                    <li>
                     <Link
-                      to={user?.role === 'seller' ? "/seller/dashboard" : "/dashboard"}
+                      to={
+                        user?.role === 'seller' ? "/seller/dashboard" : 
+                        user?.role === 'admin' ? "/admin/dashboard" : 
+                        "/dashboard"
+                      }
                       onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
                       font-semibold shadow-md hover:bg-[#E66A32] transition-all"

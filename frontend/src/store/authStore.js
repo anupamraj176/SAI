@@ -105,6 +105,7 @@ export const useAuthStore = create((set) => ({
         password,
       });
       set({ message: response.data.message, isLoading: false });
+      return response.data;
     } catch (error) {
       set({
         isLoading: false,

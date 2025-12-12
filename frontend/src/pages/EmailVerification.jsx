@@ -48,6 +48,8 @@ const EmailVerification = () => {
       // Redirect based on the role returned from the backend response
       if (response.user && response.user.role === "seller") {
         navigate("/seller/dashboard");
+      } else if (response.user && response.user.role === "admin") {
+        navigate("/admin/dashboard");
       } else {
         navigate("/dashboard");
       }
