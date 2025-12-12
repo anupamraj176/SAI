@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
     seller: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", //wqCc: Ensure this matches the model name in account.model.js (usually 'User' or 'Account')
+        ref: "Account",
         required: true
     },
     name: {

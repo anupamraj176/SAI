@@ -10,6 +10,7 @@ import SellerProducts from "../components/seller/SellerProducts";
 import SellerOrders from "../components/seller/SellerOrders";
 import CropSenseAI from "../components/seller/CropSenseAI";
 import SellerOverview from "../components/seller/SellerOverview";
+import SellerProfile from "../components/seller/SellerProfile";
 
 const SellerDashboard = () => {
     const { logout, user } = useAuthStore();
@@ -62,6 +63,7 @@ const SellerDashboard = () => {
                             {activeTab === "products" && <SellerProducts />}
                             {activeTab === "orders" && <SellerOrders />}
                             {activeTab === "ai" && <CropSenseAI />}
+                            {activeTab === "profile" && <SellerProfile />}
                         </motion.div>
                     </AnimatePresence>
                 </div>

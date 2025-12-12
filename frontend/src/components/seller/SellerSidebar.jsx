@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingBag, LogOut, Sparkles, Bot } from "lucide-react"; // Import Bot
+import { LayoutDashboard, Package, ShoppingBag, LogOut, Sparkles, Bot, User } from "lucide-react"; // Import Bot
 
 const SellerSidebar = ({ activeSection, setActiveSection, onLogout }) => {
     const SidebarItem = ({ id, icon: Icon, label }) => (
@@ -25,7 +25,8 @@ const SellerSidebar = ({ activeSection, setActiveSection, onLogout }) => {
                     <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
                     <SidebarItem id="products" icon={Package} label="My Products" />
                     <SidebarItem id="orders" icon={ShoppingBag} label="Orders" />
-                    <SidebarItem id="ai" icon={Bot} label="CropSense AI" /> {/* Add this line */}
+                    <SidebarItem id="ai" icon={Bot} label="CropSense AI" />
+                    <SidebarItem id="profile" icon={User} label="Profile" />
                 </nav>
             </div>
             <div className="mt-auto p-6 border-t border-[#2B2B2B]">

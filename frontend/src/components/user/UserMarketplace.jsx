@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ShoppingCart } from 'lucide-react';
+import { Search, Filter, ShoppingCart, Map as MapIcon, List } from 'lucide-react';
 import { useProductStore } from '../../store/productStore';
 import { useCartStore } from '../../store/cartStore';
+import MapComponent from '../MapComponent';
 
 const UserMarketplace = () => {
   const { products, fetchAllProducts, isLoading } = useProductStore(); // Get fetchAllProducts
   const { addToCart } = useCartStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isMapView, setIsMapView] = useState(false);
 
   // ✅ FIX: Fetch products when component mounts
   useEffect(() => {
@@ -21,6 +23,15 @@ const UserMarketplace = () => {
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const mapLocations = filteredProducts
+    .filter(p => p.seller && p.seller.location && p.seller.location.coordinates && p.seller.location.coordinates.length === 2)
+    .map(p => ({
+        lat: p.seller.location.coordinates[1],
+        lng: p.seller.location.coordinates[0],
+        title: p.name,
+        description: `Price: ₹${p.price} | Seller: ${p.seller.name}`
+    }));
 
   return (
     <div className="p-6">
@@ -54,11 +65,21 @@ const UserMarketplace = () => {
               ))}
             </select>
           </div>
+
+          <button
+            onClick={() => setIsMapView(!isMapView)}
+            className="p-2 border border-[#FFD9A0] rounded-lg hover:bg-[#FFF4E6] text-[#FF8C42] transition-colors bg-white"
+            title={isMapView ? "Switch to List View" : "Switch to Map View"}
+          >
+            {isMapView ? <List size={20} /> : <MapIcon size={20} />}
+          </button>
         </div>
       </div>
 
       {isLoading ? (
         <div className="text-center py-20 text-gray-500">Loading products...</div>
+      ) : isMapView ? (
+        <MapComponent locations={mapLocations} />
       ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (

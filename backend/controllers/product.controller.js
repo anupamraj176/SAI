@@ -52,9 +52,7 @@ export const getSellerProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try {
-        console.log("Fetching ALL products for marketplace...");
-        const products = await Product.find({});
-        console.log(`Found ${products.length} products in DB.`);
+        const products = await Product.find({}).populate('seller', 'name location');
         res.status(200).json({ success: true, products });
     } catch (error) {
         console.error("Error fetching all products:", error);
