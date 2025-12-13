@@ -20,14 +20,14 @@ const UserOrders = ({ setActiveSection }) => {
                                        bg-gradient-to-br from-[#FFF4E6] to-[#FFE9D3] transition"
                         >
                             {/* Header */}
-                            <div className="px-6 py-4 bg-[#FFF4E6] border-b border-[#FFD9A0] flex justify-between items-center">
+                            <div className="px-6 py-4 bg-[#FFF4E6] border-b border-[#FFD9A0] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                 <div>
                                     <p className="text-[10px] font-semibold text-[#C24C30] uppercase tracking-wide">Order ID</p>
-                                    <p className="text-sm font-mono text-[#2B2B2B]">{order._id}</p>
+                                    <p className="text-sm font-mono text-[#2B2B2B] break-all">{order._id}</p>
                                 </div>
 
                                 {/* Status */}
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 self-end sm:self-auto">
                                     {order.status === "Pending" ? (
                                         <Clock size={16} className="text-[#E66A32]" />
                                     ) : (
@@ -52,10 +52,10 @@ const UserOrders = ({ setActiveSection }) => {
                                     {order.items.map((item, index) => (
                                         <div
                                             key={index}
-                                            className="flex justify-between items-center bg-white/60 p-3 rounded-lg shadow-sm border border-[#FFE1BA]"
+                                            className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/60 p-3 rounded-lg shadow-sm border border-[#FFE1BA] gap-4"
                                         >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-[#FDF6E9] rounded-lg overflow-hidden">
+                                            <div className="flex items-center gap-4 w-full">
+                                                <div className="w-12 h-12 bg-[#FDF6E9] rounded-lg overflow-hidden flex-shrink-0">
                                                     {item.product?.image && (
                                                         <img
                                                             src={item.product.image}
@@ -65,15 +65,15 @@ const UserOrders = ({ setActiveSection }) => {
                                                     )}
                                                 </div>
 
-                                                <div>
-                                                    <p className="font-medium text-[#2B2B2B]">
+                                                <div className="flex-1">
+                                                    <p className="font-medium text-[#2B2B2B] line-clamp-1">
                                                         {item.product?.name || "Unknown Product"}
                                                     </p>
                                                     <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
 
-                                            <p className="font-bold text-[#8C2F2B]">
+                                            <p className="font-bold text-[#8C2F2B] self-end sm:self-auto">
                                                 ₹{item.price * item.quantity}
                                             </p>
                                         </div>

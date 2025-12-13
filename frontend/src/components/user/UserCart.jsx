@@ -36,46 +36,48 @@ const UserCart = ({ setActiveSection }) => {
                             <motion.div
                                 key={item._id}
                                 layout
-                                className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] flex gap-4 items-center hover:shadow-lg transition"
+                                className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] flex flex-col sm:flex-row gap-4 items-start sm:items-center hover:shadow-lg transition"
                             >
                                 <img
                                     src={item.image}
                                     alt={item.name}
-                                    className="w-20 h-20 object-cover rounded-lg bg-[#FAF3E3]"
+                                    className="w-full sm:w-20 h-40 sm:h-20 object-cover rounded-lg bg-[#FAF3E3]"
                                 />
 
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-[#2B2B2B]">{item.name}</h3>
+                                <div className="flex-1 w-full">
+                                    <h3 className="font-bold text-[#2B2B2B] text-lg sm:text-base">{item.name}</h3>
                                     <p className="text-sm text-[#8C2F2B]">₹{item.price} / unit</p>
                                 </div>
 
-                                {/* QUANTITY SELECTOR */}
-                                <div className="flex items-center gap-3 bg-[#FAF3E3] rounded-lg p-1 border border-[#EAD7BD]">
-                                    <button
-                                        onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                                        className="p-1 hover:bg-[#FFD9A0] rounded transition"
-                                    >
-                                        <Minus size={16} className="text-[#C24C30]" />
-                                    </button>
+                                <div className="flex justify-between items-center w-full sm:w-auto gap-4">
+                                    {/* QUANTITY SELECTOR */}
+                                    <div className="flex items-center gap-3 bg-[#FAF3E3] rounded-lg p-1 border border-[#EAD7BD]">
+                                        <button
+                                            onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                                            className="p-1 hover:bg-[#FFD9A0] rounded transition"
+                                        >
+                                            <Minus size={16} className="text-[#C24C30]" />
+                                        </button>
 
-                                    <span className="font-bold text-[#2B2B2B] w-4 text-center">
-                                        {item.quantity}
-                                    </span>
+                                        <span className="font-bold text-[#2B2B2B] w-4 text-center">
+                                            {item.quantity}
+                                        </span>
+
+                                        <button
+                                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                            className="p-1 hover:bg-[#FFD9A0] rounded transition"
+                                        >
+                                            <Plus size={16} className="text-[#C24C30]" />
+                                        </button>
+                                    </div>
 
                                     <button
-                                        onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                                        className="p-1 hover:bg-[#FFD9A0] rounded transition"
+                                        onClick={() => removeFromCart(item._id)}
+                                        className="p-2 text-gray-400 hover:text-[#C24C30] transition"
                                     >
-                                        <Plus size={16} className="text-[#C24C30]" />
+                                        <Trash2 size={20} />
                                     </button>
                                 </div>
-
-                                <button
-                                    onClick={() => removeFromCart(item._id)}
-                                    className="p-2 text-gray-400 hover:text-[#C24C30] transition"
-                                >
-                                    <Trash2 size={20} />
-                                </button>
                             </motion.div>
                         ))}
                     </div>
