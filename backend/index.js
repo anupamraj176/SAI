@@ -25,7 +25,7 @@ const __dirname = path.resolve(); // Define __dirname
 cloudinaryConnect();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://sai-8zrg.onrender.com"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
