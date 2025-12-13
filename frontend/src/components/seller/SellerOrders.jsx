@@ -16,7 +16,7 @@ const SellerOrders = () => {
                             className="bg-[#FFF6E9] rounded-2xl shadow-md border border-[#EAD7BD] overflow-hidden"
                         >
                             {/* Header */}
-                            <div className="bg-[#F7E8D5] px-6 py-4 border-b border-[#EAD7BD] flex justify-between items-center">
+                            <div className="bg-[#F7E8D5] px-6 py-4 border-b border-[#EAD7BD] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                 <div>
                                     <p className="text-xs text-[#8C2F2B] uppercase font-bold">
                                         Order ID: {order._id}
@@ -30,6 +30,7 @@ const SellerOrders = () => {
                                     value={order.status}
                                     onChange={(e) => updateOrderStatus(order._id, e.target.value)}
                                     className="
+                                        w-full sm:w-auto
                                         px-3 py-1 rounded-lg text-sm font-bold border border-[#EAD7BD]
                                         bg-[#FFF6E9] text-[#8C2F2B]
                                         focus:outline-none focus:ring-2 focus:ring-[#FF8C42]
@@ -48,15 +49,15 @@ const SellerOrders = () => {
                                 {order.items.map((item, idx) => (
                                     <div 
                                         key={idx} 
-                                        className="flex justify-between items-center mb-3"
+                                        className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2"
                                     >
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-3 w-full">
                                             <img 
                                                 src={item.product?.image} 
-                                                className="w-12 h-12 bg-[#F3E6D3] rounded-lg object-cover border border-[#EAD7BD]" 
+                                                className="w-12 h-12 bg-[#F3E6D3] rounded-lg object-cover border border-[#EAD7BD] flex-shrink-0" 
                                             />
-                                            <div>
-                                                <p className="font-medium text-[#2B2B2B]">
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-[#2B2B2B] truncate">
                                                     {item.product?.name}
                                                 </p>
                                                 <p className="text-xs text-[#8C2F2B]/60">
@@ -65,7 +66,7 @@ const SellerOrders = () => {
                                             </div>
                                         </div>
 
-                                        <p className="font-bold text-[#C24C30]">
+                                        <p className="font-bold text-[#C24C30] self-end sm:self-auto">
                                             ₹{item.price * item.quantity}
                                         </p>
                                     </div>

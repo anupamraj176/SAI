@@ -44,7 +44,7 @@ const SellerProfile = () => {
     };
 
     return (
-        <div className="bg-[#FFF6E9] rounded-xl shadow-sm border border-[#FFD9A0] p-8">
+        <div className="bg-[#FFF6E9] rounded-xl shadow-sm border border-[#FFD9A0] p-4 md:p-8">
 
             {/* Heading */}
             <h2 className="text-3xl font-bold text-[#8C2F2B] mb-6 flex items-center gap-2">

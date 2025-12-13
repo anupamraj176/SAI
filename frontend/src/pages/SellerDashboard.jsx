@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Menu } from "lucide-react"; // Import Menu icon
 
 import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";
@@ -18,6 +19,7 @@ const SellerDashboard = () => {
     const { orders, fetchSellerOrders } = useOrderStore();
 
     const [activeTab, setActiveTab] = useState("dashboard");
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
 
     // Centralized Data Fetching
     useEffect(() => {
@@ -33,13 +35,28 @@ const SellerDashboard = () => {
 
     return (
         <div className="flex h-screen bg-[#FAF3E3] font-sans overflow-hidden">
+            {/* Mobile Header */}
+            <div className="md:hidden fixed top-0 left-0 right-0 bg-[#2B2B2B] text-white p-4 z-40 flex items-center justify-between shadow-md">
+                <span className="font-bold text-lg bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-transparent bg-clip-text">
+                    FarmerHub
+                </span>
+                <button onClick={() => setIsSidebarOpen(true)} className="p-2">
+                    <Menu size={24} />
+                </button>
+            </div>
+
             <SellerSidebar
                 activeSection={activeTab}
-                setActiveSection={setActiveTab}
+                setActiveSection={(section) => {
+                    setActiveTab(section);
+                    setIsSidebarOpen(false);
+                }}
                 onLogout={logout}
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
             />
 
-            <main className="flex-1 overflow-y-auto relative z-0">
+            <main className="flex-1 overflow-y-auto relative z-0 mt-16 md:mt-0">
                 <div className="p-4 md:p-8">
                     <AnimatePresence mode="wait">
                         <motion.div

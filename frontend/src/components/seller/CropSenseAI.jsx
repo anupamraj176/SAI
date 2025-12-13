@@ -82,7 +82,7 @@ const CropSenseAI = () => {
             </div>
 
             {/* MAIN CARD */}
-            <div className="bg-[#FFF6E9] rounded-2xl shadow-lg border border-[#EAD7BD] p-8">
+            <div className="bg-[#FFF6E9] rounded-2xl shadow-lg border border-[#EAD7BD] p-4 md:p-8">
                 <form onSubmit={handlePredict} className="space-y-6">
                     
                     {/* Map Selection */}
