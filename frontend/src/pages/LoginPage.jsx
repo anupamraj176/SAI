@@ -44,10 +44,10 @@ const LoginPage = ({ role = "user" }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
+      className="w-11/12 max-w-md sm:w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
     >
-      <div className="p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
+      <div className="p-6 sm:p-8">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
           {role === "seller" ? "Seller Login" : role === "admin" ? "Admin Login" : "User Login"}
         </h2>
 
@@ -69,7 +69,7 @@ const LoginPage = ({ role = "user" }) => {
 
           <div className="flex items-center mb-6">
             <Link
-              to={role === "seller" ? "/forgot/seller" : "/forgot"}
+              to={role === "seller" ? "/forgot/seller" : role === "admin" ? "/forgot/admin" : "/forgot"}
               className="text-sm text-[#FF8C42] hover:text-[#FFD9A0] hover:underline transition-colors"
             >
               Forgot password?

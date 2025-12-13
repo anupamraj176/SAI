@@ -114,6 +114,7 @@ export default function App() {
           <Route path="/login/admin" element={<LoginPage role="admin" />} />
           <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
           <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
+          <Route path="/forgot/admin" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="admin" /></RedirectAuthenticatedUser>} />
           <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
         </Route>

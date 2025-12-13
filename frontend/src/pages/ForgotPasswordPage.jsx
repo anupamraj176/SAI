@@ -22,10 +22,10 @@ const ForgotPasswordPage = ({ role = "user" }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
+      className="w-11/12 max-w-md sm:w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
     >
-      <div className="p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
+      <div className="p-6 sm:p-8">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
           Forgot Password
         </h2>
 
@@ -70,7 +70,7 @@ const ForgotPasswordPage = ({ role = "user" }) => {
 
       <div className="px-8 py-4 bg-black/20 flex justify-center">
         <Link
-          to={role === "seller" ? "/login/seller" : "/login"}
+          to={role === "seller" ? "/login/seller" : role === "admin" ? "/login/admin" : "/login"}
           className="text-sm text-[#FF8C42] hover:text-[#FFD9A0] hover:underline flex items-center"
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
