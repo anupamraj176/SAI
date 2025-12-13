@@ -93,14 +93,14 @@ const AdminDashboardOverview = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF3E3] p-10">
+    <div className="min-h-screen bg-[#FAF3E3] p-4 md:p-10">
 
       <h2 className="text-3xl font-bold text-[#2B2B2B] mb-10">
         Dashboard Overview
       </h2>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
         <StatCard title="Total Revenue" value={`₹${stats.totalRevenue.toLocaleString()}`} icon={DollarSign} />
         <StatCard title="Total Orders" value={stats.totalOrders} icon={ShoppingBag} />
         <StatCard title="Total Users" value={stats.totalUsers} icon={Users} />

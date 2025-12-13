@@ -45,13 +45,13 @@ const AdminUsers = () => {
   }
 
   return (
-    <div className="p-10 bg-[#FAF3E3] min-h-screen">
+    <div className="p-4 md:p-10 bg-[#FAF3E3] min-h-screen">
       <h2 className="text-3xl font-bold text-[#2B2B2B] mb-8">
         Manage Users
       </h2>
 
-      <div className="bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
-        <table className="w-full text-left">
+      <div className="bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden overflow-x-auto">
+        <table className="w-full text-left min-w-[600px]">
           <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
             <tr>
               <th className="p-4 font-semibold text-[#8C2F2B]">Name</th>

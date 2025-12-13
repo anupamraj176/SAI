@@ -22,12 +22,13 @@ const AdminProducts = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="p-10 bg-[#FAF3E3] min-h-screen">
+    <div className="p-4 md:p-10 bg-[#FAF3E3] min-h-screen">
       <h2 className="text-3xl font-bold text-[#2B2B2B] mb-8">
         Manage Products
       </h2>
 
-      <div className="bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
+      {/* DESKTOP TABLE VIEW */}
+      <div className="hidden md:block bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
         <table className="w-full text-left">
           <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
             <tr>
@@ -109,6 +110,61 @@ const AdminProducts = () => {
 
         {products.length === 0 && (
           <div className="p-8 text-center text-[#8C2F2B]">
+            No products found.
+          </div>
+        )}
+      </div>
+
+      {/* MOBILE CARD VIEW */}
+      <div className="md:hidden grid grid-cols-1 gap-4">
+        {products.map((product) => (
+          <div 
+            key={product._id}
+            className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] space-y-3"
+          >
+            <div className="flex gap-3">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-16 h-16 rounded-lg object-cover border border-[#EAD7BD] bg-[#F3E6D3]"
+              />
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-[#2B2B2B] truncate">{product.name}</h3>
+                <p className="text-xs text-[#8C2F2B] truncate">Seller: {product.seller?.name || "Unknown"}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="bg-[#F3E6D3] text-[#8C2F2B] px-2 py-0.5 rounded text-[10px] font-semibold border border-[#EAD7BD]">
+                    {product.category}
+                  </span>
+                  <span
+                    className={`text-xs font-semibold ${
+                      product.stock < 10 ? "text-red-600" : "text-[#8C2F2B]"
+                    }`}
+                  >
+                    Stock: {product.stock}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-[#EAD7BD]/50">
+              <span className="text-lg font-bold text-[#2B2B2B]">₹{product.price}</span>
+              
+              <button
+                onClick={() => {
+                  if (window.confirm("Delete this product?")) {
+                    deleteProduct(product._id);
+                  }
+                }}
+                className="bg-red-100 text-red-700 p-2 rounded-lg border border-red-200 flex items-center gap-2 text-xs font-bold"
+              >
+                <Trash2 size={14} /> Delete
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {products.length === 0 && (
+          <div className="p-8 text-center text-[#8C2F2B] bg-[#FFF6E9] rounded-xl border border-[#EAD7BD]">
             No products found.
           </div>
         )}
