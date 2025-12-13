@@ -1,41 +1,69 @@
-import { LayoutDashboard, Package, ShoppingBag, LogOut, Sparkles, Bot, User } from "lucide-react"; // Import Bot
+import { 
+    LayoutDashboard,
+    Package,
+    ShoppingBag,
+    LogOut,
+    Sparkles,
+    Bot,
+    User
+} from "lucide-react";
 
 const SellerSidebar = ({ activeSection, setActiveSection, onLogout }) => {
-    const SidebarItem = ({ id, icon: Icon, label }) => (
-        <button
-            onClick={() => setActiveSection(id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-2 ${
-                activeSection === id 
-                ? "bg-[#C24C30] text-white shadow-lg" 
-                : "text-[#FFD9A0] hover:bg-[#2B2B2B] hover:text-white"
-            }`}
-        >
-            <Icon size={20} />
-            <span className="font-medium">{label}</span>
-        </button>
-    );
+
+    const menuItems = [
+        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { id: "products", label: "My Products", icon: Package },
+        { id: "orders", label: "Orders", icon: ShoppingBag },
+        { id: "ai", label: "CropSense AI", icon: Bot },
+        { id: "profile", label: "Profile", icon: User },
+    ];
 
     return (
-        <aside className="w-64 bg-[#1A1A1A] border-r border-[#2B2B2B] flex flex-col shadow-2xl">
-            <div className="p-6">
-                <h2 className="text-2xl font-bold text-[#FF8C42] mb-8 flex items-center gap-2">
-                    <Sparkles className="text-[#FF8C42]" /> FarmerHub
+        <aside className="w-64 bg-[#2B2B2B] text-white h-screen flex flex-col border-r border-[#403A34] shadow-xl">
+
+            {/* HEADER */}
+            <div className="p-6 border-b border-[#403A34]">
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                    <span className="bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-transparent bg-clip-text">
+                        FarmerHub
+                    </span>
                 </h2>
-                <nav className="space-y-1">
-                    <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
-                    <SidebarItem id="products" icon={Package} label="My Products" />
-                    <SidebarItem id="orders" icon={ShoppingBag} label="Orders" />
-                    <SidebarItem id="ai" icon={Bot} label="CropSense AI" />
-                    <SidebarItem id="profile" icon={User} label="Profile" />
-                </nav>
             </div>
-            <div className="mt-auto p-6 border-t border-[#2B2B2B]">
-                <button onClick={onLogout} className="w-full flex items-center gap-3 px-4 py-3 text-[#8C2F2B] hover:bg-[#2B2B2B] hover:text-[#FF8C42] rounded-lg transition-colors">
+
+            {/* MENU */}
+            <nav className="flex-1 px-4 py-4 space-y-2">
+                {menuItems.map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => setActiveSection(item.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200
+                            ${
+                                activeSection === item.id
+                                    ? "bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-white shadow-md scale-[1.02]"
+                                    : "text-[#EEDFCC] hover:bg-[#3A3A3A] hover:text-white"
+                            }
+                        `}
+                    >
+                        <item.icon size={20} />
+                        {item.label}
+                    </button>
+                ))}
+            </nav>
+
+            {/* LOGOUT */}
+            <div className="p-4 border-t border-[#403A34]">
+                <button
+                    onClick={onLogout}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition 
+                    hover:bg-[#3A3A3A] text-red-400 hover:text-red-300"
+                >
                     <LogOut size={20} />
                     <span className="font-medium">Logout</span>
                 </button>
             </div>
+
         </aside>
     );
 };
+
 export default SellerSidebar;

@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaf
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix for default marker icon
+// Fix default marker icon
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -26,45 +26,60 @@ const LocationMarker = ({ position, setPosition, isEditable }) => {
         },
     });
 
-    return position === null ? null : (
+    return position ? (
         <Marker position={position}>
-            <Popup>Selected Location</Popup>
+            <Popup className="font-semibold text-[#8C2F2B]">Selected Location</Popup>
         </Marker>
-    );
+    ) : null;
 };
 
-const MapComponent = ({ 
-    locations = [], // Array of { lat, lng, title, description }
-    center = [20.5937, 78.9629], // Default to India
+const MapComponent = ({
+    locations = [], // { lat, lng, title, description }
+    center = [20.5937, 78.9629],
     zoom = 5,
     isEditable = false,
     onLocationSelect,
     selectedLocation
 }) => {
     return (
-        <div className="h-[400px] w-full rounded-lg overflow-hidden border border-gray-300 z-0">
-            <MapContainer center={center} zoom={zoom} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+        <div
+            className="
+                h-[400px] w-full 
+                rounded-xl 
+                overflow-hidden 
+                shadow-md 
+                border border-[#FFD9A0] 
+                bg-[#FFF6E9]
+            "
+        >
+            <MapContainer
+                center={center}
+                zoom={zoom}
+                scrollWheelZoom={true}
+                style={{ height: "100%", width: "100%" }}
+            >
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution='&copy; OpenStreetMap contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                
+
                 {isEditable && (
-                    <LocationMarker 
-                        position={selectedLocation} 
-                        setPosition={onLocationSelect} 
-                        isEditable={isEditable} 
+                    <LocationMarker
+                        position={selectedLocation}
+                        setPosition={onLocationSelect}
+                        isEditable={isEditable}
                     />
                 )}
 
-                {!isEditable && locations.map((loc, idx) => (
-                    <Marker key={idx} position={[loc.lat, loc.lng]}>
-                        <Popup>
-                            <div className="font-bold">{loc.title}</div>
-                            <div>{loc.description}</div>
-                        </Popup>
-                    </Marker>
-                ))}
+                {!isEditable &&
+                    locations.map((loc, idx) => (
+                        <Marker key={idx} position={[loc.lat, loc.lng]}>
+                            <Popup>
+                                <div className="font-bold text-[#8C2F2B]">{loc.title}</div>
+                                <div className="text-sm text-[#C24C30]">{loc.description}</div>
+                            </Popup>
+                        </Marker>
+                    ))}
             </MapContainer>
         </div>
     );

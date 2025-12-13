@@ -12,24 +12,28 @@ const UserWishlist = () => {
     fetchWishlist();
   }, [fetchWishlist]);
 
+  // ------------------- LOADING -------------------
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF8C42]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E66A32]"></div>
       </div>
     );
   }
 
+  // ------------------- EMPTY WISHLIST -------------------
   if (wishlist.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <h2 className="text-2xl font-bold text-[#2B2B2B] mb-4">My Wishlist</h2>
-        <div className="bg-white rounded-xl p-10 border border-dashed border-gray-300">
-          <Heart size={48} className="mx-auto text-gray-300 mb-4" />
-          <p className="text-gray-500 text-lg mb-6">Your wishlist is empty.</p>
+      <div className="p-6 text-center max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold text-[#8C2F2B] mb-4">My Wishlist</h2>
+
+        <div className="bg-[#FFF6E9] rounded-2xl p-10 border border-[#EAD7BD] shadow-sm">
+          <Heart size={50} className="mx-auto text-[#EAD7BD] mb-4" />
+          <p className="text-[#C24C30] text-lg mb-6">Your wishlist is empty.</p>
+
           <Link 
-            to="/user-dashboard/marketplace" 
-            className="bg-[#FF8C42] text-white px-6 py-2 rounded-lg hover:bg-[#e67e3b] transition-colors"
+            to="/user-dashboard/marketplace"
+            className="bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:opacity-90 transition"
           >
             Browse Marketplace
           </Link>
@@ -38,59 +42,75 @@ const UserWishlist = () => {
     );
   }
 
+  // ------------------- WISHLIST GRID -------------------
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h2 className="text-2xl font-bold text-[#2B2B2B] mb-6">My Wishlist ({wishlist.length})</h2>
+      <h2 className="text-3xl font-bold text-[#8C2F2B] mb-6">My Wishlist ({wishlist.length})</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
         {wishlist.map((product) => (
           <div
             key={product._id}
             className="bg-white rounded-xl border border-[#FFD9A0] shadow-sm overflow-hidden 
-                     hover:shadow-md transition-shadow group relative"
+                       hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative"
           >
-            {/* Product Image */}
+            {/* ------------------- IMAGE ------------------- */}
             <div className="h-48 overflow-hidden relative">
               <img
                 src={product.image || product.imageUrl}
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              
+
+              {/* REMOVE FROM WISHLIST */}
               <button 
                 onClick={() => toggleWishlist(product._id)}
-                className="absolute top-2 right-2 bg-white/90 p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors z-10 shadow-sm"
+                className="absolute top-2 right-2 bg-white/90 p-2 rounded-full hover:bg-red-50 
+                           text-red-500 transition-colors z-10 shadow-sm"
                 title="Remove from wishlist"
               >
                 <Trash2 size={18} />
               </button>
+
+              {/* LOW STOCK BADGE */}
+              {product.stock < 10 && (
+                <span className="absolute top-2 left-2 bg-[#C24C30] text-white text-xs font-bold px-2 py-1 rounded-full">
+                  Low Stock
+                </span>
+              )}
             </div>
 
-            {/* Details */}
-            <div className="p-4">
-              <div className="mb-2">
+            {/* ------------------- DETAILS ------------------- */}
+            <div className="p-4 space-y-2">
+
+              <div>
                 <h3 className="font-bold text-lg text-[#2B2B2B]">{product.name}</h3>
-                <p className="text-xs text-gray-500">{product.category}</p>
+                <p className="text-xs text-[#C24C30]">{product.category}</p>
               </div>
 
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+              <p className="text-gray-600 text-sm line-clamp-2 mb-3">
                 {product.description}
               </p>
 
+              {/* PRICE + ADD BUTTON */}
               <div className="flex justify-between items-center">
                 <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
 
                 <button
                   onClick={() => addToCart(product)}
-                  className="bg-[#FF8C42] text-white p-2 rounded-lg hover:bg-[#e67e3b] transition-colors 
-                             flex items-center gap-2 text-sm font-medium"
+                  className="bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-white px-3 py-2 rounded-lg shadow 
+                             hover:opacity-90 transition flex items-center gap-2 text-sm font-medium"
                 >
-                  <ShoppingCart size={18} /> Add
+                  <ShoppingCart size={18} />
+                  Add
                 </button>
               </div>
+
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );

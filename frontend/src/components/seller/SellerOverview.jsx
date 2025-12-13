@@ -79,12 +79,12 @@ const SellerOverview = ({ user, orders, products, setActiveTab }) => {
     return (
         <div className="space-y-6 pb-8">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-xl border border-[#FFD9A0] shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#FFF6E9] p-6 rounded-xl border border-[#EAD7BD] shadow-sm">
                 <div>
                     <h1 className="text-2xl font-bold text-[#8C2F2B]">Dashboard Overview</h1>
                     <p className="text-sm text-[#C24C30]">Welcome back, {user?.name}</p>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-medium text-[#8C2F2B] bg-[#FDF6E9] px-3 py-1.5 rounded-lg border border-[#FFD9A0]">
+                <div className="flex items-center gap-2 text-xs font-medium text-[#8C2F2B] bg-[#FAF3E3] px-3 py-1.5 rounded-lg border border-[#EAD7BD]">
                     <Clock size={14} />
                     <span>Updated: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                 </div>
@@ -155,7 +155,7 @@ const StatCard = ({ title, value, icon, color, trend }) => {
     const currentStyle = styles[color] || styles.saffron;
 
     return (
-        <motion.div whileHover={{ y: -2 }} className={`bg-white p-6 rounded-xl shadow-sm border border-[#FFD9A0] flex flex-col justify-between h-full`}>
+        <motion.div whileHover={{ y: -2 }} className={`bg-[#FFF6E9] p-6 rounded-xl shadow-sm border border-[#EAD7BD] flex flex-col justify-between h-full`}>
             <div className="flex justify-between items-start mb-4">
                 <div className={`p-3 rounded-lg ${currentStyle.iconBg} ${currentStyle.text}`}>
                     {icon}
@@ -175,13 +175,13 @@ const StatCard = ({ title, value, icon, color, trend }) => {
 };
 
 const RevenueChart = ({ data }) => (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-[#FFD9A0]">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-2 bg-[#FFF6E9] p-6 rounded-xl shadow-sm border border-[#EAD7BD]">
         <div className="flex justify-between items-center mb-6">
             <div>
                 <h3 className="font-bold text-[#2B2B2B]">Revenue Analytics</h3>
                 <p className="text-xs text-[#C24C30]">Income over time</p>
             </div>
-            <div className="p-2 bg-[#FDF6E9] rounded-lg"><Activity size={16} className="text-[#E66A32]" /></div>
+            <div className="p-2 bg-[#FAF3E3] rounded-lg"><Activity size={16} className="text-[#E66A32]" /></div>
         </div>
         <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -192,10 +192,10 @@ const RevenueChart = ({ data }) => (
                             <stop offset="95%" stopColor="#FF8C42" stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#FDF6E9" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#FAF3E3" />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#C24C30' }} dy={10} />
                     <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#C24C30' }} tickFormatter={(v) => `₹${v}`} />
-                    <Tooltip contentStyle={{backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #FFD9A0', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}} />
+                    <Tooltip contentStyle={{backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #EAD7BD', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}} />
                     <Area type="monotone" dataKey="sales" stroke="#FF8C42" strokeWidth={2} fill="url(#sales)" />
                 </AreaChart>
             </ResponsiveContainer>
@@ -204,7 +204,7 @@ const RevenueChart = ({ data }) => (
 );
 
 const StatusChart = ({ data }) => (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white p-6 rounded-xl shadow-sm border border-[#FFD9A0] flex flex-col">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-[#FFF6E9] p-6 rounded-xl shadow-sm border border-[#EAD7BD] flex flex-col">
         <h3 className="font-bold text-[#2B2B2B] mb-1">Order Status</h3>
         <p className="text-xs text-[#C24C30] mb-4">Distribution by status</p>
         <div className="flex-1 min-h-[250px]">
@@ -226,7 +226,7 @@ const RecentOrdersTable = ({ orders, setActiveTab }) => (
         initial={{ opacity: 0, y: 10 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ delay: 0.2 }} 
-        className="bg-white p-6 rounded-xl shadow-sm border border-[#FFD9A0] h-full flex flex-col"
+        className="bg-[#FFF6E9] p-6 rounded-xl shadow-sm border border-[#EAD7BD] h-full flex flex-col"
     >
         <div className="flex justify-between items-center mb-5">
             <div><h3 className="font-bold text-[#2B2B2B]">Recent Orders</h3><p className="text-xs text-[#C24C30]">Latest transactions</p></div>
@@ -235,16 +235,16 @@ const RecentOrdersTable = ({ orders, setActiveTab }) => (
         <div className="overflow-x-auto flex-1">
             <table className="w-full">
                 <thead>
-                    <tr className="text-left border-b border-[#FFD9A0]">
+                    <tr className="text-left border-b border-[#EAD7BD]">
                         <th className="pb-3 text-xs font-semibold text-[#8C2F2B] uppercase">Order ID</th>
                         <th className="pb-3 text-xs font-semibold text-[#8C2F2B] uppercase">Date</th>
                         <th className="pb-3 text-xs font-semibold text-[#8C2F2B] uppercase">Amount</th>
                         <th className="pb-3 text-xs font-semibold text-[#8C2F2B] uppercase">Status</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-[#FFD9A0]/30">
+                <tbody className="divide-y divide-[#EAD7BD]/30">
                     {orders.map((order) => (
-                        <tr key={order._id} className="group hover:bg-[#FDF6E9] transition-colors">
+                        <tr key={order._id} className="group hover:bg-[#FAF3E3] transition-colors">
                             <td className="py-3 text-sm font-medium text-[#2B2B2B]">#{order._id.slice(-6)}</td>
                             <td className="py-3 text-sm text-[#C24C30]"><div className="flex items-center gap-1.5"><Calendar size={12} />{new Date(order.createdAt).toLocaleDateString()}</div></td>
                             <td className="py-3 text-sm font-medium text-[#2B2B2B]">₹{order.totalAmount}</td>
@@ -273,7 +273,7 @@ const InventoryAlertList = ({ products, setActiveTab }) => (
         initial={{ opacity: 0, y: 10 }} 
         animate={{ opacity: 1, y: 0 }} 
         transition={{ delay: 0.3 }} 
-        className="bg-white p-6 rounded-xl shadow-sm border border-[#FFD9A0] h-full flex flex-col"
+        className="bg-[#FFF6E9] p-6 rounded-xl shadow-sm border border-[#EAD7BD] h-full flex flex-col"
     >
         <div className="flex justify-between items-center mb-5">
             <div><h3 className="font-bold text-[#2B2B2B]">Inventory Alerts</h3><p className="text-xs text-[#C24C30]">Low stock items</p></div>
@@ -281,12 +281,12 @@ const InventoryAlertList = ({ products, setActiveTab }) => (
         </div>
         <div className="space-y-3 flex-1">
             {products.length > 0 ? products.map((p) => (
-                <div key={p._id} className="flex items-center gap-3 p-2.5 border border-[#FFD9A0] rounded-lg hover:border-[#E66A32] hover:bg-[#FFF7ED] transition-all group">
-                    <div className="w-10 h-10 bg-[#FDF6E9] rounded-lg overflow-hidden flex-shrink-0">
+                <div key={p._id} className="flex items-center gap-3 p-2.5 border border-[#EAD7BD] rounded-lg hover:border-[#E66A32] hover:bg-[#FAF3E3] transition-all group">
+                    <div className="w-10 h-10 bg-[#FAF3E3] rounded-lg overflow-hidden flex-shrink-0">
                         {p.image ? <img src={p.image} className="w-full h-full object-cover" alt={p.name} /> : <div className="w-full h-full flex items-center justify-center text-[#C24C30]"><ShoppingBag size={16} /></div>}
                     </div>
                     <div className="flex-1 min-w-0"><p className="text-sm font-medium text-[#2B2B2B] truncate">{p.name}</p><p className="text-xs text-[#C24C30] font-medium">Only {p.quantity} left</p></div>
-                    <button onClick={() => setActiveTab("products")} className="text-xs px-2.5 py-1.5 bg-white border border-[#FFD9A0] text-[#E66A32] rounded-md hover:text-white hover:bg-[#E66A32] transition-colors shadow-sm">Restock</button>
+                    <button onClick={() => setActiveTab("products")} className="text-xs px-2.5 py-1.5 bg-white border border-[#EAD7BD] text-[#E66A32] rounded-md hover:text-white hover:bg-[#E66A32] transition-colors shadow-sm">Restock</button>
                 </div>
             )) : (
                 <div className="h-full flex flex-col items-center justify-center py-8 text-center">

@@ -8,50 +8,87 @@ const UserOrders = ({ setActiveSection }) => {
     return (
         <div className="max-w-4xl mx-auto">
             <h1 className="text-3xl font-bold text-[#8C2F2B] mb-8">My Orders</h1>
-            
+
             {orders.length > 0 ? (
                 <div className="space-y-6">
                     {orders.map((order) => (
-                        <motion.div 
+                        <motion.div
                             key={order._id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-xl shadow-sm border border-[#FFD9A0] overflow-hidden"
+                            className="rounded-2xl overflow-hidden shadow-md border border-[#FFD9A0]
+                                       bg-gradient-to-br from-[#FFF4E6] to-[#FFE9D3] transition"
                         >
-                            <div className="bg-[#FDF6E9] px-6 py-4 border-b border-[#FFD9A0] flex justify-between items-center">
+                            {/* Header */}
+                            <div className="px-6 py-4 bg-[#FFF4E6] border-b border-[#FFD9A0] flex justify-between items-center">
                                 <div>
-                                    <p className="text-xs text-[#8C2F2B] uppercase font-bold">Order ID</p>
+                                    <p className="text-[10px] font-semibold text-[#C24C30] uppercase tracking-wide">Order ID</p>
                                     <p className="text-sm font-mono text-[#2B2B2B]">{order._id}</p>
                                 </div>
+
+                                {/* Status */}
                                 <div className="flex items-center gap-2">
-                                    {order.status === 'Pending' ? <Clock size={16} className="text-orange-500"/> : <CheckCircle size={16} className="text-green-500"/>}
-                                    <span className={`text-sm font-bold ${order.status === 'Pending' ? 'text-orange-500' : 'text-green-600'}`}>
+                                    {order.status === "Pending" ? (
+                                        <Clock size={16} className="text-[#E66A32]" />
+                                    ) : (
+                                        <CheckCircle size={16} className="text-green-600" />
+                                    )}
+
+                                    <span
+                                        className={`text-sm font-bold px-3 py-1 rounded-full border ${
+                                            order.status === "Pending"
+                                                ? "text-[#E66A32] bg-[#FFE2C6] border-[#FFB98A]"
+                                                : "text-green-700 bg-green-100 border-green-300"
+                                        }`}
+                                    >
                                         {order.status}
                                     </span>
                                 </div>
                             </div>
-                            
+
+                            {/* Order Items */}
                             <div className="p-6">
                                 <div className="space-y-4 mb-6">
                                     {order.items.map((item, index) => (
-                                        <div key={index} className="flex justify-between items-center">
+                                        <div
+                                            key={index}
+                                            className="flex justify-between items-center bg-white/60 p-3 rounded-lg shadow-sm border border-[#FFE1BA]"
+                                        >
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
-                                                    {item.product?.image && <img src={item.product.image} alt="Product" className="w-full h-full object-cover" />}
+                                                <div className="w-12 h-12 bg-[#FDF6E9] rounded-lg overflow-hidden">
+                                                    {item.product?.image && (
+                                                        <img
+                                                            src={item.product.image}
+                                                            alt="Product"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    )}
                                                 </div>
+
                                                 <div>
-                                                    <p className="font-medium text-[#2B2B2B]">{item.product?.name || "Unknown Product"}</p>
+                                                    <p className="font-medium text-[#2B2B2B]">
+                                                        {item.product?.name || "Unknown Product"}
+                                                    </p>
                                                     <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
-                                            <p className="font-medium text-[#8C2F2B]">₹{item.price * item.quantity}</p>
+
+                                            <p className="font-bold text-[#8C2F2B]">
+                                                ₹{item.price * item.quantity}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
-                                
-                                <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                                    <p className="text-sm text-gray-500">Ordered on {new Date(order.createdAt).toLocaleDateString()}</p>
-                                    <p className="text-xl font-bold text-[#C24C30]">Total: ₹{order.totalAmount}</p>
+
+                                {/* Footer */}
+                                <div className="flex justify-between items-center pt-4 border-t border-[#FFE1BA]">
+                                    <p className="text-sm text-gray-600">
+                                        Ordered on {new Date(order.createdAt).toLocaleDateString()}
+                                    </p>
+
+                                    <p className="text-xl font-bold text-[#C24C30]">
+                                        Total: ₹{order.totalAmount}
+                                    </p>
                                 </div>
                             </div>
                         </motion.div>
@@ -61,9 +98,9 @@ const UserOrders = ({ setActiveSection }) => {
                 <div className="flex flex-col items-center justify-center py-20 text-[#C24C30]/60">
                     <Package className="w-16 h-16 mb-4 opacity-40" />
                     <p className="text-lg">You haven't placed any orders yet.</p>
-                    <button 
+                    <button
                         onClick={() => setActiveSection("market")}
-                        className="mt-4 text-[#FF8C42] hover:underline font-medium"
+                        className="mt-4 text-[#E66A32] hover:text-[#C24C30] hover:underline font-medium"
                     >
                         Browse Market
                     </button>

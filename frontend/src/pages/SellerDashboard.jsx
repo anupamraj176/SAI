@@ -32,7 +32,7 @@ const SellerDashboard = () => {
     }, [fetchSellerProducts, fetchSellerOrders]);
 
     return (
-        <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
+        <div className="flex h-screen bg-[#FAF3E3] font-sans overflow-hidden">
             <SellerSidebar
                 activeSection={activeTab}
                 setActiveSection={setActiveTab}
@@ -40,9 +40,6 @@ const SellerDashboard = () => {
             />
 
             <main className="flex-1 overflow-y-auto relative z-0">
-                {/* Static Background */}
-                <div className="absolute inset-0 bg-gray-50 -z-10" />
-
                 <div className="p-4 md:p-8">
                     <AnimatePresence mode="wait">
                         <motion.div
