@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5001/api/products";
+const API_URL = "/api/products";
 axios.defaults.withCredentials = true;
 
 export const useProductStore = create((set) => ({

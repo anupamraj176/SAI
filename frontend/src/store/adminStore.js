@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:5001/api/admin";
+const API_URL = "/api/admin";
 axios.defaults.withCredentials = true;
 
 export const useAdminStore = create((set) => ({
