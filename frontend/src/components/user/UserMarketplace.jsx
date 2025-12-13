@@ -5,22 +5,22 @@ import { useProductStore } from '../../store/productStore';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 import MapComponent from '../MapComponent';
-import vegetableImage from '../../../assets/vegetable.jpg';
-import fruitsImage from '../../../assets/fruits.webp';
-import grainsImage from '../../../assets/grains.avif';
-import pulsesImage from '../../../assets/pulses.webp';
-import spicesImage from '../../../assets/spices.avif';
-import nutsImage from '../../../assets/nuts.avif';
-import sugarImage from '../../../assets/sugar.avif';
-import seedsImage from '../../../assets/seeds.avif';
-import eggsImage from '../../../assets/eggs.avif';
-import juiceImage from '../../../assets/juice.avif';
-import edibleImage from '../../../assets/edible.avif';
-import bakeryImage from '../../../assets/bakery.avif';
-import picklesImage from '../../../assets/pickles.avif';
-import snacksImage from '../../../assets/snacks.avif';
-import coffeeImage from '../../../assets/coffe.avif';
-import dryfruitsImage from '../../../assets/dryfruits.avif';
+const vegetableImage = '/assets/vegetable.jpg';
+const fruitsImage = '/assets/fruits.webp';
+const grainsImage = '/assets/grains.avif';
+const pulsesImage = '/assets/pulses.webp';
+const spicesImage = '/assets/spices.avif';
+const nutsImage = '/assets/nuts.avif';
+const sugarImage = '/assets/sugar.avif';
+const seedsImage = '/assets/seeds.avif';
+const eggsImage = '/assets/eggs.avif';
+const juiceImage = '/assets/juice.avif';
+const edibleImage = '/assets/edible.avif';
+const bakeryImage = '/assets/bakery.avif';
+const picklesImage = '/assets/pickles.avif';
+const snacksImage = '/assets/snacks.avif';
+const coffeeImage = '/assets/coffe.avif';
+const dryfruitsImage = '/assets/dryfruits.avif';
 
 const CATEGORIES = [
   { id: 'Vegetables', name: 'Vegetables', image: vegetableImage },
