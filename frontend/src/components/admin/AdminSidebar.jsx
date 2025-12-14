@@ -38,7 +38,7 @@ const AdminSidebar = ({ activeSection, setActiveSection, onLogout, isOpen, onClo
 
       <aside className={`
           fixed md:relative z-50 
-          w-64 bg-[#2B2B2B] text-white h-screen flex flex-col border-r border-[#403A34] shadow-xl
+          w-64 bg-[#2B2B2B] text-white h-[100dvh] flex flex-col border-r border-[#403A34] shadow-xl
           transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}>
