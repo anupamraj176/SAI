@@ -87,9 +87,9 @@ const SellerProfile = () => {
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
                 
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 flex justify-between items-end">
-                    <div className="text-white mb-2 md:mb-0 ml-36 md:ml-44">
-                        <h1 className="text-2xl md:text-4xl font-bold shadow-black drop-shadow-md">{name || "Farm Name"}</h1>
-                        <p className="text-white/90 text-sm md:text-base font-medium flex items-center gap-2">
+                    <div className="text-white mb-2 md:mb-0 hidden md:block md:ml-44">
+                        <h1 className="text-4xl font-bold shadow-black drop-shadow-md">{name || "Farm Name"}</h1>
+                        <p className="text-white/90 text-base font-medium flex items-center gap-2">
                             {user?.isSellerVerified ? (
                                 <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/30">
                                     <CheckCircle size={14} className="text-green-300" /> Verified Seller
@@ -109,7 +109,7 @@ const SellerProfile = () => {
                 <div className="bg-[#FFF6E9] rounded-3xl shadow-xl border border-[#EAD7BD] overflow-visible">
                     
                     {/* PROFILE IMAGE (Floating) */}
-                    <div className="absolute -top-16 left-8 md:left-12">
+                    <div className="absolute -top-16 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0">
                         <div className="relative group">
                             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[#FFF6E9] shadow-lg bg-[#FAF3E3]">
                                 {image ? (
@@ -127,7 +127,23 @@ const SellerProfile = () => {
                         </div>
                     </div>
 
-                    <div className="pt-28 pb-8 px-6 md:px-10">
+                    <div className="pt-20 md:pt-28 pb-8 px-6 md:px-10">
+                        {/* Mobile Name & Verification (Visible only on small screens) */}
+                        <div className="md:hidden text-center mb-8">
+                            <h1 className="text-2xl font-bold text-[#8C2F2B]">{name || "Farm Name"}</h1>
+                            <div className="flex justify-center mt-2">
+                                {user?.isSellerVerified ? (
+                                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full flex items-center gap-1 border border-green-300 text-sm font-bold">
+                                        <CheckCircle size={14} /> Verified Seller
+                                    </span>
+                                ) : (
+                                    <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full flex items-center gap-1 border border-yellow-300 text-sm font-bold">
+                                        Verification Pending
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
                         <form onSubmit={handleSubmit} className="space-y-8">
                             
                             {/* SECTION: BASIC INFO */}
