@@ -50,8 +50,9 @@ const AdminUsers = () => {
         Manage Users
       </h2>
 
-      <div className="bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden overflow-x-auto">
-        <table className="w-full text-left min-w-[600px]">
+      {/* DESKTOP TABLE VIEW */}
+      <div className="hidden md:block bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
+        <table className="w-full text-left">
           <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
             <tr>
               <th className="p-4 font-semibold text-[#8C2F2B]">Name</th>
@@ -112,6 +113,49 @@ const AdminUsers = () => {
 
         {users.length === 0 && (
           <div className="p-8 text-center text-[#8C2F2B]">
+            No users found.
+          </div>
+        )}
+      </div>
+
+      {/* MOBILE CARD VIEW */}
+      <div className="md:hidden grid grid-cols-1 gap-4">
+        {users.map((user) => (
+          <div 
+            key={user._id}
+            className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] space-y-3"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-[#FFE3C2] border border-[#EAD7BD] rounded-full flex items-center justify-center shrink-0">
+                <User size={20} className="text-[#E66A32]" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-bold text-[#2B2B2B] truncate">{user.name}</h3>
+                <p className="text-sm text-[#8C2F2B] truncate">{user.email}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-[#EAD7BD]/50">
+              <span className="text-xs font-medium text-[#8C2F2B] bg-[#F3E6D3] px-2 py-1 rounded border border-[#EAD7BD]">
+                Joined: {new Date(user.createdAt).toLocaleDateString()}
+              </span>
+              
+              <button
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete this user?")) {
+                    deleteUser(user._id);
+                  }
+                }}
+                className="bg-red-100 text-red-700 p-2 rounded-lg border border-red-200 flex items-center gap-2 text-xs font-bold"
+              >
+                <Trash2 size={14} /> Delete
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {users.length === 0 && (
+          <div className="p-8 text-center text-[#8C2F2B] bg-[#FFF6E9] rounded-xl border border-[#EAD7BD]">
             No users found.
           </div>
         )}
