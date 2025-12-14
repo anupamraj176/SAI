@@ -30,6 +30,22 @@ const accountSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isSellerVerified: {
+      type: Boolean,
+      default: false,
+    },
+    profileImage: {
+      type: String,
+      default: "",
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
+    phoneNumber: {
+      type: String,
+      default: "",
+    },
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,
     verificationToken: String,

@@ -28,8 +28,8 @@ const AdminSellers = () => {
   }, [fetchSellers]);
 
   const filteredSellers = sellers?.filter((seller) => {
-    if (filter === "verified") return seller.isVerified;
-    if (filter === "pending") return !seller.isVerified;
+    if (filter === "verified") return seller.isSellerVerified;
+    if (filter === "pending") return !seller.isSellerVerified;
     return true;
   });
 
@@ -138,12 +138,12 @@ const AdminSellers = () => {
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold border 
                         ${
-                          seller.isVerified
+                          seller.isSellerVerified
                             ? "bg-green-100 text-green-700 border-green-300"
                             : "bg-yellow-100 text-yellow-700 border-yellow-300"
                         }`}
                       >
-                        {seller.isVerified ? "Verified" : "Pending"}
+                        {seller.isSellerVerified ? "Verified" : "Pending"}
                       </span>
                     </td>
 
@@ -154,7 +154,7 @@ const AdminSellers = () => {
 
                     {/* ACTION BUTTONS */}
                     <td className="p-4 flex gap-2">
-                      {!seller.isVerified ? (
+                      {!seller.isSellerVerified ? (
                         <button
                           onClick={() => verifySeller(seller._id, true)}
                           className="text-green-600 hover:bg-green-100 p-2 rounded-lg transition"
@@ -214,12 +214,12 @@ const AdminSellers = () => {
                   <span
                     className={`px-2 py-1 rounded-full text-[10px] font-bold border 
                     ${
-                      seller.isVerified
+                      seller.isSellerVerified
                         ? "bg-green-100 text-green-700 border-green-300"
                         : "bg-yellow-100 text-yellow-700 border-yellow-300"
                     }`}
                   >
-                    {seller.isVerified ? "Verified" : "Pending"}
+                    {seller.isSellerVerified ? "Verified" : "Pending"}
                   </span>
                 </div>
 
@@ -229,7 +229,7 @@ const AdminSellers = () => {
                   </span>
                   
                   <div className="flex gap-2">
-                    {!seller.isVerified ? (
+                    {!seller.isSellerVerified ? (
                       <button
                         onClick={() => verifySeller(seller._id, true)}
                         className="bg-green-100 text-green-700 p-2 rounded-lg border border-green-200"

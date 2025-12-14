@@ -75,8 +75,13 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role,
         isVerified: user.isVerified,
+        isSellerVerified: user.isSellerVerified,
+        profileImage: user.profileImage,
+        bio: user.bio,
+        phoneNumber: user.phoneNumber,
         createdAt: user.createdAt,
         lastLogin: user.lastLogin,
+        location: user.location,
       },
     });
   } catch (error) {
@@ -189,7 +194,7 @@ export const resetPassword = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, location } = req.body;
+    const { name, location, profileImage, bio, phoneNumber } = req.body;
     const user = await Account.findById(req.userId);
 
     if (!user) {
@@ -197,6 +202,9 @@ export const updateProfile = async (req, res) => {
     }
 
     if (name) user.name = name;
+    if (profileImage) user.profileImage = profileImage;
+    if (bio !== undefined) user.bio = bio;
+    if (phoneNumber !== undefined) user.phoneNumber = phoneNumber;
     if (location) {
       user.location = {
         type: "Point",
@@ -215,6 +223,11 @@ export const updateProfile = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isVerified: user.isVerified,
+        isSellerVerified: user.isSellerVerified,
+        profileImage: user.profileImage,
+        bio: user.bio,
+        phoneNumber: user.phoneNumber,
         location: user.location,
       },
     });

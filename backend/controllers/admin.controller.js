@@ -16,7 +16,7 @@ export const getDashboardStats = async (req, res) => {
     const orders = await Order.find({ status: { $ne: "Cancelled" } });
     const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
 
-    const pendingSellers = await Account.countDocuments({ role: "seller", isVerified: false });
+    const pendingSellers = await Account.countDocuments({ role: "seller", isSellerVerified: false });
 
     res.status(200).json({
       success: true,
@@ -73,9 +73,8 @@ export const verifySeller = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body; // true (approve) or false (reject/block)
     
-    // Assuming isVerified handles approval. For blocking, we might need a separate 'status' field or use isVerified=false
-    // For now, let's toggle isVerified
-    const seller = await Account.findByIdAndUpdate(id, { isVerified: status }, { new: true });
+    // Toggle isSellerVerified
+    const seller = await Account.findByIdAndUpdate(id, { isSellerVerified: status }, { new: true });
     
     res.status(200).json({ success: true, message: `Seller ${status ? 'verified' : 'unverified'}`, seller });
   } catch (error) {
