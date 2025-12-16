@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, X, Upload, Trash2 } from "lucide-react";
+import { Plus, X, Upload, Trash2, Package } from "lucide-react";
 import { useProductStore } from "../../store/productStore";
 
 const CATEGORY_OPTIONS = [
@@ -80,26 +80,67 @@ const SellerProducts = () => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
           <div 
             key={product._id} 
-            className="rounded-xl shadow-sm border border-[#EAD7BD] bg-[#FFF6E9] overflow-hidden hover:shadow-md transition"
+            // UPDATED: Removed 'group', 'hover:shadow-xl', 'hover:-translate-y-1', 'transition'
+            className="rounded-2xl shadow-md border border-[#EAD7BD] bg-white overflow-hidden"
           >
-            <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+            {/* Image Container */}
+            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-[#FFF6E9] to-[#FAF3E3]">
+              <img 
+                src={product.image} 
+                alt={product.name} 
+                // UPDATED: Removed 'group-hover:scale-110'
+                className="w-full h-full object-cover" 
+              />
+              
+              {/* Category Badge */}
+              <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full 
+                             shadow-sm flex items-center gap-1 border border-[#EAD7BD]">
+                <span className="text-sm">
+                  {CATEGORY_OPTIONS.find(c => c.id === product.category)?.icon || "📦"}
+                </span>
+                <span className="text-[10px] font-bold text-[#8C2F2B] uppercase tracking-wide">{product.category}</span>
+              </div>
 
+              {/* Stock Badge */}
+              <div className="absolute top-2 right-2 bg-[#FF8C42] text-white px-2 py-1 rounded-full 
+                             shadow-sm flex items-center gap-1 text-[10px] font-bold">
+                <Package size={12} />
+                <span>{product.stock || 0}</span>
+              </div>
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent"></div>
+            </div>
+
+            {/* Content */}
             <div className="p-4">
-              <h3 className="font-bold text-lg text-[#2B2B2B]">{product.name}</h3>
-              <p className="text-sm text-[#C24C30]">{product.category}</p>
+              {/* UPDATED: Removed 'group-hover:text-[#8C2F2B]' */}
+              <h3 className="font-bold text-lg text-[#2B2B2B] mb-1 line-clamp-1">
+                {product.name}
+              </h3>
+              
+              <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">
+                {product.description || "Fresh and organic product"}
+              </p>
 
-              <div className="flex justify-between items-center mt-4">
-                <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
+              {/* Price and Action Row */}
+              <div className="flex justify-between items-center pt-3 border-t border-[#EAD7BD]">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-gray-500 font-medium">Price</span>
+                  <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
+                </div>
                 
                 <button 
                   onClick={() => deleteProduct(product._id)}
-                  className="text-red-600 hover:bg-red-100 p-2 rounded-full transition"
+                  className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-lg 
+                             transition-all duration-200 group/btn shadow-sm hover:shadow-md"
+                  title="Delete Product"
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={18} className="group-hover/btn:scale-110 transition-transform" />
                 </button>
               </div>
             </div>
@@ -199,7 +240,7 @@ const SellerProducts = () => {
                 )}
               </div>
 
-              {/* Image Upload (NO DASHED BORDER NOW) */}
+              {/* Image Upload */}
               <label className="block w-full rounded-lg p-4 text-center cursor-pointer bg-[#FFF6E9] border border-[#EAD7BD] hover:bg-[#FAF3E3] transition">
                 <input 
                   type="file"

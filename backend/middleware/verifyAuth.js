@@ -19,9 +19,6 @@ export const verifyAuth = (req, res, next) => {
         userId: decoded.userId,
         role: decoded.role
     };
-    
-    console.log("VerifyAuth Decoded:", req.user); // Debug log
-
     next();
   } catch (error) {
     console.log("Error in verifyAuth ", error);

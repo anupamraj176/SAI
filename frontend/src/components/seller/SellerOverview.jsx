@@ -19,12 +19,10 @@ const COLORS = {
     rust: "#C24C30",
     carbon: "#2B2B2B",
     white: "#FFFFFF",
-    bg: "#FDF6E9" // Light sand background
+    bg: "#FDF6E9" 
 };
 
 const SellerOverview = ({ user, orders, products, setActiveTab }) => {
-    
-    // —————————————— Calculations ——————————————
     const totalSales = useMemo(() => {
         return orders?.reduce((acc, order) => {
             if (order.status?.toLowerCase() === "delivered") {
@@ -77,9 +75,9 @@ const SellerOverview = ({ user, orders, products, setActiveTab }) => {
 
     // —————————————— Render ——————————————
     return (
-        <div className="space-y-6 pb-8">
+        <div className="space-y-5 pb-8">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#FFF6E9] p-6 rounded-xl border border-[#EAD7BD] shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#FFF6E9] p-6 rounded-5xl border border-[#EAD7BD] shadow-sm">
                 <div>
                     <h1 className="text-2xl font-bold text-[#8C2F2B]">Dashboard Overview</h1>
                     <p className="text-sm text-[#C24C30]">Welcome back, {user?.name}</p>
