@@ -5,6 +5,7 @@ import { useProductStore } from '../../store/productStore';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 import MapComponent from '../MapComponent';
+
 const vegetableImage = '/assets/vegetable.jpg';
 const fruitsImage = '/assets/fruits.webp';
 const grainsImage = '/assets/grains.avif';
@@ -141,7 +142,7 @@ const UserMarketplace = () => {
         </div>
       </div>
 
-      {/* CATEGORY GRID (OPTION A - Clean Image Cards) */}
+      {/* CATEGORY GRID */}
       {!showProducts && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {CATEGORIES.map((cat) => (
@@ -184,60 +185,76 @@ const UserMarketplace = () => {
               {filteredProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="rounded-xl overflow-hidden shadow-sm border border-[#EAD7BD] bg-[#FFF6E9] hover:shadow-md transition"
+                  className="rounded-xl overflow-hidden shadow-sm border-2 border-[#EAD7BD] bg-white"
                 >
-                  <div className="h-48 overflow-hidden relative">
+                  {/* Image Container */}
+                  <div className="h-44 overflow-hidden relative bg-[#FFF6E9]">
                     <img
                       src={product.image || product.imageUrl}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
                     />
 
+                    {/* Wishlist Button */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleWishlist(product._id);
                       }}
-                      className="absolute top-3 left-3 bg-white/90 p-1.5 rounded-full hover:bg-white z-20 transition"
+                      className="absolute top-2 left-2 bg-white/95 p-1.5 rounded-full shadow-md z-20"
                       title="Add to wishlist"
                     >
                       <Heart
-                        size={18}
+                        size={16}
                         className={isInWishlist(product._id) ? "fill-red-500 text-red-500" : "text-gray-600"}
                       />
                     </button>
 
+                    {/* Low Stock Badge */}
                     {product.stock < 10 && (
-                      <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full z-20">
-                        Low Stock
-                      </span>
+                      <div className="absolute top-2 right-2 z-20">
+                        <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
+                          Low Stock
+                        </span>
+                      </div>
                     )}
                   </div>
 
+                  {/* Content Container */}
                   <div className="p-4">
+                    {/* Product Name & Stock */}
                     <div className="flex justify-between items-start mb-2">
-                      <div className="max-w-[75%]">
-                        <h3 className="font-bold text-lg text-[#2B2B2B]">{product.name}</h3>
-                        <p className="text-xs text-[#6A5746]">{product.category}</p>
+                      <div className="flex-1 pr-2">
+                        <h3 className="font-bold text-lg text-[#2B2B2B] leading-tight">
+                          {product.name}
+                        </h3>
+                        <p className="text-xs text-[#6A5746] mt-0.5">{product.category}</p>
                       </div>
 
-                      <span className="bg-[#FFF4E6] text-[#FF8C42] text-xs font-bold px-2 py-1 rounded-md">
-                        {product.stock} left
-                      </span>
+                      <div className="flex-shrink-0">
+                        <span className="inline-block bg-[#FFF4E6] text-[#FF8C42] text-xs font-bold px-2.5 py-1 rounded-md border border-[#FFE9CC]">
+                          {product.stock} left
+                        </span>
+                      </div>
                     </div>
 
-                    <p className="text-[#6A5746] text-sm mb-4 line-clamp-2">
+                    {/* Description */}
+                    <p className="text-[#6A5746] text-sm mb-3 line-clamp-2">
                       {product.description}
                     </p>
 
+                    {/* Price & Add to Cart */}
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
+                      <span className="text-xl font-bold text-[#8C2F2B]">
+                        ₹{product.price}
+                      </span>
 
                       <button
                         onClick={() => addToCart(product)}
-                        className="bg-[#FF8C42] text-white p-2 rounded-lg hover:bg-[#e67e3b] transition-colors flex items-center gap-2 text-sm font-medium"
+                        className="bg-[#FF8C42] text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium shadow-sm"
                       >
-                        <ShoppingCart size={16} /> Add
+                        <ShoppingCart size={16} />
+                        <span>Add</span>
                       </button>
                     </div>
                   </div>
