@@ -27,25 +27,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Light Theme Palette
+// Green Theme Palette
 const PALETTE = {
-  saffron: "#FFB444",
-  paprika: "#E66A32",
-  nougat: "#FBEEDB",
-  rust: "#C24C30",
-  maroon: "#8C2F2B",
-  base: "#FAF3E3",
+  sage: "#6FA99F",
+  emerald: "#347B66",
+  lime: "#CFF56E",
+  forest: "#3B4A38",
+  evergreen: "#1F3326",
+  base: "#E8F5E9",
 };
 
-// Soft warm stat card
+// Soft green stat card
 const StatCard = ({ title, value, icon: Icon }) => (
-  <div className="p-5 bg-[#FFF6E9] border border-[#EAD7BD] rounded-2xl shadow-md hover:shadow-lg transition">
+  <div className="p-5 bg-[#E8F5E9] border border-[#6FA99F] rounded-2xl shadow-md hover:shadow-lg transition">
     <div className="flex justify-between items-center">
       <div>
-        <p className="text-[#8C2F2B] text-xs font-semibold">{title}</p>
-        <h3 className="text-2xl font-bold text-[#2B2B2B] mt-1">{value}</h3>
+        <p className="text-[#1F3326] text-xs font-semibold">{title}</p>
+        <h3 className="text-2xl font-bold text-[#1F3326] mt-1">{value}</h3>
       </div>
-      <div className="p-3 rounded-xl bg-[#E66A32] shadow-md">
+      <div className="p-3 rounded-xl bg-[#347B66] shadow-md">
         <Icon size={26} className="text-white" />
       </div>
     </div>
@@ -54,8 +54,8 @@ const StatCard = ({ title, value, icon: Icon }) => (
 
 // Soft card for charts
 const ChartCard = ({ title, children }) => (
-  <div className="bg-[#FFF6E9] border border-[#EAD7BD] p-6 rounded-2xl shadow-md">
-    <h3 className="text-lg font-semibold text-[#8C2F2B] mb-4">{title}</h3>
+  <div className="bg-[#E8F5E9] border border-[#6FA99F] p-6 rounded-2xl shadow-md">
+    <h3 className="text-lg font-semibold text-[#1F3326] mb-4">{title}</h3>
     {children}
   </div>
 );
@@ -79,8 +79,8 @@ const AdminDashboardOverview = () => {
   ];
 
   const pieData = [
-    { name: "Users", value: stats.totalUsers, fill: PALETTE.paprika },
-    { name: "Sellers", value: stats.totalSellers, fill: PALETTE.rust },
+    { name: "Users", value: stats.totalUsers, fill: PALETTE.emerald },
+    { name: "Sellers", value: stats.totalSellers, fill: PALETTE.forest },
   ];
 
   const orderData = [
@@ -93,9 +93,9 @@ const AdminDashboardOverview = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF3E3] p-4 md:p-10">
+    <div className="min-h-screen bg-[#E8F5E9] p-4 md:p-10">
 
-      <h2 className="text-3xl font-bold text-[#2B2B2B] mb-10">
+      <h2 className="text-3xl font-bold text-[#1F3326] mb-10">
         Dashboard Overview
       </h2>
 
@@ -125,10 +125,10 @@ const AdminDashboardOverview = () => {
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={revenueData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" stroke="#8C2F2B" />
-              <YAxis stroke="#8C2F2B" />
+              <XAxis dataKey="month" stroke="#1F3326" />
+              <YAxis stroke="#1F3326" />
               <Tooltip />
-              <Bar dataKey="revenue" fill={PALETTE.paprika} radius={[6, 6, 0, 0]} />
+              <Bar dataKey="revenue" fill={PALETTE.emerald} radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -136,10 +136,10 @@ const AdminDashboardOverview = () => {
         <ChartCard title="Weekly Orders">
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={orderData}>
-              <XAxis dataKey="day" stroke="#8C2F2B" />
-              <YAxis stroke="#8C2F2B" />
+              <XAxis dataKey="day" stroke="#1F3326" />
+              <YAxis stroke="#1F3326" />
               <Tooltip />
-              <Line dataKey="orders" stroke={PALETTE.maroon} strokeWidth={3} dot />
+              <Line dataKey="orders" stroke={PALETTE.evergreen} strokeWidth={3} dot />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>

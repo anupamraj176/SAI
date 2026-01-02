@@ -4,11 +4,11 @@ import { Trash2, Package } from "lucide-react";
 import LoadingSpinner from "../LoadingSpinner";
 
 const PALETTE = {
-  paprika: "#E66A32",
-  nougat: "#FFF6E9",
-  rust: "#C24C30",
-  maroon: "#8C2F2B",
-  saffron: "#FFB444",
+  emerald: "#347B66",
+  lime: "#CFF56E",
+  forest: "#3B4A38",
+  evergreen: "#1F3326",
+  sage: "#6FA99F",
 };
 
 const AdminProducts = () => {
@@ -22,57 +22,57 @@ const AdminProducts = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="p-4 md:p-10 bg-[#FAF3E3] min-h-screen">
-      <h2 className="text-3xl font-bold text-[#2B2B2B] mb-8">
+    <div className="p-4 md:p-10 bg-[#E8F5E9] min-h-screen">
+      <h2 className="text-3xl font-bold text-[#1F3326] mb-8">
         Manage Products
       </h2>
 
       {/* DESKTOP TABLE VIEW */}
-      <div className="hidden md:block bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
+      <div className="hidden md:block bg-[#E8F5E9] rounded-2xl shadow-xl border border-[#6FA99F] overflow-hidden">
         <table className="w-full text-left">
-          <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
+          <thead className="bg-[#C8E6C9] border-b border-[#6FA99F]">
             <tr>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Product</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Seller</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Category</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Price</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Stock</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Actions</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Product</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Seller</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Category</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Price</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Stock</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Actions</th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-[#EAD7BD]">
+          <tbody className="divide-y divide-[#6FA99F]">
             {products.map((product) => (
               <tr
                 key={product._id}
-                className="hover:bg-[#F7EDE1] transition"
+                className="hover:bg-[#C8E6C9] transition"
               >
                 {/* PRODUCT IMAGE + NAME */}
                 <td className="p-4 flex items-center gap-3">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-12 h-12 rounded-lg object-cover border border-[#EAD7BD]"
+                    className="w-12 h-12 rounded-lg object-cover border border-[#6FA99F]"
                   />
-                  <span className="font-medium text-[#2B2B2B]">
+                  <span className="font-medium text-[#1F3326]">
                     {product.name}
                   </span>
                 </td>
 
                 {/* SELLER */}
-                <td className="p-4 text-[#8C2F2B]">
+                <td className="p-4 text-[#3B4A38]">
                   {product.seller?.name || "Unknown"}
                 </td>
 
                 {/* CATEGORY */}
                 <td className="p-4">
-                  <span className="bg-[#F3E6D3] text-[#8C2F2B] px-3 py-1 rounded-md text-xs font-semibold border border-[#EAD7BD]">
+                  <span className="bg-[#C8E6C9] text-[#1F3326] px-3 py-1 rounded-md text-xs font-semibold border border-[#6FA99F]">
                     {product.category}
                   </span>
                 </td>
 
                 {/* PRICE */}
-                <td className="p-4 font-bold text-[#2B2B2B]">
+                <td className="p-4 font-bold text-[#1F3326]">
                   ₹{product.price}
                 </td>
 
@@ -82,7 +82,7 @@ const AdminProducts = () => {
                     className={`text-sm font-semibold ${
                       product.stock < 10
                         ? "text-red-600"
-                        : "text-[#8C2F2B]"
+                        : "text-[#1F3326]"
                     }`}
                   >
                     {product.stock}
@@ -109,7 +109,7 @@ const AdminProducts = () => {
         </table>
 
         {products.length === 0 && (
-          <div className="p-8 text-center text-[#8C2F2B]">
+          <div className="p-8 text-center text-[#1F3326]">
             No products found.
           </div>
         )}
@@ -120,24 +120,24 @@ const AdminProducts = () => {
         {products.map((product) => (
           <div 
             key={product._id}
-            className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] space-y-3"
+            className="bg-[#E8F5E9] p-4 rounded-xl shadow-md border border-[#6FA99F] space-y-3"
           >
             <div className="flex gap-3">
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-16 h-16 rounded-lg object-cover border border-[#EAD7BD] bg-[#F3E6D3]"
+                className="w-16 h-16 rounded-lg object-cover border border-[#6FA99F] bg-[#C8E6C9]"
               />
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-[#2B2B2B] truncate">{product.name}</h3>
-                <p className="text-xs text-[#8C2F2B] truncate">Seller: {product.seller?.name || "Unknown"}</p>
+                <h3 className="font-bold text-[#1F3326] truncate">{product.name}</h3>
+                <p className="text-xs text-[#3B4A38] truncate">Seller: {product.seller?.name || "Unknown"}</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="bg-[#F3E6D3] text-[#8C2F2B] px-2 py-0.5 rounded text-[10px] font-semibold border border-[#EAD7BD]">
+                  <span className="bg-[#C8E6C9] text-[#1F3326] px-2 py-0.5 rounded text-[10px] font-semibold border border-[#6FA99F]">
                     {product.category}
                   </span>
                   <span
                     className={`text-xs font-semibold ${
-                      product.stock < 10 ? "text-red-600" : "text-[#8C2F2B]"
+                      product.stock < 10 ? "text-red-600" : "text-[#1F3326]"
                     }`}
                   >
                     Stock: {product.stock}
@@ -146,8 +146,8 @@ const AdminProducts = () => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-[#EAD7BD]/50">
-              <span className="text-lg font-bold text-[#2B2B2B]">₹{product.price}</span>
+            <div className="flex justify-between items-center pt-2 border-t border-[#6FA99F]/50">
+              <span className="text-lg font-bold text-[#1F3326]">₹{product.price}</span>
               
               <button
                 onClick={() => {
@@ -164,7 +164,7 @@ const AdminProducts = () => {
         ))}
 
         {products.length === 0 && (
-          <div className="p-8 text-center text-[#8C2F2B] bg-[#FFF6E9] rounded-xl border border-[#EAD7BD]">
+          <div className="p-8 text-center text-[#1F3326] bg-[#E8F5E9] rounded-xl border border-[#6FA99F]">
             No products found.
           </div>
         )}

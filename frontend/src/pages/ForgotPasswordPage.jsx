@@ -22,10 +22,10 @@ const ForgotPasswordPage = ({ role = "user" }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-11/12 max-w-md sm:w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
+      className="w-11/12 max-w-md sm:w-full bg-[#1F3326]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#347B66]/50"
     >
       <div className="p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#6FA99F] to-[#CFF56E] text-transparent bg-clip-text">
           Forgot Password
         </h2>
 
@@ -45,7 +45,7 @@ const ForgotPasswordPage = ({ role = "user" }) => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 px-4 bg-gradient-to-r from-[#C24C30] to-[#E66A32] text-white font-bold rounded-lg shadow-lg hover:from-[#E66A32] hover:to-[#FF8C42] focus:outline-none focus:ring-2 focus:ring-[#FF8C42] focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+              className="w-full py-3 px-4 bg-gradient-to-r from-[#347B66] to-[#6FA99F] text-white font-bold rounded-lg shadow-lg hover:from-[#6FA99F] hover:to-[#CFF56E] focus:outline-none focus:ring-2 focus:ring-[#6FA99F] focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
               type="submit"
             >
               {isLoading ? <Loader className="size-6 animate-spin mx-auto" /> : "Send Reset Link"}
@@ -57,9 +57,9 @@ const ForgotPasswordPage = ({ role = "user" }) => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="w-16 h-16 bg-[#FF8C42]/10 rounded-full flex items-center justify-center mx-auto mb-4"
+              className="w-16 h-16 bg-[#347B66]/10 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <Mail className="h-8 w-8 text-[#FF8C42]" />
+              <Mail className="h-8 w-8 text-[#6FA99F]" />
             </motion.div>
             <p className="text-gray-300 mb-6">
               If an account exists for {email}, you will receive a password reset link shortly.
@@ -71,7 +71,7 @@ const ForgotPasswordPage = ({ role = "user" }) => {
       <div className="px-8 py-4 bg-black/20 flex justify-center">
         <Link
           to={role === "seller" ? "/login/seller" : role === "admin" ? "/login/admin" : "/login"}
-          className="text-sm text-[#FF8C42] hover:text-[#FFD9A0] hover:underline flex items-center"
+          className="text-sm text-[#CFF56E] hover:text-[#6FA99F] hover:underline flex items-center"
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
         </Link>

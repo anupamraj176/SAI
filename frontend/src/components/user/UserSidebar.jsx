@@ -19,8 +19,8 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
                 onClick={() => setActiveSection(id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200
                     ${isActive 
-                        ? "bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-white shadow-md scale-[1.02]"
-                        : "text-[#EEDFCC] hover:bg-[#3A3A3A] hover:text-white"
+                        ? "bg-gradient-to-r from-[#347B66] to-[#6FA99F] text-white shadow-md scale-[1.02]"
+                        : "text-[#E8F5E9] hover:bg-[#3B4A38] hover:text-white"
                     }
                 `}
             >
@@ -29,7 +29,7 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
 
                 {/* Cart badge */}
                 {id === "cart" && cartCount > 0 && (
-                    <span className="ml-auto bg-[#FF8C42] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    <span className="ml-auto bg-[#CFF56E] text-[#1F3326] text-[10px] font-bold px-2 py-0.5 rounded-full">
                         {cartCount}
                     </span>
                 )}
@@ -49,16 +49,16 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
 
             <aside className={`
                 fixed md:relative z-50 
-                w-64 bg-[#2B2B2B] text-white h-[100dvh] flex flex-col border-r border-[#403A34] shadow-xl
+                w-64 bg-[#1F3326] text-white h-[100dvh] flex flex-col border-r border-[#347B66] shadow-xl
                 transition-transform duration-300 ease-in-out
                 ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
             `}>
                 
                 {/* HEADER */}
-                <div className="p-6 border-b border-[#403A34] flex justify-between items-center">
+                <div className="p-6 border-b border-[#347B66] flex justify-between items-center">
                     <h2 className="text-2xl font-bold flex items-center gap-2">
-                        <Sparkles className="text-[#FFB444]" />
-                        <span className="bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-transparent bg-clip-text">
+                        <Sparkles className="text-[#CFF56E]" />
+                        <span className="bg-gradient-to-r from-[#6FA99F] to-[#CFF56E] text-transparent bg-clip-text">
                             FarmerHub
                         </span>
                     </h2>
@@ -78,11 +78,11 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
                 </nav>
 
                 {/* FOOTER SECTION */}
-                <div className="p-4 border-t border-[#403A34]">
+                <div className="p-4 border-t border-[#347B66]">
                     
                     {/* USER INFO */}
-                    <div className="mb-4 px-4 py-2 bg-[#3A3A3A] rounded-lg">
-                        <p className="text-xs text-[#FFD9A0] opacity-80">Logged in as</p>
+                    <div className="mb-4 px-4 py-2 bg-[#3B4A38] rounded-lg">
+                        <p className="text-xs text-[#E8F5E9] opacity-80">Logged in as</p>
                         <p className="text-sm font-bold text-white truncate">
                             {user?.name}
                         </p>
@@ -92,7 +92,7 @@ const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCoun
                     <button
                         onClick={onLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition 
-                                   hover:bg-[#3A3A3A] text-red-400 hover:text-red-300"
+                                   hover:bg-[#3B4A38] text-red-400 hover:text-red-300"
                     >
                         <LogOut size={20} />
                         <span className="font-medium">Logout</span>

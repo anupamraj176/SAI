@@ -69,10 +69,10 @@ const EmailVerification = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-11/12 max-w-md sm:w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
+      className="w-11/12 max-w-md sm:w-full bg-[#1F3326]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#347B66]/50"
     >
       <div className="p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#6FA99F] to-[#CFF56E] text-transparent bg-clip-text">
           Verify Your Email
         </h2>
         <p className="text-center text-gray-300 mb-6">
@@ -90,7 +90,7 @@ const EmailVerification = () => {
                 value={digit}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-2xl font-bold bg-[#1A1A1A] text-white border-2 border-[#FFD9A0] rounded-lg focus:border-[#FF8C42] focus:outline-none"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-2xl font-bold bg-[#0E1719] text-white border-2 border-[#6FA99F] rounded-lg focus:border-[#CFF56E] focus:outline-none"
               />
             ))}
           </div>
@@ -100,7 +100,7 @@ const EmailVerification = () => {
             whileTap={{ scale: 0.95 }}
             type="submit"
             disabled={isLoading || code.some((c) => !c)}
-            className="w-full bg-gradient-to-r from-[#C24C30] to-[#E66A32] text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#E66A32] hover:to-[#FF8C42] focus:outline-none focus:ring-2 focus:ring-[#FF8C42] focus:ring-opacity-50 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-[#347B66] to-[#6FA99F] text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#6FA99F] hover:to-[#CFF56E] focus:outline-none focus:ring-2 focus:ring-[#6FA99F] focus:ring-opacity-50 disabled:opacity-50"
           >
             {isLoading ? "Verifying..." : "Verify Email"}
           </motion.button>

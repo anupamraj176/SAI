@@ -40,10 +40,10 @@ const SignUpPage = ({ role = "user" }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-11/12 max-w-md sm:w-full bg-[#2B2B2B]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#8C2F2B]/50"
+      className="w-11/12 max-w-md sm:w-full bg-[#1F3326]/80 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden border border-[#347B66]/50"
     >
       <div className="p-6 sm:p-8">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#FF8C42] to-[#FFD9A0] text-transparent bg-clip-text">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center bg-gradient-to-r from-[#6FA99F] to-[#CFF56E] text-transparent bg-clip-text">
           {role === "seller" ? "Create Seller Account" : "Create User Account"}
         </h2>
 
@@ -73,7 +73,7 @@ const SignUpPage = ({ role = "user" }) => {
           <PasswordStrengthMeter password={password} />
 
           <motion.button
-            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-[#C24C30] to-[#E66A32] text-white font-bold rounded-lg shadow-lg hover:from-[#E66A32] hover:to-[#FF8C42] focus:outline-none focus:ring-2 focus:ring-[#FF8C42] focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+            className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-[#347B66] to-[#6FA99F] text-white font-bold rounded-lg shadow-lg hover:from-[#6FA99F] hover:to-[#CFF56E] focus:outline-none focus:ring-2 focus:ring-[#6FA99F] focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
@@ -88,7 +88,7 @@ const SignUpPage = ({ role = "user" }) => {
           Already have an account?{" "}
           <Link
             to={role === "seller" ? "/login/seller" : "/login"}
-            className="text-[#FF8C42] hover:text-[#FFD9A0] hover:underline transition-colors"
+            className="text-[#CFF56E] hover:text-[#6FA99F] hover:underline transition-colors"
           >
             Login
           </Link>

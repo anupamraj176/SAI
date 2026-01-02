@@ -4,11 +4,11 @@ import { Trash2, User } from "lucide-react";
 import LoadingSpinner from "../LoadingSpinner";
 
 const PALETTE = {
-  paprika: "#E66A32",
-  nougat: "#FFF6E9",
-  beige: "#FAF3E3",
-  rust: "#C24C30",
-  maroon: "#8C2F2B",
+  emerald: "#347B66",
+  lime: "#CFF56E",
+  base: "#E8F5E9",
+  forest: "#3B4A38",
+  evergreen: "#1F3326",
 };
 
 const AdminUsers = () => {
@@ -22,7 +22,7 @@ const AdminUsers = () => {
 
   if (error) {
     return (
-      <div className="p-10 bg-[#FAF3E3]">
+      <div className="p-10 bg-[#E8F5E9]">
         <div className="bg-red-100 text-red-700 p-4 rounded-xl border border-red-300 shadow">
           Error loading users: {error}
         </div>
@@ -32,12 +32,12 @@ const AdminUsers = () => {
 
   if (!users || users.length === 0) {
     return (
-      <div className="p-10 bg-[#FAF3E3]">
-        <h2 className="text-3xl font-bold text-[#2B2B2B] mb-6">
+      <div className="p-10 bg-[#E8F5E9]">
+        <h2 className="text-3xl font-bold text-[#1F3326] mb-6">
           Manage Users
         </h2>
 
-        <div className="bg-[#FFF6E9] p-10 rounded-2xl shadow-md border border-[#EAD7BD] text-center text-[#8C2F2B]">
+        <div className="bg-[#E8F5E9] p-10 rounded-2xl shadow-md border border-[#6FA99F] text-center text-[#1F3326]">
           No users found.
         </div>
       </div>
@@ -45,46 +45,46 @@ const AdminUsers = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 bg-[#FAF3E3] min-h-screen">
-      <h2 className="text-3xl font-bold text-[#2B2B2B] mb-8">
+    <div className="p-4 md:p-10 bg-[#E8F5E9] min-h-screen">
+      <h2 className="text-3xl font-bold text-[#1F3326] mb-8">
         Manage Users
       </h2>
 
       {/* DESKTOP TABLE VIEW */}
-      <div className="hidden md:block bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
+      <div className="hidden md:block bg-[#E8F5E9] rounded-2xl shadow-xl border border-[#6FA99F] overflow-hidden">
         <table className="w-full text-left">
-          <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
+          <thead className="bg-[#C8E6C9] border-b border-[#6FA99F]">
             <tr>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Name</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Email</th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">
+              <th className="p-4 font-semibold text-[#1F3326]">Name</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Email</th>
+              <th className="p-4 font-semibold text-[#1F3326]">
                 Joined Date
               </th>
-              <th className="p-4 font-semibold text-[#8C2F2B]">Actions</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Actions</th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-[#EAD7BD]">
+          <tbody className="divide-y divide-[#6FA99F]">
             {users.map((user) => (
               <tr
                 key={user._id}
-                className="hover:bg-[#F7EDE1] transition"
+                className="hover:bg-[#C8E6C9] transition"
               >
                 {/* USER AVATAR + NAME */}
                 <td className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#FFE3C2] border border-[#EAD7BD] rounded-full flex items-center justify-center">
-                    <User size={18} className="text-[#E66A32]" />
+                  <div className="w-10 h-10 bg-[#C8E6C9] border border-[#6FA99F] rounded-full flex items-center justify-center">
+                    <User size={18} className="text-[#347B66]" />
                   </div>
-                  <span className="font-medium text-[#2B2B2B]">
+                  <span className="font-medium text-[#1F3326]">
                     {user.name}
                   </span>
                 </td>
 
                 {/* EMAIL */}
-                <td className="p-4 text-[#8C2F2B]">{user.email}</td>
+                <td className="p-4 text-[#3B4A38]">{user.email}</td>
 
                 {/* JOINED DATE */}
-                <td className="p-4 text-[#8C2F2B] text-sm">
+                <td className="p-4 text-[#3B4A38] text-sm">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
 
@@ -112,7 +112,7 @@ const AdminUsers = () => {
         </table>
 
         {users.length === 0 && (
-          <div className="p-8 text-center text-[#8C2F2B]">
+          <div className="p-8 text-center text-[#1F3326]">
             No users found.
           </div>
         )}
@@ -123,20 +123,20 @@ const AdminUsers = () => {
         {users.map((user) => (
           <div 
             key={user._id}
-            className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] space-y-3"
+            className="bg-[#E8F5E9] p-4 rounded-xl shadow-md border border-[#6FA99F] space-y-3"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-[#FFE3C2] border border-[#EAD7BD] rounded-full flex items-center justify-center shrink-0">
-                <User size={20} className="text-[#E66A32]" />
+              <div className="w-12 h-12 bg-[#C8E6C9] border border-[#6FA99F] rounded-full flex items-center justify-center shrink-0">
+                <User size={20} className="text-[#347B66]" />
               </div>
               <div className="min-w-0">
-                <h3 className="font-bold text-[#2B2B2B] truncate">{user.name}</h3>
-                <p className="text-sm text-[#8C2F2B] truncate">{user.email}</p>
+                <h3 className="font-bold text-[#1F3326] truncate">{user.name}</h3>
+                <p className="text-sm text-[#3B4A38] truncate">{user.email}</p>
               </div>
             </div>
 
-            <div className="flex justify-between items-center pt-2 border-t border-[#EAD7BD]/50">
-              <span className="text-xs font-medium text-[#8C2F2B] bg-[#F3E6D3] px-2 py-1 rounded border border-[#EAD7BD]">
+            <div className="flex justify-between items-center pt-2 border-t border-[#6FA99F]/50">
+              <span className="text-xs font-medium text-[#1F3326] bg-[#C8E6C9] px-2 py-1 rounded border border-[#6FA99F]">
                 Joined: {new Date(user.createdAt).toLocaleDateString()}
               </span>
               
@@ -155,7 +155,7 @@ const AdminUsers = () => {
         ))}
 
         {users.length === 0 && (
-          <div className="p-8 text-center text-[#8C2F2B] bg-[#FFF6E9] rounded-xl border border-[#EAD7BD]">
+          <div className="p-8 text-center text-[#1F3326] bg-[#E8F5E9] rounded-xl border border-[#6FA99F]">
             No users found.
           </div>
         )}

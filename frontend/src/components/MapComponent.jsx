@@ -28,7 +28,7 @@ const LocationMarker = ({ position, setPosition, isEditable }) => {
 
     return position ? (
         <Marker position={position}>
-            <Popup className="font-semibold text-[#8C2F2B]">Selected Location</Popup>
+            <Popup className="font-semibold text-[#1F3326]">Selected Location</Popup>
         </Marker>
     ) : null;
 };
@@ -48,8 +48,8 @@ const MapComponent = ({
                 rounded-xl 
                 overflow-hidden 
                 shadow-md 
-                border border-[#FFD9A0] 
-                bg-[#FFF6E9]
+                border border-[#6FA99F] 
+                bg-[#E8F5E9]
             "
         >
             <MapContainer
@@ -75,8 +75,8 @@ const MapComponent = ({
                     locations.map((loc, idx) => (
                         <Marker key={idx} position={[loc.lat, loc.lng]}>
                             <Popup>
-                                <div className="font-bold text-[#8C2F2B]">{loc.title}</div>
-                                <div className="text-sm text-[#C24C30]">{loc.description}</div>
+                                <div className="font-bold text-[#1F3326]">{loc.title}</div>
+                                <div className="text-sm text-[#347B66]">{loc.description}</div>
                             </Popup>
                         </Marker>
                     ))}

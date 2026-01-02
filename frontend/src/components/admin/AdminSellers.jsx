@@ -4,11 +4,11 @@ import { Trash2, CheckCircle, XCircle, Store } from "lucide-react";
 import LoadingSpinner from "../LoadingSpinner";
 
 const PALETTE = {
-  paprika: "#E66A32",
-  nougat: "#FFF6E9",
-  beige: "#FAF3E3",
-  rust: "#C24C30",
-  maroon: "#8C2F2B",
+  emerald: "#347B66",
+  lime: "#CFF56E",
+  base: "#E8F5E9",
+  forest: "#3B4A38",
+  evergreen: "#1F3326",
 };
 
 const AdminSellers = () => {
@@ -37,7 +37,7 @@ const AdminSellers = () => {
 
   if (error) {
     return (
-      <div className="p-10 bg-[#FAF3E3]">
+      <div className="p-10 bg-[#E8F5E9]">
         <div className="bg-red-100 text-red-700 p-4 rounded-xl border border-red-300 shadow">
           Error loading sellers: {error}
         </div>
@@ -46,19 +46,19 @@ const AdminSellers = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 bg-[#FAF3E3] min-h-screen">
+    <div className="p-4 md:p-10 bg-[#E8F5E9] min-h-screen">
       {/* HEADER & FILTERS */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <h2 className="text-3xl font-bold text-[#2B2B2B]">Manage Sellers</h2>
+        <h2 className="text-3xl font-bold text-[#1F3326]">Manage Sellers</h2>
 
-        <div className="flex gap-2 bg-[#FFF6E9] p-1 rounded-xl border border-[#EAD7BD] w-full md:w-auto overflow-x-auto">
+        <div className="flex gap-2 bg-[#E8F5E9] p-1 rounded-xl border border-[#6FA99F] w-full md:w-auto overflow-x-auto">
           <button
             onClick={() => setFilter("all")}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition whitespace-nowrap
             ${
               filter === "all"
-                ? "bg-[#F3E6D3] text-[#8C2F2B]"
-                : "text-[#8C2F2B] hover:bg-[#F7EDE1]"
+                ? "bg-[#C8E6C9] text-[#1F3326]"
+                : "text-[#1F3326] hover:bg-[#C8E6C9]"
             }`}
           >
             All
@@ -70,7 +70,7 @@ const AdminSellers = () => {
             ${
               filter === "pending"
                 ? "bg-yellow-100 text-yellow-700"
-                : "text-[#8C2F2B] hover:bg-[#F7EDE1]"
+                : "text-[#1F3326] hover:bg-[#C8E6C9]"
             }`}
           >
             Pending
@@ -82,7 +82,7 @@ const AdminSellers = () => {
             ${
               filter === "verified"
                 ? "bg-green-100 text-green-700"
-                : "text-[#8C2F2B] hover:bg-[#F7EDE1]"
+                : "text-[#1F3326] hover:bg-[#C8E6C9]"
             }`}
           >
             Verified
@@ -92,46 +92,46 @@ const AdminSellers = () => {
 
       {/* NO SELLERS */}
       {!filteredSellers || filteredSellers.length === 0 ? (
-        <div className="bg-[#FFF6E9] p-10 rounded-2xl border border-[#EAD7BD] shadow text-center text-[#8C2F2B]">
+        <div className="bg-[#E8F5E9] p-10 rounded-2xl border border-[#6FA99F] shadow text-center text-[#1F3326]">
           No {filter !== "all" ? filter : ""} sellers found.
         </div>
       ) : (
         <>
           {/* DESKTOP TABLE VIEW */}
-          <div className="hidden md:block bg-[#FFF6E9] rounded-2xl shadow-xl border border-[#EAD7BD] overflow-hidden">
+          <div className="hidden md:block bg-[#E8F5E9] rounded-2xl shadow-xl border border-[#6FA99F] overflow-hidden">
             <table className="w-full text-left">
-              <thead className="bg-[#F3E6D3] border-b border-[#EAD7BD]">
+              <thead className="bg-[#C8E6C9] border-b border-[#6FA99F]">
                 <tr>
-                  <th className="p-4 font-semibold text-[#8C2F2B]">
+                  <th className="p-4 font-semibold text-[#1F3326]">
                     Seller Name
                   </th>
-                  <th className="p-4 font-semibold text-[#8C2F2B]">Email</th>
-                  <th className="p-4 font-semibold text-[#8C2F2B]">Status</th>
-                  <th className="p-4 font-semibold text-[#8C2F2B]">
+                  <th className="p-4 font-semibold text-[#1F3326]">Email</th>
+                  <th className="p-4 font-semibold text-[#1F3326]">Status</th>
+                  <th className="p-4 font-semibold text-[#1F3326]">
                     Joined Date
                   </th>
-                  <th className="p-4 font-semibold text-[#8C2F2B]">Actions</th>
+                  <th className="p-4 font-semibold text-[#1F3326]">Actions</th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-[#EAD7BD]">
+              <tbody className="divide-y divide-[#6FA99F]">
                 {filteredSellers.map((seller) => (
                   <tr
                     key={seller._id}
-                    className="hover:bg-[#F7EDE1] transition"
+                    className="hover:bg-[#C8E6C9] transition"
                   >
                     {/* SELLER NAME */}
                     <td className="p-4 flex items-center gap-3">
-                      <div className="w-9 h-9 bg-[#FFE3C2] rounded-full flex items-center justify-center border border-[#EAD7BD]">
-                        <Store size={16} className="text-[#E66A32]" />
+                      <div className="w-9 h-9 bg-[#C8E6C9] rounded-full flex items-center justify-center border border-[#6FA99F]">
+                        <Store size={16} className="text-[#347B66]" />
                       </div>
-                      <span className="font-medium text-[#2B2B2B]">
+                      <span className="font-medium text-[#1F3326]">
                         {seller.name}
                       </span>
                     </td>
 
                     {/* EMAIL */}
-                    <td className="p-4 text-[#8C2F2B]">{seller.email}</td>
+                    <td className="p-4 text-[#3B4A38]">{seller.email}</td>
 
                     {/* STATUS */}
                     <td className="p-4">
@@ -148,7 +148,7 @@ const AdminSellers = () => {
                     </td>
 
                     {/* JOINED DATE */}
-                    <td className="p-4 text-[#8C2F2B] text-sm">
+                    <td className="p-4 text-[#3B4A38] text-sm">
                       {new Date(seller.createdAt).toLocaleDateString()}
                     </td>
 
@@ -199,16 +199,16 @@ const AdminSellers = () => {
             {filteredSellers.map((seller) => (
               <div 
                 key={seller._id}
-                className="bg-[#FFF6E9] p-4 rounded-xl shadow-md border border-[#EAD7BD] space-y-3"
+                className="bg-[#E8F5E9] p-4 rounded-xl shadow-md border border-[#6FA99F] space-y-3"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#FFE3C2] rounded-full flex items-center justify-center border border-[#EAD7BD]">
-                      <Store size={18} className="text-[#E66A32]" />
+                    <div className="w-10 h-10 bg-[#C8E6C9] rounded-full flex items-center justify-center border border-[#6FA99F]">
+                      <Store size={18} className="text-[#347B66]" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#2B2B2B]">{seller.name}</h3>
-                      <p className="text-xs text-[#8C2F2B]">{seller.email}</p>
+                      <h3 className="font-bold text-[#1F3326]">{seller.name}</h3>
+                      <p className="text-xs text-[#3B4A38]">{seller.email}</p>
                     </div>
                   </div>
                   <span
@@ -223,8 +223,8 @@ const AdminSellers = () => {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center pt-2 border-t border-[#EAD7BD]/50">
-                  <span className="text-xs text-[#8C2F2B]">
+                <div className="flex justify-between items-center pt-2 border-t border-[#6FA99F]/50">
+                  <span className="text-xs text-[#3B4A38]">
                     Joined: {new Date(seller.createdAt).toLocaleDateString()}
                   </span>
                   

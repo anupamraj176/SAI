@@ -96,10 +96,10 @@ const UserMarketplace = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-[#2B2B2B]">
+          <h2 className="text-3xl font-bold text-[#1F3326]">
             {selectedCategory ? `${selectedCategory} Market` : "Marketplace"}
           </h2>
-          <p className="text-sm text-[#6A5746] mt-1">
+          <p className="text-sm text-[#3B4A38] mt-1">
             {selectedCategory
               ? `Browse fresh ${selectedCategory.toLowerCase()} from local farmers`
               : "Fresh produce directly from farmers"}
@@ -111,7 +111,7 @@ const UserMarketplace = () => {
           {showProducts && (
             <button
               onClick={handleBackToCategories}
-              className="p-2 text-[#6A5746] hover:text-[#FF8C42] flex items-center gap-2"
+              className="p-2 text-[#3B4A38] hover:text-[#347B66] flex items-center gap-2"
             >
               <ArrowLeft size={20} />
               <span className="hidden md:inline text-sm">Categories</span>
@@ -125,7 +125,7 @@ const UserMarketplace = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-[#EAD7BD] bg-[#FFF6E9] focus:ring-2 focus:ring-[#FF8C42] outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-[#6FA99F] bg-[#E8F5E9] focus:ring-2 focus:ring-[#347B66] outline-none"
             />
           </div>
 
@@ -133,7 +133,7 @@ const UserMarketplace = () => {
             <button
               onClick={() => setIsMapView(!isMapView)}
               className={`p-2 rounded-lg transition-colors flex items-center justify-center
-                ${isMapView ? 'bg-[#FF8C42] text-white' : 'border border-[#EAD7BD] text-[#FF8C42] bg-transparent hover:bg-[#FFF4E6]'}`}
+                ${isMapView ? 'bg-[#347B66] text-white' : 'border border-[#6FA99F] text-[#347B66] bg-transparent hover:bg-[#C8E6C9]'}`}
               title={isMapView ? "Switch to list" : "Show map"}
             >
               {isMapView ? <List size={18} /> : <MapIcon size={18} />}
@@ -150,7 +150,7 @@ const UserMarketplace = () => {
               key={cat.id}
               onClick={() => handleCategoryClick(cat.id)}
               className="group relative h-48 rounded-2xl overflow-hidden cursor-pointer 
-                         bg-[#FFF6E9] border border-[#EAD7BD] shadow-sm hover:shadow-md 
+                         bg-[#E8F5E9] border border-[#6FA99F] shadow-sm hover:shadow-md 
                          transition-all duration-300"
             >
               <img
@@ -175,9 +175,9 @@ const UserMarketplace = () => {
       {showProducts && (
         <>
           {isLoading ? (
-            <div className="text-center py-20 text-[#6A5746]">Loading products...</div>
+            <div className="text-center py-20 text-[#3B4A38]">Loading products...</div>
           ) : isMapView ? (
-            <div className="rounded-xl overflow-hidden border border-[#EAD7BD] bg-[#FFF6E9] shadow-sm">
+            <div className="rounded-xl overflow-hidden border border-[#6FA99F] bg-[#E8F5E9] shadow-sm">
               <MapComponent locations={mapLocations} />
             </div>
           ) : filteredProducts.length > 0 ? (
@@ -185,10 +185,10 @@ const UserMarketplace = () => {
               {filteredProducts.map((product) => (
                 <div
                   key={product._id}
-                  className="rounded-xl overflow-hidden shadow-sm border-2 border-[#EAD7BD] bg-white"
+                  className="rounded-xl overflow-hidden shadow-sm border-2 border-[#6FA99F] bg-white"
                 >
                   {/* Image Container */}
-                  <div className="h-44 overflow-hidden relative bg-[#FFF6E9]">
+                  <div className="h-44 overflow-hidden relative bg-[#E8F5E9]">
                     <img
                       src={product.image || product.imageUrl}
                       alt={product.name}
@@ -225,33 +225,33 @@ const UserMarketplace = () => {
                     {/* Product Name & Stock */}
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex-1 pr-2">
-                        <h3 className="font-bold text-lg text-[#2B2B2B] leading-tight">
+                        <h3 className="font-bold text-lg text-[#1F3326] leading-tight">
                           {product.name}
                         </h3>
-                        <p className="text-xs text-[#6A5746] mt-0.5">{product.category}</p>
+                        <p className="text-xs text-[#3B4A38] mt-0.5">{product.category}</p>
                       </div>
 
                       <div className="flex-shrink-0">
-                        <span className="inline-block bg-[#FFF4E6] text-[#FF8C42] text-xs font-bold px-2.5 py-1 rounded-md border border-[#FFE9CC]">
+                        <span className="inline-block bg-[#C8E6C9] text-[#347B66] text-xs font-bold px-2.5 py-1 rounded-md border border-[#6FA99F]">
                           {product.stock} left
                         </span>
                       </div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-[#6A5746] text-sm mb-3 line-clamp-2">
+                    <p className="text-[#3B4A38] text-sm mb-3 line-clamp-2">
                       {product.description}
                     </p>
 
                     {/* Price & Add to Cart */}
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-[#8C2F2B]">
+                      <span className="text-xl font-bold text-[#1F3326]">
                         ₹{product.price}
                       </span>
 
                       <button
                         onClick={() => addToCart(product)}
-                        className="bg-[#FF8C42] text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium shadow-sm"
+                        className="bg-[#347B66] text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium shadow-sm"
                       >
                         <ShoppingCart size={16} />
                         <span>Add</span>
@@ -262,11 +262,11 @@ const UserMarketplace = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 rounded-xl border border-dashed border-[#EAD7BD] bg-[#FFF6E9]">
-              <p className="text-[#6A5746] text-lg">No products found in this category.</p>
+            <div className="text-center py-20 rounded-xl border border-dashed border-[#6FA99F] bg-[#E8F5E9]">
+              <p className="text-[#3B4A38] text-lg">No products found in this category.</p>
               <button
                 onClick={handleBackToCategories}
-                className="mt-4 text-[#FF8C42] font-bold hover:underline"
+                className="mt-4 text-[#347B66] font-bold hover:underline"
               >
                 Browse all categories
               </button>

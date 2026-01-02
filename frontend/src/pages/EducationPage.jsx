@@ -63,7 +63,7 @@ const EducationPage = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-gradient-to-br from-[#FFE7C6] via-[#FFD2A1] to-[#FFB478] flex flex-col overflow-hidden">
+    <div className="h-screen w-full bg-gradient-to-br from-[#E8F5E9] via-[#C8E6C9] to-[#A5D6A7] flex flex-col overflow-hidden">
       <FarmerNavbar />
 
       <main className="flex-1 overflow-y-auto relative" style={{ scrollbarWidth: "none" }}>
@@ -73,8 +73,8 @@ const EducationPage = () => {
 
           {/* HEADER */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-[#8C2F2B] mb-2">Knowledge Hub</h1>
-            <p className="text-[#C24C30] font-medium">Empowering farmers with expert knowledge & resources</p>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-[#1F3326] mb-2">Knowledge Hub</h1>
+            <p className="text-[#347B66] font-medium">Empowering farmers with expert knowledge & resources</p>
           </div>
 
           {/* ⭐ NEW IMPROVED STICKY TOP BAR */}
@@ -87,7 +87,7 @@ const EducationPage = () => {
                   onClick={() => setActiveTab("videos")}
                   className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold transition-all
                     ${activeTab === "videos"
-                      ? "bg-[#FF8C42] text-white shadow-md"
+                      ? "bg-[#347B66] text-white shadow-md"
                       : "text-gray-600 hover:bg-white/60"}`}
                 >
                   <Play size={18} fill={activeTab === "videos" ? "currentColor" : "none"} />
@@ -98,7 +98,7 @@ const EducationPage = () => {
                   onClick={() => setActiveTab("audiobooks")}
                   className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold transition-all
                     ${activeTab === "audiobooks"
-                      ? "bg-[#FF8C42] text-white shadow-md"
+                      ? "bg-[#347B66] text-white shadow-md"
                       : "text-gray-600 hover:bg-white/60"}`}
                 >
                   <Headphones size={18} />
@@ -116,7 +116,7 @@ const EducationPage = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-10 py-3 bg-white/30 backdrop-blur-md rounded-xl border border-white/40 shadow-sm
-                  focus:bg-white/50 focus:ring-2 focus:ring-[#FF8C42] transition-all placeholder-gray-600 text-[#2B2B2B]"
+                  focus:bg-white/50 focus:ring-2 focus:ring-[#347B66] transition-all placeholder-gray-600 text-[#1F3326]"
                 />
 
                 {searchTerm && (
@@ -157,8 +157,8 @@ const EducationPage = () => {
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <div className="bg-white/90 p-3 rounded-full shadow-lg">
                         {activeTab === "videos"
-                          ? <Play className="text-[#C24C30] fill-current" />
-                          : <Headphones className="text-[#C24C30]" />}
+                          ? <Play className="text-[#347B66] fill-current" />
+                          : <Headphones className="text-[#347B66]" />}
                       </div>
                     </div>
 
@@ -170,12 +170,12 @@ const EducationPage = () => {
                   <div className="p-5">
                     <button
                       onClick={(e) => handleCategoryClick(e, item.category)}
-                      className="text-[10px] font-bold text-[#FF8C42] bg-[#FFF4E6] px-2 py-1 rounded-md uppercase hover:bg-[#FF8C42] hover:text-white transition"
+                      className="text-[10px] font-bold text-[#347B66] bg-[#E8F5E9] px-2 py-1 rounded-md uppercase hover:bg-[#347B66] hover:text-white transition"
                     >
                       {item.category}
                     </button>
 
-                    <h3 className="font-bold text-lg text-[#2B2B2B] mt-2 group-hover:text-[#C24C30] transition">
+                    <h3 className="font-bold text-lg text-[#1F3326] mt-2 group-hover:text-[#347B66] transition">
                       {item.title}
                     </h3>
 
@@ -192,11 +192,11 @@ const EducationPage = () => {
               <div className="bg-white/40 backdrop-blur-md p-6 rounded-full shadow-sm mb-4 border border-white/30">
                 <Search className="w-12 h-12 text-gray-500" />
               </div>
-              <h3 className="text-xl font-bold text-[#8C2F2B]">No results found</h3>
+              <h3 className="text-xl font-bold text-[#1F3326]">No results found</h3>
               <p className="text-gray-500 mt-2">Nothing matched "{searchTerm}"</p>
               <button
                 onClick={() => setSearchTerm("")}
-                className="mt-6 text-[#FF8C42] font-bold hover:underline"
+                className="mt-6 text-[#347B66] font-bold hover:underline"
               >
                 Clear search
               </button>
@@ -230,7 +230,7 @@ const EducationPage = () => {
 
                 <div className="w-full md:w-1/3 bg-white border-l">
                   <div className="p-4 border-b flex justify-between items-center">
-                    <h3 className="font-bold text-[#8C2F2B]">Up Next</h3>
+                    <h3 className="font-bold text-[#1F3326]">Up Next</h3>
                     <button onClick={() => setSelectedVideo(null)}>
                       <X size={20} className="text-gray-500" />
                     </button>
@@ -240,7 +240,7 @@ const EducationPage = () => {
                     {recommendedVideos.map(video => (
                       <div
                         key={video.id}
-                        className="flex gap-3 bg-white p-2 rounded-xl cursor-pointer hover:bg-[#FFF4E6] border border-transparent hover:border-[#FFD9A0]"
+                        className="flex gap-3 bg-white p-2 rounded-xl cursor-pointer hover:bg-[#E8F5E9] border border-transparent hover:border-[#6FA99F]"
                         onClick={() => showRecommended(video)}
                       >
                         <img
@@ -287,10 +287,10 @@ const EducationPage = () => {
                     className="w-48 h-48 mx-auto rounded-2xl shadow-lg object-cover mb-6"
                   />
 
-                  <h3 className="text-2xl font-bold text-[#2B2B2B] mb-1">{selectedAudio.title}</h3>
-                  <p className="text-[#FF8C42] font-medium mb-6">{selectedAudio.author}</p>
+                  <h3 className="text-2xl font-bold text-[#1F3326] mb-1">{selectedAudio.title}</h3>
+                  <p className="text-[#347B66] font-medium mb-6">{selectedAudio.author}</p>
 
-                  <audio controls autoPlay className="w-full accent-[#FF8C42]">
+                  <audio controls autoPlay className="w-full accent-[#347B66]">
                     <source src={selectedAudio.audio} type="audio/mpeg" />
                   </audio>
                 </div>

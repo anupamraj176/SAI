@@ -68,12 +68,12 @@ const SellerProducts = () => {
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <h2 className="text-3xl font-bold text-[#8C2F2B]">Manage Products</h2>
+        <h2 className="text-3xl font-bold text-[#1F3326]">Manage Products</h2>
 
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-[#FF8C42] text-white px-4 py-2 rounded-lg flex items-center gap-2 
-                     hover:bg-[#E66A32] shadow-md transition w-full sm:w-auto justify-center"
+          className="bg-[#347B66] text-white px-4 py-2 rounded-lg flex items-center gap-2 
+                     hover:bg-[#1F3326] shadow-md transition w-full sm:w-auto justify-center"
         >
           <Plus size={20} /> Add Product
         </button>
@@ -85,10 +85,10 @@ const SellerProducts = () => {
           <div 
             key={product._id} 
             // UPDATED: Removed 'group', 'hover:shadow-xl', 'hover:-translate-y-1', 'transition'
-            className="rounded-2xl shadow-md border border-[#EAD7BD] bg-white overflow-hidden"
+            className="rounded-2xl shadow-md border border-[#6FA99F] bg-white overflow-hidden"
           >
             {/* Image Container */}
-            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-[#FFF6E9] to-[#FAF3E3]">
+            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-[#E8F5E9] to-[#C8E6C9]">
               <img 
                 src={product.image} 
                 alt={product.name} 
@@ -98,15 +98,15 @@ const SellerProducts = () => {
               
               {/* Category Badge */}
               <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full 
-                             shadow-sm flex items-center gap-1 border border-[#EAD7BD]">
+                             shadow-sm flex items-center gap-1 border border-[#6FA99F]">
                 <span className="text-sm">
                   {CATEGORY_OPTIONS.find(c => c.id === product.category)?.icon || "📦"}
                 </span>
-                <span className="text-[10px] font-bold text-[#8C2F2B] uppercase tracking-wide">{product.category}</span>
+                <span className="text-[10px] font-bold text-[#1F3326] uppercase tracking-wide">{product.category}</span>
               </div>
 
               {/* Stock Badge */}
-              <div className="absolute top-2 right-2 bg-[#FF8C42] text-white px-2 py-1 rounded-full 
+              <div className="absolute top-2 right-2 bg-[#347B66] text-white px-2 py-1 rounded-full 
                              shadow-sm flex items-center gap-1 text-[10px] font-bold">
                 <Package size={12} />
                 <span>{product.stock || 0}</span>
@@ -118,8 +118,7 @@ const SellerProducts = () => {
 
             {/* Content */}
             <div className="p-4">
-              {/* UPDATED: Removed 'group-hover:text-[#8C2F2B]' */}
-              <h3 className="font-bold text-lg text-[#2B2B2B] mb-1 line-clamp-1">
+              <h3 className="font-bold text-lg text-[#1F3326] mb-1 line-clamp-1">
                 {product.name}
               </h3>
               
@@ -128,10 +127,10 @@ const SellerProducts = () => {
               </p>
 
               {/* Price and Action Row */}
-              <div className="flex justify-between items-center pt-3 border-t border-[#EAD7BD]">
+              <div className="flex justify-between items-center pt-3 border-t border-[#6FA99F]">
                 <div className="flex flex-col">
                   <span className="text-[10px] text-gray-500 font-medium">Price</span>
-                  <span className="text-xl font-bold text-[#8C2F2B]">₹{product.price}</span>
+                  <span className="text-xl font-bold text-[#1F3326]">₹{product.price}</span>
                 </div>
                 
                 <button 
@@ -151,17 +150,17 @@ const SellerProducts = () => {
       {/* Add Product Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="rounded-2xl w-full max-w-lg p-6 relative bg-[#FFF6E9] border border-[#EAD7BD] shadow-xl">
+          <div className="rounded-2xl w-full max-w-lg p-6 relative bg-[#E8F5E9] border border-[#6FA99F] shadow-xl">
 
             {/* Close Button */}
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-[#8C2F2B] hover:text-[#C24C30]"
+              className="absolute top-4 right-4 text-[#1F3326] hover:text-[#347B66]"
             >
               <X size={24} />
             </button>
 
-            <h3 className="text-2xl font-bold text-[#8C2F2B] mb-4">Add New Product</h3>
+            <h3 className="text-2xl font-bold text-[#1F3326] mb-4">Add New Product</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
@@ -170,8 +169,8 @@ const SellerProducts = () => {
                 placeholder="Product Name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full p-3 border border-[#EAD7BD] rounded-lg bg-[#FFF6E9]
-                           focus:ring-2 focus:ring-[#FF8C42] outline-none"
+                className="w-full p-3 border border-[#6FA99F] rounded-lg bg-[#E8F5E9]
+                           focus:ring-2 focus:ring-[#347B66] outline-none"
                 required
               />
 
@@ -180,8 +179,8 @@ const SellerProducts = () => {
                 placeholder="Description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full p-3 border border-[#EAD7BD] rounded-lg bg-[#FFF6E9]
-                           focus:ring-2 focus:ring-[#FF8C42] outline-none"
+                className="w-full p-3 border border-[#6FA99F] rounded-lg bg-[#E8F5E9]
+                           focus:ring-2 focus:ring-[#347B66] outline-none"
                 required
               />
 
@@ -192,7 +191,7 @@ const SellerProducts = () => {
                   placeholder="Price (₹)"
                   value={formData.price}
                   onChange={handleChange}
-                  className="w-full p-3 border border-[#EAD7BD] rounded-lg bg-[#FFF6E9]"
+                  className="w-full p-3 border border-[#6FA99F] rounded-lg bg-[#E8F5E9]"
                   required
                 />
 
@@ -202,7 +201,7 @@ const SellerProducts = () => {
                   placeholder="Stock Qty"
                   value={formData.stock}
                   onChange={handleChange}
-                  className="w-full p-3 border border-[#EAD7BD] rounded-lg bg-[#FFF6E9]"
+                  className="w-full p-3 border border-[#6FA99F] rounded-lg bg-[#E8F5E9]"
                   required
                 />
               </div>
@@ -212,7 +211,7 @@ const SellerProducts = () => {
                 <button
                   type="button"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="w-full p-3 border border-[#EAD7BD] rounded-lg bg-[#FFF6E9] flex justify-between items-center"
+                  className="w-full p-3 border border-[#6FA99F] rounded-lg bg-[#E8F5E9] flex justify-between items-center"
                 >
                   <span className="flex items-center gap-2">
                     {CATEGORY_OPTIONS.find(c => c.id === formData.category)?.icon || "📦"}
@@ -222,7 +221,7 @@ const SellerProducts = () => {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute mt-2 w-full bg-[#FFF6E9] border border-[#EAD7BD] rounded-lg shadow-lg max-h-52 overflow-y-auto z-50">
+                  <div className="absolute mt-2 w-full bg-[#E8F5E9] border border-[#6FA99F] rounded-lg shadow-lg max-h-52 overflow-y-auto z-50">
                     {CATEGORY_OPTIONS.map((cat) => (
                       <div
                         key={cat.id}
@@ -230,10 +229,10 @@ const SellerProducts = () => {
                           setFormData({ ...formData, category: cat.id });
                           setDropdownOpen(false);
                         }}
-                        className="p-3 hover:bg-[#FAF3E3] cursor-pointer flex items-center gap-3"
+                        className="p-3 hover:bg-[#C8E6C9] cursor-pointer flex items-center gap-3"
                       >
                         <span>{cat.icon}</span>
-                        <span className="text-[#2B2B2B]">{cat.label}</span>
+                        <span className="text-[#1F3326]">{cat.label}</span>
                       </div>
                     ))}
                   </div>
@@ -241,15 +240,15 @@ const SellerProducts = () => {
               </div>
 
               {/* Image Upload */}
-              <label className="block w-full rounded-lg p-4 text-center cursor-pointer bg-[#FFF6E9] border border-[#EAD7BD] hover:bg-[#FAF3E3] transition">
+              <label className="block w-full rounded-lg p-4 text-center cursor-pointer bg-[#E8F5E9] border border-[#6FA99F] hover:bg-[#C8E6C9] transition">
                 <input 
                   type="file"
                   className="hidden"
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-                <Upload size={26} className="mx-auto text-[#C24C30]" />
-                <p className="mt-2 text-sm text-[#8C2F2B]">
+                <Upload size={26} className="mx-auto text-[#347B66]" />
+                <p className="mt-2 text-sm text-[#1F3326]">
                   {formData.image ? formData.image.name : "Upload Image"}
                 </p>
               </label>
@@ -258,7 +257,7 @@ const SellerProducts = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#FF8C42] text-white py-3 rounded-lg font-bold hover:bg-[#E66A32] transition disabled:opacity-50"
+                className="w-full bg-[#347B66] text-white py-3 rounded-lg font-bold hover:bg-[#1F3326] transition disabled:opacity-50"
               >
                 {isLoading ? "Adding..." : "Add Product"}
               </button>

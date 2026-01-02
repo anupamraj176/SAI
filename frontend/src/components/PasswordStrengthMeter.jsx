@@ -15,8 +15,8 @@ const PasswordCriteria = ({ password }) => {
     <div className="mt-2 space-y-1">
       {criteria.map((item) => (
         <div key={item.label} className="flex items-center text-xs">
-          {item.met ? <Check className="size-4 text-[#FBC42E] mr-2" /> : <X className="size-4 text-[#C24C30] mr-2" />}
-          <span className={item.met ? "text-[#FFD9A0]" : "text-[#8C2F2B]"}>{item.label}</span>
+          {item.met ? <Check className="size-4 text-[#CFF56E] mr-2" /> : <X className="size-4 text-[#6FA99F] mr-2" />}
+          <span className={item.met ? "text-[#E8F5E9]" : "text-[#6B765C]"}>{item.label}</span>
         </div>
       ))}
     </div>
@@ -35,11 +35,11 @@ const PasswordStrengthMeter = ({ password }) => {
   const strength = getStrength(password);
 
   const getColor = (strength) => {
-    if (strength === 0) return "bg-[#8C2F2B]";
-    if (strength === 1) return "bg-[#C24C30]";
-    if (strength === 2) return "bg-[#E66A32]";
-    if (strength === 3) return "bg-[#FBC42E]";
-    return "bg-[#FFD9A0]";
+    if (strength === 0) return "bg-[#3B4A38]";
+    if (strength === 1) return "bg-[#6B765C]";
+    if (strength === 2) return "bg-[#6FA99F]";
+    if (strength === 3) return "bg-[#347B66]";
+    return "bg-[#CFF56E]";
   };
 
   const getStrengthText = (strength) => {
@@ -53,13 +53,13 @@ const PasswordStrengthMeter = ({ password }) => {
   return (
     <div className="mt-2">
       <div className="flex justify-between items-center mb-1">
-        <span className="text-xs text-[#FFD9A0]/70">Password strength</span>
-        <span className="text-xs text-[#FFD9A0]/70">{getStrengthText(strength)}</span>
+        <span className="text-xs text-[#E8F5E9]/70">Password strength</span>
+        <span className="text-xs text-[#E8F5E9]/70">{getStrengthText(strength)}</span>
       </div>
 
       <div className="flex space-x-1">
         {[...Array(4)].map((_, index) => (
-          <div key={index} className={`h-1 w-1/4 rounded-full transition-colors duration-300 ${index < strength ? getColor(strength) : "bg-[#2B2B2B]"}`} />
+          <div key={index} className={`h-1 w-1/4 rounded-full transition-colors duration-300 ${index < strength ? getColor(strength) : "bg-[#1F3326]"}`} />
         ))}
       </div>
 

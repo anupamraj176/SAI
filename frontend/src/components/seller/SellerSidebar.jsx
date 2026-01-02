@@ -31,15 +31,15 @@ const SellerSidebar = ({ activeSection, setActiveSection, onLogout, isOpen, onCl
 
             <aside className={`
                 fixed md:relative z-50 
-                w-64 bg-[#2B2B2B] text-white h-[100dvh] flex flex-col border-r border-[#403A34] shadow-xl
+                w-64 bg-[#1F3326] text-white h-[100dvh] flex flex-col border-r border-[#347B66] shadow-xl
                 transition-transform duration-300 ease-in-out
                 ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
             `}>
 
                 {/* HEADER */}
-                <div className="p-6 border-b border-[#403A34] flex justify-between items-center">
+                <div className="p-6 border-b border-[#347B66] flex justify-between items-center">
                     <h2 className="text-2xl font-bold flex items-center gap-2">
-                        <span className="bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-transparent bg-clip-text">
+                        <span className="bg-gradient-to-r from-[#6FA99F] to-[#CFF56E] text-transparent bg-clip-text">
                             FarmerHub
                         </span>
                     </h2>
@@ -58,8 +58,8 @@ const SellerSidebar = ({ activeSection, setActiveSection, onLogout, isOpen, onCl
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200
                                 ${
                                     activeSection === item.id
-                                        ? "bg-gradient-to-r from-[#E66A32] to-[#FFB444] text-white shadow-md scale-[1.02]"
-                                        : "text-[#EEDFCC] hover:bg-[#3A3A3A] hover:text-white"
+                                        ? "bg-gradient-to-r from-[#347B66] to-[#6FA99F] text-white shadow-md scale-[1.02]"
+                                        : "text-[#E8F5E9] hover:bg-[#3B4A38] hover:text-white"
                                 }
                             `}
                         >
@@ -70,11 +70,11 @@ const SellerSidebar = ({ activeSection, setActiveSection, onLogout, isOpen, onCl
                 </nav>
 
                 {/* LOGOUT */}
-                <div className="p-4 border-t border-[#403A34]">
+                <div className="p-4 border-t border-[#347B66]">
                     <button
                         onClick={onLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition 
-                        hover:bg-[#3A3A3A] text-red-400 hover:text-red-300"
+                        hover:bg-[#3B4A38] text-red-400 hover:text-red-300"
                     >
                         <LogOut size={20} />
                         <span className="font-medium">Logout</span>

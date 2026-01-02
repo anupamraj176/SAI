@@ -72,22 +72,22 @@ const CropSenseAI = () => {
             
             {/* Heading */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-[#8C2F2B] flex items-center gap-3">
-                    <Bot className="text-[#FF8C42]" size={32} />
+                <h1 className="text-3xl font-bold text-[#1F3326] flex items-center gap-3">
+                    <Bot className="text-[#347B66]" size={32} />
                     CropSense AI Predictor
                 </h1>
-                <p className="text-[#C24C30] mt-2">
+                <p className="text-[#3B4A38] mt-2">
                     Enter your farm's environmental details to get AI-powered crop recommendations.
                 </p>
             </div>
 
             {/* MAIN CARD */}
-            <div className="bg-[#FFF6E9] rounded-2xl shadow-lg border border-[#EAD7BD] p-4 md:p-8">
+            <div className="bg-[#E8F5E9] rounded-2xl shadow-lg border border-[#6FA99F] p-4 md:p-8">
                 <form onSubmit={handlePredict} className="space-y-6">
                     
                     {/* Map Selection */}
                     <div>
-                        <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                        <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                             <MapPin size={16} /> Select Farm Location (optional)
                         </label>
 
@@ -98,7 +98,7 @@ const CropSenseAI = () => {
                             center={location ? [location.lat, location.lng] : [20.5937, 78.9629]}
                         />
 
-                        <p className="text-xs text-[#8C2F2B]/60 mt-1">
+                        <p className="text-xs text-[#1F3326]/60 mt-1">
                             {location
                                 ? `Selected: ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`
                                 : "Click on map to select location"}
@@ -107,14 +107,14 @@ const CropSenseAI = () => {
 
                     {/* Soil Type */}
                     <div>
-                        <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                        <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                             <Layers size={16} /> Soil Type (optional)
                         </label>
 
                         <select
                             value={formData.soil}
                             onChange={(e) => setFormData({ ...formData, soil: e.target.value })}
-                            className="w-full px-4 py-3 bg-[#FDF6E9] border border-[#EAD7BD] rounded-lg focus:ring-2 focus:ring-[#FF8C42]"
+                            className="w-full px-4 py-3 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg focus:ring-2 focus:ring-[#347B66]"
                         >
                             <option value="">Select Soil</option>
                             {soilTypes.map((soil) => (
@@ -125,7 +125,7 @@ const CropSenseAI = () => {
 
                     {/* Altitude */}
                     <div>
-                        <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                        <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                             <Mountain size={16} /> Altitude (km)
                         </label>
 
@@ -134,7 +134,7 @@ const CropSenseAI = () => {
                             step="0.1"
                             value={formData.altitude}
                             onChange={(e) => setFormData({ ...formData, altitude: e.target.value })}
-                            className="w-full px-4 py-3 bg-[#FDF6E9] border border-[#EAD7BD] rounded-lg focus:ring-2 focus:ring-[#FF8C42]"
+                            className="w-full px-4 py-3 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg focus:ring-2 focus:ring-[#347B66]"
                         />
                     </div>
 
@@ -142,38 +142,38 @@ const CropSenseAI = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         
                         <div>
-                            <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                            <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                                 <Thermometer size={16} /> Temperature (°C)
                             </label>
                             <input
                                 type="number"
                                 value={formData.temperature}
                                 onChange={(e) => setFormData({ ...formData, temperature: e.target.value })}
-                                className="w-full px-4 py-3 bg-[#FDF6E9] border border-[#EAD7BD] rounded-lg focus:ring-2 focus:ring-[#FF8C42]"
+                                className="w-full px-4 py-3 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg focus:ring-2 focus:ring-[#347B66]"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                            <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                                 <Droplets size={16} /> Humidity (%)
                             </label>
                             <input
                                 type="number"
                                 value={formData.humidity}
                                 onChange={(e) => setFormData({ ...formData, humidity: e.target.value })}
-                                className="w-full px-4 py-3 bg-[#FDF6E9] border border-[#EAD7BD] rounded-lg focus:ring-2 focus:ring-[#FF8C42]"
+                                className="w-full px-4 py-3 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg focus:ring-2 focus:ring-[#347B66]"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-bold text-[#8C2F2B] mb-2 flex items-center gap-2">
+                            <label className="text-sm font-bold text-[#1F3326] mb-2 flex items-center gap-2">
                                 <CloudRain size={16} /> Rainfall (mm)
                             </label>
                             <input
                                 type="number"
                                 value={formData.rainfall}
                                 onChange={(e) => setFormData({ ...formData, rainfall: e.target.value })}
-                                className="w-full px-4 py-3 bg-[#FDF6E9] border border-[#EAD7BD] rounded-lg focus:ring-2 focus:ring-[#FF8C42]"
+                                className="w-full px-4 py-3 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg focus:ring-2 focus:ring-[#347B66]"
                             />
                         </div>
                     </div>
@@ -183,7 +183,7 @@ const CropSenseAI = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="bg-[#C24C30] hover:bg-[#A03B23] text-white px-8 py-3 rounded-lg font-bold shadow-md flex items-center gap-2 transition disabled:opacity-50"
+                            className="bg-[#347B66] hover:bg-[#1F3326] text-white px-8 py-3 rounded-lg font-bold shadow-md flex items-center gap-2 transition disabled:opacity-50"
                         >
                             {isLoading ? (
                                 <>
@@ -225,7 +225,7 @@ const CropSenseAI = () => {
 
                 {/* AI Output */}
                 <div className="mt-6">
-                    <label className="text-sm font-bold text-[#8C2F2B] mb-2 block">
+                    <label className="text-sm font-bold text-[#1F3326] mb-2 block">
                         AI Prediction
                     </label>
 
@@ -235,7 +235,7 @@ const CropSenseAI = () => {
                             response ||
                             "AI Prediction will appear here.\nNote: Consult a farming expert for accurate advice.\nPowered by Gemini AI."
                         }
-                        className="w-full min-h-[200px] rounded-lg p-4 bg-[#FDF6E9] border border-[#EAD7BD] shadow-inner focus:ring-2 focus:ring-[#FF8C42]"
+                        className="w-full min-h-[200px] rounded-lg p-4 bg-[#E8F5E9] border border-[#6FA99F] shadow-inner focus:ring-2 focus:ring-[#347B66]"
                     />
                 </div>
             </div>

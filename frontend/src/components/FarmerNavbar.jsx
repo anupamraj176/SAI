@@ -33,7 +33,7 @@ export default function FarmerNavbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FFD9A0] text-[#8C2F2B] shadow-lg border-b border-[#C24C30]/30">
+    <header className="sticky top-0 z-50 bg-[#E8F5E9] text-[#1F3326] shadow-lg border-b border-[#347B66]/30">
 
       {/* MAIN NAVBAR WRAPPER */}
       <div className="mx-auto flex h-14 md:h-16 max-w-7xl items-center justify-between 
@@ -47,8 +47,8 @@ export default function FarmerNavbar() {
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-12 md:h-12 drop-shadow-sm"
             onError={(e) => {e.target.style.display='none'}} // Fallback if image missing
           />
-          <span className="text-base sm:text-lg font-bold text-[#C24C30] tracking-wide whitespace-nowrap">
-            Farmer<span className="text-[#FF8C42]">Hub</span>
+          <span className="text-base sm:text-lg font-bold text-[#347B66] tracking-wide whitespace-nowrap">
+            Farmer<span className="text-[#CFF56E]">Hub</span>
           </span>
         </Link>
 
@@ -60,14 +60,14 @@ export default function FarmerNavbar() {
                 {item.link.startsWith("/#") ? (
                   <a
                     href={item.link}
-                    className="text-[#8C2F2B]/80 hover:text-[#C24C30] transition-all duration-200"
+                    className="text-[#1F3326]/80 hover:text-[#347B66] transition-all duration-200"
                   >
                     {item.name}
                   </a>
                 ) : (
                   <Link
                     to={item.link}
-                    className={`text-[#8C2F2B]/80 hover:text-[#C24C30] transition-all duration-200 ${location.pathname === item.link ? 'font-bold text-[#C24C30]' : ''}`}
+                    className={`text-[#1F3326]/80 hover:text-[#347B66] transition-all duration-200 ${location.pathname === item.link ? 'font-bold text-[#347B66]' : ''}`}
                   >
                     {item.name}
                   </Link>
@@ -87,8 +87,8 @@ export default function FarmerNavbar() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-xl bg-[#C24C30] px-5 py-2 text-sm 
-                  font-semibold text-white shadow-sm hover:bg-[#E66A32] transition-all"
+                  className="flex items-center gap-2 rounded-xl bg-[#347B66] px-5 py-2 text-sm 
+                  font-semibold text-white shadow-sm hover:bg-[#6FA99F] transition-all"
                 >
                   <FaUserAlt /> User
                 </motion.button>
@@ -99,8 +99,8 @@ export default function FarmerNavbar() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-xl border border-[#FF8C42] px-5 py-2 
-                  text-sm font-semibold text-[#8C2F2B] hover:bg-[#FF8C42] hover:text-white transition-all"
+                  className="flex items-center gap-2 rounded-xl border border-[#347B66] px-5 py-2 
+                  text-sm font-semibold text-[#1F3326] hover:bg-[#347B66] hover:text-white transition-all"
                 >
                   <FaStore /> Seller
                 </motion.button>
@@ -111,8 +111,8 @@ export default function FarmerNavbar() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-xl border border-[#8C2F2B] px-5 py-2 
-                  text-sm font-semibold text-[#8C2F2B] hover:bg-[#8C2F2B] hover:text-white transition-all"
+                  className="flex items-center gap-2 rounded-xl border border-[#1F3326] px-5 py-2 
+                  text-sm font-semibold text-[#1F3326] hover:bg-[#1F3326] hover:text-white transition-all"
                 >
                   <FaUserShield /> Admin
                 </motion.button>
@@ -132,8 +132,8 @@ export default function FarmerNavbar() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-xl bg-[#C24C30] px-5 py-2 text-sm 
-                  font-semibold text-white shadow-sm hover:bg-[#E66A32] transition-all"
+                  className="flex items-center gap-2 rounded-xl bg-[#347B66] px-5 py-2 text-sm 
+                  font-semibold text-white shadow-sm hover:bg-[#6FA99F] transition-all"
                 >
                   <FaLeaf /> Dashboard
                 </motion.button>
@@ -144,8 +144,8 @@ export default function FarmerNavbar() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center gap-2 rounded-xl bg-[#8C2F2B] px-5 py-2 text-sm 
-                font-semibold text-white shadow-sm hover:bg-[#C24C30] transition-all"
+                className="flex items-center gap-2 rounded-xl bg-[#1F3326] px-5 py-2 text-sm 
+                font-semibold text-white shadow-sm hover:bg-[#347B66] transition-all"
               >
                 <FaSignOutAlt /> Logout
               </motion.button>
@@ -154,7 +154,7 @@ export default function FarmerNavbar() {
 
           {/* MOBILE MENU ICON */}
           <button
-            className="block rounded-md p-1.5 text-[#8C2F2B] hover:text-[#C24C30] md:hidden"
+            className="block rounded-md p-1.5 text-[#1F3326] hover:text-[#347B66] md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <IconX size={22} /> : <IconMenu2 size={22} />}
@@ -169,7 +169,7 @@ export default function FarmerNavbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden bg-[#FFD9A0] border-t border-[#C24C30]/30 shadow-inner"
+            className="md:hidden bg-[#E8F5E9] border-t border-[#347B66]/30 shadow-inner"
           >
             <ul className="flex flex-col px-4 py-4 space-y-3 text-sm font-medium">
 
@@ -180,7 +180,7 @@ export default function FarmerNavbar() {
                     <a
                       href={item.link}
                       onClick={() => setMenuOpen(false)}
-                      className="block text-[#8C2F2B]/90 hover:text-[#C24C30] transition-all"
+                      className="block text-[#1F3326]/90 hover:text-[#347B66] transition-all"
                     >
                       {item.name}
                     </a>
@@ -188,7 +188,7 @@ export default function FarmerNavbar() {
                     <Link
                       to={item.link}
                       onClick={() => setMenuOpen(false)}
-                      className="block text-[#8C2F2B]/90 hover:text-[#C24C30] transition-all"
+                      className="block text-[#1F3326]/90 hover:text-[#347B66] transition-all"
                     >
                       {item.name}
                     </Link>
@@ -203,8 +203,8 @@ export default function FarmerNavbar() {
                     <Link
                       to="/login"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
-                      font-semibold shadow-md hover:bg-[#E66A32] transition-all"
+                      className="flex items-center gap-2 w-full rounded-md bg-[#347B66] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#6FA99F] transition-all"
                     >
                       <FaUserCircle /> User Login
                     </Link>
@@ -215,8 +215,8 @@ export default function FarmerNavbar() {
                     <Link
                       to="/login/seller"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2 w-full rounded-md border border-[#FF8C42] px-4 py-2 
-                      text-[#8C2F2B] font-semibold hover:bg-[#FF8C42] hover:text-white transition-all"
+                      className="flex items-center gap-2 w-full rounded-md border border-[#347B66] px-4 py-2 
+                      text-[#1F3326] font-semibold hover:bg-[#347B66] hover:text-white transition-all"
                     >
                       <FaStore /> Seller Login
                     </Link>
@@ -227,8 +227,8 @@ export default function FarmerNavbar() {
                     <Link
                       to="/login/admin"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2 w-full rounded-md border border-[#8C2F2B] px-4 py-2 
-                      text-[#8C2F2B] font-semibold hover:bg-[#8C2F2B] hover:text-white transition-all"
+                      className="flex items-center gap-2 w-full rounded-md border border-[#1F3326] px-4 py-2 
+                      text-[#1F3326] font-semibold hover:bg-[#1F3326] hover:text-white transition-all"
                     >
                       <FaUserShield /> Admin Login
                     </Link>
@@ -245,8 +245,8 @@ export default function FarmerNavbar() {
                         "/dashboard"
                       }
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2 w-full rounded-md bg-[#C24C30] px-4 py-2 text-white 
-                      font-semibold shadow-md hover:bg-[#E66A32] transition-all"
+                      className="flex items-center gap-2 w-full rounded-md bg-[#347B66] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#6FA99F] transition-all"
                     >
                       <FaLeaf /> Dashboard
                     </Link>
@@ -256,8 +256,8 @@ export default function FarmerNavbar() {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 w-full rounded-md bg-[#8C2F2B] px-4 py-2 text-white 
-                      font-semibold shadow-md hover:bg-[#C24C30] transition-all"
+                      className="flex items-center gap-2 w-full rounded-md bg-[#1F3326] px-4 py-2 text-white 
+                      font-semibold shadow-md hover:bg-[#347B66] transition-all"
                     >
                       <FaSignOutAlt /> Logout
                     </button>

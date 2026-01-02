@@ -16,21 +16,21 @@ const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-xl bg-[#FFF6E9] border border-[#FFD9A0] shadow-sm overflow-hidden transition-all">
+    <div className="rounded-xl bg-[#E8F5E9] border border-[#6FA99F] shadow-sm overflow-hidden transition-all">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-[#FAF1DD] transition"
+        className="w-full px-6 py-4 flex justify-between items-center text-left hover:bg-[#C8E6C9] transition"
       >
-        <span className="font-semibold text-[#8C2F2B]">{question}</span>
+        <span className="font-semibold text-[#1F3326]">{question}</span>
         {isOpen ? (
-          <ChevronUp className="text-[#E66A32]" />
+          <ChevronUp className="text-[#347B66]" />
         ) : (
-          <ChevronDown className="text-[#E66A32]" />
+          <ChevronDown className="text-[#347B66]" />
         )}
       </button>
 
       {isOpen && (
-        <div className="px-6 py-4 bg-[#FDF6E9] border-t border-[#FFD9A0] text-[#C24C30] text-sm">
+        <div className="px-6 py-4 bg-[#E8F5E9] border-t border-[#6FA99F] text-[#3B4A38] text-sm">
           {answer}
         </div>
       )}
@@ -62,8 +62,8 @@ const SupportSection = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#8C2F2B] mb-10 flex items-center gap-3">
-        <HelpCircle className="text-[#E66A32]" /> Help & Support
+      <h1 className="text-3xl font-bold text-[#1F3326] mb-10 flex items-center gap-3">
+        <HelpCircle className="text-[#347B66]" /> Help & Support
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -72,19 +72,19 @@ const SupportSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#FFF6E9] p-8 rounded-2xl shadow-md border border-[#FFD9A0]"
+          className="bg-[#E8F5E9] p-8 rounded-2xl shadow-md border border-[#6FA99F]"
         >
-          <h2 className="text-xl font-bold text-[#C24C30] mb-6">Contact Us</h2>
+          <h2 className="text-xl font-bold text-[#347B66] mb-6">Contact Us</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-[#8C2F2B] mb-1">
+              <label className="block text-sm font-medium text-[#1F3326] mb-1">
                 Your Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-3 text-[#FFB444]" size={18} />
+                <User className="absolute left-3 top-3 text-[#347B66]" size={18} />
                 <input
                   type="text"
                   value={formData.name}
@@ -92,8 +92,8 @@ const SupportSection = () => {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   placeholder="John Doe"
-                  className="w-full pl-10 pr-4 py-2 bg-[#FAF3E3] border border-[#FFD9A0] rounded-lg 
-                             focus:ring-2 focus:ring-[#E66A32] focus:outline-none text-[#2B2B2B]"
+                  className="w-full pl-10 pr-4 py-2 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg 
+                             focus:ring-2 focus:ring-[#347B66] focus:outline-none text-[#1F3326]"
                   required
                 />
               </div>
@@ -101,11 +101,11 @@ const SupportSection = () => {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-[#8C2F2B] mb-1">
+              <label className="block text-sm font-medium text-[#1F3326] mb-1">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 text-[#FFB444]" size={18} />
+                <Mail className="absolute left-3 top-3 text-[#347B66]" size={18} />
                 <input
                   type="email"
                   value={formData.email}
@@ -113,8 +113,8 @@ const SupportSection = () => {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   placeholder="example@mail.com"
-                  className="w-full pl-10 pr-4 py-2 bg-[#FAF3E3] border border-[#FFD9A0] rounded-lg 
-                             focus:ring-2 focus:ring-[#E66A32] focus:outline-none text-[#2B2B2B]"
+                  className="w-full pl-10 pr-4 py-2 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg 
+                             focus:ring-2 focus:ring-[#347B66] focus:outline-none text-[#1F3326]"
                   required
                 />
               </div>
@@ -122,11 +122,11 @@ const SupportSection = () => {
 
             {/* Subject Dropdown */}
             <div>
-              <label className="block text-sm font-medium text-[#8C2F2B] mb-1">
+              <label className="block text-sm font-medium text-[#1F3326] mb-1">
                 Subject
               </label>
               <div className="relative">
-                <MessageSquare className="absolute left-3 top-3 text-[#FFB444]" size={18} />
+                <MessageSquare className="absolute left-3 top-3 text-[#347B66]" size={18} />
 
                 <select
                   value={formData.subject}
@@ -134,9 +134,9 @@ const SupportSection = () => {
                     setFormData({ ...formData, subject: e.target.value })
                   }
                   className="
-                    w-full pl-10 pr-10 py-2 bg-[#FAF3E3]
-                    border border-[#FFD9A0] rounded-lg text-[#2B2B2B]
-                    focus:ring-2 focus:ring-[#E66A32] outline-none transition
+                    w-full pl-10 pr-10 py-2 bg-[#E8F5E9]
+                    border border-[#6FA99F] rounded-lg text-[#1F3326]
+                    focus:ring-2 focus:ring-[#347B66] outline-none transition
                     appearance-none cursor-pointer
                   "
                   required
@@ -149,7 +149,7 @@ const SupportSection = () => {
                 </select>
 
                 <ChevronDown
-                  className="absolute right-3 top-3 text-[#C24C30]"
+                  className="absolute right-3 top-3 text-[#347B66]"
                   size={18}
                 />
               </div>
@@ -157,7 +157,7 @@ const SupportSection = () => {
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-[#8C2F2B] mb-1">
+              <label className="block text-sm font-medium text-[#1F3326] mb-1">
                 Message
               </label>
               <textarea
@@ -166,8 +166,8 @@ const SupportSection = () => {
                   setFormData({ ...formData, message: e.target.value })
                 }
                 placeholder="Describe your issue..."
-                className="w-full px-4 py-2 bg-[#FAF3E3] border border-[#FFD9A0] rounded-lg 
-                           focus:ring-2 focus:ring-[#E66A32] text-[#2B2B2B] h-32 resize-none"
+                className="w-full px-4 py-2 bg-[#E8F5E9] border border-[#6FA99F] rounded-lg 
+                           focus:ring-2 focus:ring-[#347B66] text-[#1F3326] h-32 resize-none"
                 required
               />
             </div>
@@ -176,7 +176,7 @@ const SupportSection = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#C24C30] hover:bg-[#9E2B26] text-white font-bold py-3 rounded-lg 
+              className="w-full bg-[#347B66] hover:bg-[#1F3326] text-white font-bold py-3 rounded-lg 
                          transition shadow-md flex items-center justify-center gap-2"
             >
               {isLoading ? "Sending..." : <>Send Message <Send size={18} /></>}
@@ -186,7 +186,7 @@ const SupportSection = () => {
 
         {/* RIGHT: FAQ */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <h2 className="text-xl font-bold text-[#C24C30] mb-6">FAQ</h2>
+          <h2 className="text-xl font-bold text-[#347B66] mb-6">FAQ</h2>
 
           <div className="space-y-4">
             <FAQItem
