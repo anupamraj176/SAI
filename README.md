@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![FarmerHub Logo](frontend/public/assets/farmer-logo.png)
+![FarmerHub Platform Preview](frontend/public/assets/farmerhub-hero.png)
 
 **Empowering farmers with direct consumer access—bringing fresh, organic, and locally grown produce straight to your home.**
 
