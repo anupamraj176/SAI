@@ -48,7 +48,7 @@ export default function FarmerNavbar() {
             onError={(e) => {e.target.style.display='none'}} // Fallback if image missing
           />
           <span className="text-base sm:text-lg font-bold text-[#347B66] tracking-wide whitespace-nowrap">
-            Farmer<span className="text-[#CFF56E]">Hub</span>
+            Farmer<span className="text-[#637731]">Hub</span>
           </span>
         </Link>
 
