@@ -3,10 +3,10 @@ import {
     ShoppingCart, 
     LayoutDashboard, 
     LogOut, 
-    Sparkles, 
     HelpCircle, 
     Heart,
-    X
+    X,
+    Sparkles
 } from "lucide-react";
 
 const UserSidebar = ({ activeSection, setActiveSection, onLogout, user, cartCount, isOpen, onClose }) => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
@@ -9,7 +9,7 @@ const EmailVerification = () => {
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  const { error, isLoading, verifyEmail, user } = useAuthStore();
+  const { error, isLoading, verifyEmail } = useAuthStore();
 
   const handleChange = (index, value) => {
     const newCode = [...code];
@@ -37,12 +37,9 @@ const EmailVerification = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const verificationCode = code.join("");
+  const submitVerification = useCallback(async (verificationCode) => {
     try {
       const response = await verifyEmail(verificationCode);
-
       toast.success("Email verified successfully");
 
       // Redirect based on the role returned from the backend response
@@ -53,16 +50,22 @@ const EmailVerification = () => {
       } else {
         navigate("/dashboard");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
+  }, [verifyEmail, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const verificationCode = code.join("");
+    await submitVerification(verificationCode);
   };
 
   useEffect(() => {
     if (code.every((digit) => digit !== "")) {
-      handleSubmit(new Event("submit"));
+      submitVerification(code.join(""));
     }
-  }, [code]);
+  }, [code, submitVerification]);
 
   return (
     <motion.div

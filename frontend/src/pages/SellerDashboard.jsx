@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu } from "lucide-react"; // Import Menu icon
+import { Menu } from "lucide-react";
 
 import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";

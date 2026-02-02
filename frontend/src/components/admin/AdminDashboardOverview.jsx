@@ -35,6 +35,8 @@ const PALETTE = {
   forest: "#3B4A38",
   evergreen: "#1F3326",
   base: "#E8F5E9",
+  saffron: "#F59E0B",
+  maroon: "#DC2626",
 };
 
 // Soft green stat card

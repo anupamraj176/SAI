@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Package, Clock, CheckCircle } from "lucide-react";
 import { useOrderStore } from "../../store/orderStore";
 
-const UserOrders = ({ setActiveSection }) => {
+const UserOrders = ({ setActiveSection = () => {} }) => {
     const { orders } = useOrderStore();
 
     return (

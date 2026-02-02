@@ -83,12 +83,3 @@ export const useProductStore = create((set) => ({
         }
     }
 }));
-
-const handleAddProduct = async (e) => {
-    e.preventDefault(); 
-    
-    const formData = new FormData();
-    // ... append your data ...
-
-    await addProduct(formData);
-};

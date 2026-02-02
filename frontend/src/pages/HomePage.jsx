@@ -1,4 +1,3 @@
-"use client";
 import FarmerNavbar from "../components/FarmerNavbar";
 import FloatingLeaves from "../components/FloatingLeaves";
 import MangoTree from "../components/MangoTree";

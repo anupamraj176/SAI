@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
     Bot,
     Sparkles,
     Sprout,
-    AlertCircle,
     Thermometer,
     Droplets,
     CloudRain,

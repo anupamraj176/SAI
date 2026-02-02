@@ -3,7 +3,6 @@ import {
     Package,
     ShoppingBag,
     LogOut,
-    Sparkles,
     Bot,
     User,
     X

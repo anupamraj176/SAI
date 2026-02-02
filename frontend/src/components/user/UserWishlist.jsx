@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useWishlistStore } from '../../store/wishlistStore';
 import { useCartStore } from '../../store/cartStore';
 import { ShoppingCart, Heart, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const UserWishlist = () => {
   const { wishlist, fetchWishlist, toggleWishlist, isLoading } = useWishlistStore();

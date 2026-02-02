@@ -1,8 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
-
-const API_URL = "http://localhost:5001/api/cart";
-axios.defaults.withCredentials = true;
 
 export const useCartStore = create((set, get) => ({
     cart: [],
