@@ -4,6 +4,7 @@ import { useAuthStore } from "./store/authStore";
 import { Toaster } from "react-hot-toast";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
+import FarmerNavbar from "./components/FarmerNavbar";
 
 // Pages
 import LoginPage from "./pages/LoginPage";
@@ -77,8 +78,11 @@ const BackgroundWrapper = ({ children, className = "", showShapes = false }) => 
 
 // --- Layouts ---
 const AuthLayout = () => (
-  <BackgroundWrapper className="flex items-center justify-center" showShapes={true}>
-    <Outlet />
+  <BackgroundWrapper className="flex flex-col" showShapes={true}>
+    <FarmerNavbar />
+    <div className="flex-1 flex items-center justify-center">
+      <Outlet />
+    </div>
   </BackgroundWrapper>
 );
 

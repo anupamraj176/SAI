@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Headphones, Search, X } from 'lucide-react';
+import { Play, Headphones, Search, X, BookOpen, Clock, Users, Award, Filter } from 'lucide-react';
 import FarmerNavbar from '../components/FarmerNavbar';
 
 const EducationPage = () => {
@@ -9,6 +9,7 @@ const EducationPage = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [recommendedVideos, setRecommendedVideos] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const commonId = "Ulf8E1XnhgI";
 
@@ -47,10 +48,12 @@ const EducationPage = () => {
       ? videos.map(v => ({ ...v, thumbnail: `https://img.youtube.com/vi/${commonId}/mqdefault.jpg` }))
       : audiobooks;
 
-  const filteredItems = currentItems.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredItems = currentItems.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const showRecommended = (video) => {
     setSelectedVideo(video.youtubeId);
@@ -72,10 +75,34 @@ const EducationPage = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
 
           {/* HEADER */}
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-[#1F3326] mb-2">Knowledge Hub</h1>
-            <p className="text-[#347B66] font-medium">Empowering farmers with expert knowledge & resources</p>
+          <div className="text-center mb-8">
+            <span className="inline-block px-4 py-1.5 bg-[#347B66]/10 text-[#347B66] rounded-full text-sm font-semibold mb-4">
+              📚 Learn & Grow
+            </span>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[#1F3326] mb-3">Knowledge Hub</h1>
+            <p className="text-[#347B66] font-medium text-lg">Empowering farmers with expert knowledge & resources</p>
           </div>
+
+          {/* STATS BAR */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
+          >
+            {[
+              { label: "Videos", value: "6+", icon: Play, color: "text-emerald-600" },
+              { label: "Audiobooks", value: "2+", icon: Headphones, color: "text-blue-600" },
+              { label: "Categories", value: "6", icon: BookOpen, color: "text-purple-600" },
+              { label: "Total Duration", value: "90+ min", icon: Clock, color: "text-amber-600" },
+            ].map((stat, i) => (
+              <div key={i} className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/40 shadow-sm">
+                <stat.icon className={`mx-auto mb-1.5 ${stat.color}`} size={22} />
+                <h4 className="text-xl font-extrabold text-[#1F3326]">{stat.value}</h4>
+                <p className="text-xs text-[#3B4A38]/60 font-medium">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
 
           {/* ⭐ NEW IMPROVED STICKY TOP BAR */}
           <div className="sticky top-0 z-30 bg-white/10 backdrop-blur-md py-4 mb-10 border-b border-white/20 shadow-sm">
@@ -129,6 +156,23 @@ const EducationPage = () => {
                 )}
               </div>
             </div>
+
+            {/* Category Filter Chips */}
+            <div className="max-w-6xl mx-auto flex items-center gap-2 px-4 mt-3 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+              <Filter size={16} className="text-[#347B66] flex-shrink-0" />
+              {["All", ...new Set(videos.map(v => v.category))].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border
+                    ${selectedCategory === cat
+                      ? "bg-[#347B66] text-white border-[#347B66] shadow-md"
+                      : "bg-white/40 text-[#1F3326] border-white/40 hover:bg-white/70"}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* CONTENT GRID */}
@@ -143,28 +187,34 @@ const EducationPage = () => {
                       ? showRecommended(item)
                       : setSelectedAudio(item)
                   }
-                  className="bg-white/60 backdrop-blur-md rounded-2xl shadow-lg border border-white/40 cursor-pointer group overflow-hidden hover:shadow-xl transition-all duration-300 hover:bg-white/80"
+                  className="bg-white/60 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 cursor-pointer group overflow-hidden hover:shadow-2xl transition-all duration-300 hover:bg-white/80"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -8 }}
                 >
                   <div className="relative h-52 overflow-hidden">
                     <img
                       src={item.thumbnail || item.cover}
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-                      <div className="bg-white/90 p-3 rounded-full shadow-lg">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent group-hover:from-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <div className="bg-white/90 p-3.5 rounded-full shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
                         {activeTab === "videos"
-                          ? <Play className="text-[#347B66] fill-current" />
-                          : <Headphones className="text-[#347B66]" />}
+                          ? <Play className="text-[#347B66] fill-current" size={22} />
+                          : <Headphones className="text-[#347B66]" size={22} />}
                       </div>
                     </div>
 
-                    <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-bold px-2.5 py-1 rounded-lg">
+                    <span className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm">
                       {item.duration}
                     </span>
+
+                    {item.id === 1 && (
+                      <span className="absolute top-3 left-3 bg-[#CFF56E] text-[#1F3326] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
+                        <Award size={10} /> Popular
+                      </span>
+                    )}
                   </div>
 
                   <div className="p-5">
