@@ -20,10 +20,13 @@ const orderSchema = new mongoose.Schema({
     },
     paymentProvider: {
         type: String,
-        default: "stripe"
+        default: "razorpay"
     },
     paymentIntentId: { type: String },
     paymentSessionId: { type: String },
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
+    razorpaySignature: { type: String },
     currency: {
         type: String,
         default: "INR"

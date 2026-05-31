@@ -28,7 +28,8 @@
     "multer": "^2.0.2",
     "nodemailer": "^6.10.1",
     "sharp": "^0.34.5",
-    "stripe": "^16.4.0"
+    "stripe": "^16.4.0",
+    "razorpay": "^2.9.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

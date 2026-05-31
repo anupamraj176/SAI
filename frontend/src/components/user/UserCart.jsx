@@ -2,11 +2,29 @@ import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { useCartStore } from "../../store/cartStore";
 import { useOrderStore } from "../../store/orderStore";
+import { useAuthStore } from "../../store/authStore";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+const loadRazorpayScript = () =>
+    new Promise((resolve) => {
+        if (window.Razorpay) {
+            resolve(true);
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
 
 const UserCart = ({ setActiveSection }) => {
-    const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCartStore();
-    const { createCheckoutSession, isLoading: isOrderLoading } = useOrderStore();
+    const { cart, removeFromCart, updateQuantity, getCartTotal } = useCartStore();
+    const { createCheckoutSession, verifyRazorpayPayment, isLoading: isOrderLoading } = useOrderStore();
+    const { user } = useAuthStore();
+    const navigate = useNavigate();
 
     const handleCheckout = async () => {
         if (cart.length === 0) return;
@@ -14,7 +32,55 @@ const UserCart = ({ setActiveSection }) => {
         const result = await createCheckoutSession(cart);
 
         if (result.success) {
-            window.location.href = result.url;
+            if (result.provider === "stripe") {
+                window.location.href = result.url;
+                return;
+            }
+
+            if (result.provider === "razorpay") {
+                const scriptLoaded = await loadRazorpayScript();
+                if (!scriptLoaded) {
+                    toast.error("Failed to load Razorpay. Please try again.");
+                    return;
+                }
+
+                const options = {
+                    key: result.keyId,
+                    amount: result.amount,
+                    currency: result.currency,
+                    name: "FarmerHub",
+                    description: "Order Payment",
+                    order_id: result.razorpayOrderId,
+                    prefill: {
+                        name: user?.name || "",
+                        email: user?.email || "",
+                        contact: user?.phoneNumber || ""
+                    },
+                    handler: async (response) => {
+                        const verifyResult = await verifyRazorpayPayment({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            orderId: result.orderId
+                        });
+
+                        if (verifyResult.success) {
+                            navigate(`/payment/success?orderId=${result.orderId}`);
+                        } else {
+                            toast.error(verifyResult.message || "Payment verification failed");
+                        }
+                    },
+                    modal: {
+                        ondismiss: () => toast.error("Payment cancelled")
+                    }
+                };
+
+                const razorpay = new window.Razorpay(options);
+                razorpay.open();
+                return;
+            }
+
+            toast.error("Unsupported payment provider");
         } else {
             toast.error(result.message);
         }

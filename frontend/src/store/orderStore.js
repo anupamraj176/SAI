@@ -19,9 +19,22 @@ export const useOrderStore = create((set) => ({
 
             const response = await axios.post(`/api/payments/checkout`, { items });
             set({ isLoading: false });
-            return { success: true, url: response.data.url };
+            return { success: true, ...response.data };
         } catch (error) {
             const message = error.response?.data?.message || "Failed to start checkout";
+            set({ error: message, isLoading: false });
+            return { success: false, message };
+        }
+    },
+
+    verifyRazorpayPayment: async (payload) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await axios.post(`/api/payments/razorpay/verify`, payload);
+            set({ isLoading: false });
+            return { success: true, ...response.data };
+        } catch (error) {
+            const message = error.response?.data?.message || "Failed to verify payment";
             set({ error: message, isLoading: false });
             return { success: false, message };
         }
