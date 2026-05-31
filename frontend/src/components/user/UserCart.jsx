@@ -6,18 +6,15 @@ import toast from "react-hot-toast";
 
 const UserCart = ({ setActiveSection }) => {
     const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCartStore();
-    const { createOrder, isLoading: isOrderLoading } = useOrderStore();
+    const { createCheckoutSession, isLoading: isOrderLoading } = useOrderStore();
 
     const handleCheckout = async () => {
         if (cart.length === 0) return;
 
-        const total = getCartTotal(cart);
-        const result = await createOrder(cart, total);
+        const result = await createCheckoutSession(cart);
 
         if (result.success) {
-            toast.success("Order placed successfully!");
-            clearCart();
-            setActiveSection("orders");
+            window.location.href = result.url;
         } else {
             toast.error(result.message);
         }

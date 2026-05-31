@@ -24,6 +24,9 @@ const SellerOrders = () => {
                                     <p className="text-sm text-[#1F3326]">
                                         Buyer: <span className="font-bold">{order.buyer?.name}</span>
                                     </p>
+                                    <p className="text-xs text-[#3B4A38]/70">
+                                        Payment: {order.paymentStatus || "Paid"}
+                                    </p>
                                 </div>
 
                                 <select

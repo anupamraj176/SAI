@@ -13,7 +13,10 @@ export const getDashboardStats = async (req, res) => {
     const totalOrders = await Order.countDocuments();
     
     // Calculate Revenue (Simple sum of all orders)
-    const orders = await Order.find({ status: { $ne: "Cancelled" } });
+    const orders = await Order.find({
+      status: { $ne: "Cancelled" },
+      $or: [{ paymentStatus: "Paid" }, { paymentStatus: { $exists: false } }]
+    });
     const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
 
     const pendingSellers = await Account.countDocuments({ role: "seller", isSellerVerified: false });

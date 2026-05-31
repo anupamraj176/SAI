@@ -17,6 +17,8 @@ import UserDashboard from "./pages/UserDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import HomePage from "./pages/HomePage";
 import EducationPage from "./pages/EducationPage"; 
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
 
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -108,6 +110,23 @@ export default function App() {
         
         {/* Add the Education Route */}
         <Route path="/education" element={<EducationPage />} />
+
+        <Route
+          path="/payment/success"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <PaymentSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment/cancel"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <PaymentCancel />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Auth Pages (Centered Layout) */}
         <Route element={<AuthLayout />}>

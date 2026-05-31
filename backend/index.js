@@ -14,6 +14,8 @@ import { cloudinaryConnect } from "./config/cloudinary.js";
 import uploadRoutes from "./routes/upload.route.js"; 
 import wishlistRoutes from "./routes/wishlist.route.js";
 import adminRoutes from "./routes/admin.route.js";
+import paymentRoutes from "./routes/payment.route.js";
+import { handleStripeWebhook } from "./controllers/payment.controller.js";
 
 dotenv.config();
 
@@ -30,6 +32,8 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.post("/api/payments/webhook", express.raw({ type: "application/json" }), handleStripeWebhook);
 
 app.use(express.json());
 app.use(cookieParser()); 
@@ -50,6 +54,7 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/payments", paymentRoutes);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")));

@@ -31,6 +31,13 @@ const AdminOrders = () => {
     }
   };
 
+  const getPaymentStyle = (status) => {
+    if ((status || "Paid") === "Paid") {
+      return "bg-green-100 text-green-700 border-green-300";
+    }
+    return "bg-yellow-100 text-yellow-700 border-yellow-300";
+  };
+
   if (isLoading) return <LoadingSpinner />;
 
   if (error) {
@@ -71,6 +78,7 @@ const AdminOrders = () => {
               <th className="p-4 font-semibold text-[#1F3326]">Customer</th>
               <th className="p-4 font-semibold text-[#1F3326]">Total</th>
               <th className="p-4 font-semibold text-[#1F3326]">Status</th>
+              <th className="p-4 font-semibold text-[#1F3326]">Payment</th>
               <th className="p-4 font-semibold text-[#1F3326]">Date</th>
             </tr>
           </thead>
@@ -100,6 +108,16 @@ const AdminOrders = () => {
                     )}`}
                   >
                     {order.status}
+                  </span>
+                </td>
+
+                <td className="p-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold border ${getPaymentStyle(
+                      order.paymentStatus
+                    )}`}
+                  >
+                    {order.paymentStatus || "Paid"}
                   </span>
                 </td>
 
@@ -148,6 +166,17 @@ const AdminOrders = () => {
                 <p className="text-[10px] font-bold text-[#3B4A38] uppercase">Total</p>
                 <p className="text-lg font-bold text-[#347B66]">₹{order.totalAmount}</p>
               </div>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <p className="text-[10px] font-bold text-[#3B4A38] uppercase">Payment</p>
+              <span
+                className={`px-2 py-1 rounded-full text-[10px] font-bold border ${getPaymentStyle(
+                  order.paymentStatus
+                )}`}
+              >
+                {order.paymentStatus || "Paid"}
+              </span>
             </div>
 
             <div className="pt-2 border-t border-[#6FA99F]/50 text-xs text-[#3B4A38]">

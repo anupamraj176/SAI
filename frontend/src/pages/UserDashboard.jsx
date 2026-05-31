@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";
 import { useCartStore } from "../store/cartStore";
@@ -19,8 +20,16 @@ const UserDashboard = () => {
     const { cart } = useCartStore();
     const { fetchUserOrders } = useOrderStore();
     
-    const [activeSection, setActiveSection] = useState("market");
+    const [searchParams] = useSearchParams();
+    const sectionParam = searchParams.get("section");
+    const [activeSection, setActiveSection] = useState(sectionParam || "market");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
+
+    useEffect(() => {
+        if (sectionParam) {
+            setActiveSection(sectionParam);
+        }
+    }, [sectionParam]);
 
     useEffect(() => {
         if (activeSection === "market") fetchAllProducts(); 

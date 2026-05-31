@@ -27,7 +27,7 @@ const UserOrders = ({ setActiveSection = () => {} }) => {
                                 </div>
 
                                 {/* Status */}
-                                <div className="flex items-center gap-2 self-end sm:self-auto">
+                                <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
                                     {order.status === "Pending" ? (
                                         <Clock size={16} className="text-[#6FA99F]" />
                                     ) : (
@@ -42,6 +42,16 @@ const UserOrders = ({ setActiveSection = () => {} }) => {
                                         }`}
                                     >
                                         {order.status}
+                                    </span>
+
+                                    <span
+                                        className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                                            (order.paymentStatus || "Paid") === "Paid"
+                                                ? "text-green-700 bg-green-100 border-green-300"
+                                                : "text-yellow-700 bg-yellow-100 border-yellow-300"
+                                        }`}
+                                    >
+                                        Payment: {order.paymentStatus || "Paid"}
                                     </span>
                                 </div>
                             </div>

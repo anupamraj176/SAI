@@ -1,18 +1,24 @@
 import { Order } from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
+import { buildOrderItems } from "../utils/orderPricing.js";
 
 export const createOrder = async (req, res) => {
     try {
-        const { items, totalAmount } = req.body;
-        
-        if (!items || items.length === 0) {
-            return res.status(400).json({ success: false, message: "Cart is empty" });
+        const { items } = req.body;
+
+        const { orderItems, totalAmount, error } = await buildOrderItems(items);
+        if (error) {
+            return res.status(400).json({ success: false, message: error });
         }
 
         const newOrder = new Order({
             buyer: req.userId,
-            items,
-            totalAmount
+            items: orderItems,
+            totalAmount,
+            paymentStatus: "Paid",
+            paymentProvider: "manual",
+            status: "Processing",
+            paidAt: new Date()
         });
 
         await newOrder.save();
@@ -43,8 +49,15 @@ export const getSellerOrders = async (req, res) => {
         const sellerProductIds = sellerProducts.map(p => p._id);
 
         // 2. Find orders that contain any of these products
+        const paidFilter = {
+            $or: [
+                { paymentStatus: "Paid" },
+                { paymentStatus: { $exists: false } }
+            ]
+        };
         const orders = await Order.find({
-            "items.product": { $in: sellerProductIds }
+            "items.product": { $in: sellerProductIds },
+            ...paidFilter
         })
         .populate("buyer", "name email") // Get buyer details
         .populate("items.product")

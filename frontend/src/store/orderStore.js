@@ -9,6 +9,24 @@ export const useOrderStore = create((set) => ({
     isLoading: false,
     error: null,
 
+    createCheckoutSession: async (cartItems) => {
+        set({ isLoading: true, error: null });
+        try {
+            const items = cartItems.map((item) => ({
+                productId: item._id,
+                quantity: item.quantity
+            }));
+
+            const response = await axios.post(`/api/payments/checkout`, { items });
+            set({ isLoading: false });
+            return { success: true, url: response.data.url };
+        } catch (error) {
+            const message = error.response?.data?.message || "Failed to start checkout";
+            set({ error: message, isLoading: false });
+            return { success: false, message };
+        }
+    },
+
     createOrder: async (cartItems, totalAmount) => {
         set({ isLoading: true, error: null });
         try {
