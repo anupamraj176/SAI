@@ -33,8 +33,18 @@ let allowedOrigins = envOrigins
     ? envOrigins.split(",").map((origin) => origin.trim()).filter(Boolean)
     : (isProd ? defaultOrigins : true);
 
-if (Array.isArray(allowedOrigins) && allowedOrigins.includes("*")) {
-    allowedOrigins = true;
+if (Array.isArray(allowedOrigins)) {
+    if (allowedOrigins.includes("*")) {
+        allowedOrigins = true;
+    } else {
+        // Ensure default origins are included
+        if (isProd && !allowedOrigins.includes("https://sai-8zrg.onrender.com")) {
+            allowedOrigins.push("https://sai-8zrg.onrender.com");
+        }
+        if (!allowedOrigins.includes("http://localhost:5173")) {
+            allowedOrigins.push("http://localhost:5173");
+        }
+    }
 }
 
 app.use(cors({
@@ -44,7 +54,8 @@ app.use(cors({
             if (!origin || allowedOrigins.includes(origin)) {
                 return callback(null, true);
             }
-            return callback(new Error(`CORS blocked for origin: ${origin}`));
+            // Return false instead of throwing an Error to avoid Express 500 crashes
+            return callback(null, false);
         },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
