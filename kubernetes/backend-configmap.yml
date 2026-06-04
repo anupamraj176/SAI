@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: sai-app
+data:
+  MONGODB_URL: mongodb://root:root@mongodb:27017/admin
+  CLIENT_URL: http://localhost:30080
+  CORS_ORIGINS: "*"
+  JWT_SECRET: dev-secret
+  API_KEY: "329729725539524"
+  CLOUD_NAME: dgrktsk04
+  EMAIL_USER: anupamraj176@gmail.com
+  SUPPORT_EMAIL: anupamraj176@gmail.com
+  PAYMENT_PROVIDER: razorpay
+  RAZORPAY_KEY_ID: rzp_test_Sw0KWFlb4aNwPZ
+  NODE_ENV: development

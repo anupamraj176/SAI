@@ -47,3 +47,6 @@ coverage/
 .cache/
 .temp/
 .tmp/
+
+# Kubernetes local secrets
+kubernetes/secretes.yml

@@ -26,8 +26,26 @@ const __dirname = path.resolve(); // Define __dirname
 // 2. Connect Cloudinary
 cloudinaryConnect();
 
+const defaultOrigins = ["http://localhost:5173", "https://sai-8zrg.onrender.com"];
+const envOrigins = process.env.CORS_ORIGINS || process.env.CLIENT_URL;
+const isProd = process.env.NODE_ENV === "production";
+let allowedOrigins = envOrigins
+    ? envOrigins.split(",").map((origin) => origin.trim()).filter(Boolean)
+    : (isProd ? defaultOrigins : true);
+
+if (Array.isArray(allowedOrigins) && allowedOrigins.includes("*")) {
+    allowedOrigins = true;
+}
+
 app.use(cors({
-    origin: ["http://localhost:5173", "https://sai-8zrg.onrender.com"],
+    origin: allowedOrigins === true
+        ? true
+        : (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error(`CORS blocked for origin: ${origin}`));
+        },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]

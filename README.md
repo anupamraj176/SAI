@@ -232,26 +232,99 @@ PORT=5001
 NODE_ENV=development
 
 # MongoDB
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URL=your_mongodb_connection_string
 
 # JWT
 JWT_SECRET=your_jwt_secret_key
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CLOUD_NAME=your_cloudinary_cloud_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_api_secret
 
 # Email (Gmail)
 EMAIL_USER=your_gmail_address
-EMAIL_PASS=your_gmail_app_password
+EMAIL_APP_PASSWORD=your_gmail_app_password
 
 # Google AI (for CropSense AI feature)
-GOOGLE_AI_KEY=your_google_generative_ai_key
+GEMINI_API_KEY=your_google_generative_ai_key
 
 # Frontend URL (for CORS)
 CLIENT_URL=http://localhost:5173
 ```
+
+---
+
+## ☸️ Kubernetes Deployment
+
+This project includes Kubernetes configurations to run the entire stack (Frontend, Backend, MongoDB, and Persistent Storage) locally or in a cluster.
+
+### 📁 Kubernetes Files Structure
+All files are located in the `kubernetes/` folder:
+- `namespace.yml` - Defines the isolated `sai-app` namespace.
+- `mongodb-pv.yml` & `mongodb-pvc.yml` - Local persistent storage configuration for MongoDB.
+- `mongodb-deployment.yml` & `mongodb-service.yml` - MongoDB service and state.
+- `backend-configmap.yml` & `secretes.example.yml` - Backend environment settings.
+- `backend-deployment.yml` & `backend-service.yml` - Node.js Express server.
+- `frontend-deployment.yml` & `frontend-service.yml` - Nginx static server and api proxy.
+- `ingress.yml` - Nginx Ingress Controller routing rules (optional).
+
+### 🚀 Getting Started with Kubernetes
+
+#### 1. Setup Local Secrets
+Before applying your Kubernetes files, create a copy of the secret template:
+```powershell
+cp ./kubernetes/secretes.example.yml ./kubernetes/secretes.yml
+```
+*Note: `kubernetes/secretes.yml` is ignored by Git in `.gitignore` to prevent leaking passwords to GitHub. Update `kubernetes/secretes.yml` with your real Gemini, Gmail, Cloudinary, and Razorpay API secrets before proceeding.*
+
+#### 2. Deploy Everything to Cluster
+Apply the manifests to the cluster:
+```powershell
+# Create namespace
+kubectl apply -f .\kubernetes\namespace.yml
+
+# Apply configurations and secrets
+kubectl apply -f .\kubernetes\secretes.yml
+kubectl apply -f .\kubernetes\backend-configmap.yml
+
+# Apply Database (Persistent Volume -> Claim -> Deployment -> Service)
+kubectl apply -f .\kubernetes\mongodb-pv.yml
+kubectl apply -f .\kubernetes\mongodb-pvc.yml
+kubectl apply -f .\kubernetes\mongodb-deployment.yml
+kubectl apply -f .\kubernetes\mongodb-service.yml
+
+# Apply Backend & Frontend services
+kubectl apply -f .\kubernetes\backend-deployment.yml
+kubectl apply -f .\kubernetes\backend-service.yml
+kubectl apply -f .\kubernetes\frontend-deployment.yml
+kubectl apply -f .\kubernetes\frontend-service.yml
+```
+
+#### 3. Verify System Health
+Verify that all services and pods are running correctly:
+```powershell
+# Check pods (Wait until all show 'Running')
+kubectl get pods -n sai-app
+
+# Check services
+kubectl get svc -n sai-app
+```
+
+#### 4. Access the Application
+Since the frontend Nginx is configured to proxy all `/api/*` requests directly to the backend service inside the cluster, **you only need to port-forward the frontend to access the entire application**:
+
+```powershell
+kubectl port-forward svc/frontend -n sai-app 30080:80
+```
+- Open [http://localhost:30080](http://localhost:30080) in your web browser.
+- Login, signup, products, and support tickets will route and function correctly.
+
+*(Optional)* If you want to check backend status directly:
+```powershell
+kubectl port-forward svc/backend -n sai-app 5001:5001
+```
+Then visit [http://localhost:5001/api/auth/check-auth](http://localhost:5001/api/auth/check-auth) to check API status.
 
 ---
 

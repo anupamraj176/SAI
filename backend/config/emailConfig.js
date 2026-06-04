@@ -10,12 +10,13 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 
 // Debug check
 console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_APP_PASSWORD loaded:", !!process.env.EMAIL_APP_PASSWORD);
+const emailPassword = process.env.EMAIL_APP_PASSWORD || process.env.EMAIL_PASS;
+console.log("EMAIL_PASSWORD loaded:", !!emailPassword);
 
 export const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
+    pass: emailPassword,
   },
 });
