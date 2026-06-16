@@ -75,6 +75,16 @@ app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
 }));
 
+// Health check endpoints for Render keep-alive and monitoring
+app.get(["/health", "/api/health"], (req, res) => {
+    res.status(200).json({
+        status: "UP",
+        message: "Server is healthy and running",
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
