@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthStore } from '../../store/authStore';
-import MapComponent from '../MapComponent';
+import { useAuthStore } from '../../../store/authStore';
+import MapComponent from '../../common/MapComponent';
 import { Save, MapPin, Upload, X, Camera, CheckCircle, Phone, Mail, FileText } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';

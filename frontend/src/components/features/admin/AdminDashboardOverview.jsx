@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAdminStore } from "../../store/adminStore";
+import { useAdminStore } from "../../../store/adminStore";
 
 import {
   Users,
@@ -10,7 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 import {
   PieChart,

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useAdminStore } from "../../store/adminStore";
-import LoadingSpinner from "../LoadingSpinner";
+import { useAdminStore } from "../../../store/adminStore";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 // Green color palette
 const PALETTE = {

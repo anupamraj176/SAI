@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, X, Upload, Trash2, Package } from "lucide-react";
-import { useProductStore } from "../../store/productStore";
+import { useProductStore } from "../../../store/productStore";
 
 const CATEGORY_OPTIONS = [
   { id: "Vegetables", label: "Vegetables", icon: "🥦" },

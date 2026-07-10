@@ -1,6 +1,7 @@
 import {Product} from "../models/product.model.js";
 import { Account } from "../models/account.model.js";
 import { v2 as cloudinary } from "cloudinary";
+import { productCache } from "../utils/cache.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -41,6 +42,8 @@ export const createProduct = async (req, res) => {
         await product.save();
         console.log("Product saved:", product);
 
+        productCache.del("all_products"); // Invalidate cache
+
         res.status(201).json({ success: true, message: "Product created successfully", product });
     } catch (error) {
         console.error("Error creating product:", error);
@@ -59,7 +62,12 @@ export const getSellerProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try {
+        const cachedProducts = productCache.get("all_products");
+        if (cachedProducts) {
+            return res.status(200).json({ success: true, products: cachedProducts });
+        }
         const products = await Product.find({}).populate('seller', 'name location');
+        productCache.set("all_products", products, 5 * 60 * 1000); // Cache for 5 minutes
         res.status(200).json({ success: true, products });
     } catch (error) {
         console.error("Error fetching all products:", error);
@@ -72,6 +80,7 @@ export const deleteProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ success: false, message: "Product not found" });
         await Product.findByIdAndDelete(req.params.id);
+        productCache.del("all_products"); // Invalidate cache
         res.status(200).json({ success: true, message: "Product deleted" });
     } catch (error) {
         res.status(500).json({ success: false, message: "Server Error" });
@@ -92,6 +101,7 @@ export const updateProduct = async (req, res) => {
         }
 
         const product = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        productCache.del("all_products"); // Invalidate cache
         res.status(200).json({ success: true, message: "Product updated", product });
     } catch (error) {
         res.status(500).json({ success: false, message: "Server Error" });

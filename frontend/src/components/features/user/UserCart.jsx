@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
-import { useCartStore } from "../../store/cartStore";
-import { useOrderStore } from "../../store/orderStore";
-import { useAuthStore } from "../../store/authStore";
+import { useCartStore } from "../../../store/cartStore";
+import { useOrderStore } from "../../../store/orderStore";
+import { useAuthStore } from "../../../store/authStore";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

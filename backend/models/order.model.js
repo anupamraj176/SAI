@@ -34,4 +34,7 @@ const orderSchema = new mongoose.Schema({
     paidAt: { type: Date }
 }, { timestamps: true });
 
+orderSchema.index({ buyer: 1 });
+orderSchema.index({ "items.product": 1 });
+
 export const Order = mongoose.model("Order", orderSchema);

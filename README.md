@@ -269,7 +269,7 @@ SAI/
 7. **Seed Test Accounts (Optional)**
    To quickly explore different dashboards without manually creating accounts, run the following utility script from the `/backend` directory:
    ```bash
-   node createTestUsers.js
+   node scripts/createTestUsers.js
    ```
    This will create three pre-configured, verified test accounts with the password `password123`:
    - **User**: `testuser@example.com`

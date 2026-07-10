@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAdminStore } from "../../store/adminStore";
+import { useAdminStore } from "../../../store/adminStore";
 import { Trash2, CheckCircle, XCircle, Store } from "lucide-react";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 const PALETTE = {
   emerald: "#347B66",

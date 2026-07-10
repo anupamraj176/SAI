@@ -4,15 +4,15 @@ import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";
 import { useCartStore } from "../store/cartStore";
 import { useOrderStore } from "../store/orderStore";
-import SupportSection from "../components/SupportSection"; // Import
+import SupportSection from "../components/features/support/SupportSection"; // Import
 import { Menu } from "lucide-react"; // Import Menu icon
 
 // Import Components
-import UserSidebar from "../components/user/UserSidebar";
-import UserMarketplace from "../components/user/UserMarketplace";
-import UserCart from "../components/user/UserCart";
-import UserOrders from "../components/user/UserOrders";
-import UserWishlist from "../components/user/UserWishlist";
+import UserSidebar from "../components/layout/UserSidebar";
+import UserMarketplace from "../components/features/user/UserMarketplace";
+import UserCart from "../components/features/user/UserCart";
+import UserOrders from "../components/features/user/UserOrders";
+import UserWishlist from "../components/features/user/UserWishlist";
 
 const UserDashboard = () => {
     const { logout, user } = useAuthStore();

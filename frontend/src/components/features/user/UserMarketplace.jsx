@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, ShoppingCart, Map as MapIcon, List, ArrowLeft, Heart } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
-import { useProductStore } from '../../store/productStore';
-import { useCartStore } from '../../store/cartStore';
-import { useWishlistStore } from '../../store/wishlistStore';
-import MapComponent from '../MapComponent';
+import { useProductStore } from '../../../store/productStore';
+import { useCartStore } from '../../../store/cartStore';
+import { useWishlistStore } from '../../../store/wishlistStore';
+import MapComponent from '../../common/MapComponent';
 
 const vegetableImage = '/assets/vegetable.jpg';
 const fruitsImage = '/assets/fruits.webp';

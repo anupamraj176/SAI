@@ -1,6 +1,6 @@
-import FarmerNavbar from "../components/FarmerNavbar";
-import FloatingLeaves from "../components/FloatingLeaves";
-import MangoTree from "../components/MangoTree";
+import FarmerNavbar from "../components/layout/FarmerNavbar";
+import FloatingLeaves from "../components/graphics/FloatingLeaves";
+import MangoTree from "../components/graphics/MangoTree";
 import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";

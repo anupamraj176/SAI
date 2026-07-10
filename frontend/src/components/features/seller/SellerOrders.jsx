@@ -1,4 +1,4 @@
-import { useOrderStore } from "../../store/orderStore";
+import { useOrderStore } from "../../../store/orderStore";
 import { ShoppingBag } from "lucide-react";
 
 const SellerOrders = () => {

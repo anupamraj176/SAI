@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 import { FaUserAlt, FaStore, FaSignOutAlt, FaUserCircle, FaLeaf, FaUserShield } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 

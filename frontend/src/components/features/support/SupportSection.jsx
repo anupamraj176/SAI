@@ -9,7 +9,7 @@ import {
   MessageSquare,
   User,
 } from "lucide-react";
-import { useSupportStore } from "../store/supportStore";
+import { useSupportStore } from "../../../store/supportStore";
 import toast from "react-hot-toast";
 
 const FAQItem = ({ question, answer }) => {

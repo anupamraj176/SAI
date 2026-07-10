@@ -1,24 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import { Toaster } from "react-hot-toast";
-import LoadingSpinner from "./components/LoadingSpinner";
-import FloatingShape from "./components/FloatingShape";
-import FarmerNavbar from "./components/FarmerNavbar";
+import LoadingSpinner from "./components/common/LoadingSpinner";
+import FloatingShape from "./components/common/FloatingShape";
+import FarmerNavbar from "./components/layout/FarmerNavbar";
 
-// Pages
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EmailVerificationPage from "./pages/EmailVerification";
-import UserDashboard from "./pages/UserDashboard";
-import SellerDashboard from "./pages/SellerDashboard";
-import HomePage from "./pages/HomePage";
-import EducationPage from "./pages/EducationPage"; 
-import PaymentSuccess from "./pages/PaymentSuccess";
-import PaymentCancel from "./pages/PaymentCancel";
+// Lazy-loaded Pages for optimization
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const EmailVerificationPage = lazy(() => import("./pages/EmailVerification"));
+const UserDashboard = lazy(() => import("./pages/UserDashboard"));
+const SellerDashboard = lazy(() => import("./pages/SellerDashboard"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const EducationPage = lazy(() => import("./pages/EducationPage"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
+const PaymentCancel = lazy(() => import("./pages/PaymentCancel"));
 
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -105,73 +105,75 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        
-        {/* Add the Education Route */}
-        <Route path="/education" element={<EducationPage />} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Add the Education Route */}
+          <Route path="/education" element={<EducationPage />} />
 
-        <Route
-          path="/payment/success"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <PaymentSuccess />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/payment/cancel"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <PaymentCancel />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Auth Pages (Centered Layout) */}
-        <Route element={<AuthLayout />}>
-          <Route path="/signup" element={<SignUpPage role="user" />} />
-          <Route path="/signup/seller" element={<SignUpPage role="seller" />} />
-          <Route path="/login" element={<LoginPage role="user" />} />
-          <Route path="/login/seller" element={<LoginPage role="seller" />} />
-          <Route path="/login/admin" element={<LoginPage role="admin" />} />
-          <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
-          <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
-          <Route path="/forgot/admin" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="admin" /></RedirectAuthenticatedUser>} />
-          <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
-          <Route path="/verify-email" element={<EmailVerificationPage />} />
-        </Route>
-
-        {/* Dashboard Pages (Top-aligned Layout for Navbar) */}
-        <Route element={<DashboardLayout />}>
           <Route
-            path="/dashboard/*"
+            path="/payment/success"
             element={
               <ProtectedRoute allowedRoles={["user"]}>
-                <UserDashboard />
+                <PaymentSuccess />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/seller/dashboard"
+            path="/payment/cancel"
             element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <SellerDashboard />
+              <ProtectedRoute allowedRoles={["user"]}>
+                <PaymentCancel />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Auth Pages (Centered Layout) */}
+          <Route element={<AuthLayout />}>
+            <Route path="/signup" element={<SignUpPage role="user" />} />
+            <Route path="/signup/seller" element={<SignUpPage role="seller" />} />
+            <Route path="/login" element={<LoginPage role="user" />} />
+            <Route path="/login/seller" element={<LoginPage role="seller" />} />
+            <Route path="/login/admin" element={<LoginPage role="admin" />} />
+            <Route path="/forgot" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="user" /></RedirectAuthenticatedUser>} />
+            <Route path="/forgot/seller" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="seller" /></RedirectAuthenticatedUser>} />
+            <Route path="/forgot/admin" element={<RedirectAuthenticatedUser><ForgotPasswordPage role="admin" /></RedirectAuthenticatedUser>} />
+            <Route path="/reset/:token" element={<RedirectAuthenticatedUser><ResetPasswordPage /></RedirectAuthenticatedUser>} />
+            <Route path="/verify-email" element={<EmailVerificationPage />} />
+          </Route>
+
+          {/* Dashboard Pages (Top-aligned Layout for Navbar) */}
+          <Route element={<DashboardLayout />}>
+            <Route
+              path="/dashboard/*"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <UserDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/seller/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <SellerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
       <Toaster />
     </BrowserRouter>
   );

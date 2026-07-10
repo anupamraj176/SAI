@@ -6,12 +6,12 @@ import { useAuthStore } from "../store/authStore";
 import { useProductStore } from "../store/productStore";
 import { useOrderStore } from "../store/orderStore";
 
-import SellerSidebar from "../components/seller/SellerSidebar";
-import SellerProducts from "../components/seller/SellerProducts";
-import SellerOrders from "../components/seller/SellerOrders";
-import CropSenseAI from "../components/seller/CropSenseAI";
-import SellerOverview from "../components/seller/SellerOverview";
-import SellerProfile from "../components/seller/SellerProfile";
+import SellerSidebar from "../components/layout/SellerSidebar";
+import SellerProducts from "../components/features/seller/SellerProducts";
+import SellerOrders from "../components/features/seller/SellerOrders";
+import CropSenseAI from "../components/features/seller/CropSenseAI";
+import SellerOverview from "../components/features/seller/SellerOverview";
+import SellerProfile from "../components/features/seller/SellerProfile";
 
 const SellerDashboard = () => {
     const { logout, user } = useAuthStore();

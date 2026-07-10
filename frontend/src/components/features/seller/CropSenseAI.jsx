@@ -11,8 +11,8 @@ import {
     Layers,
     MapPin
 } from "lucide-react";
-import { useAiStore } from "../../store/aiStore";
-import MapComponent from "../MapComponent";
+import { useAiStore } from "../../../store/aiStore";
+import MapComponent from "../../common/MapComponent";
 
 const CropSenseAI = () => {
     const { askAI, response, isLoading, error } = useAiStore();

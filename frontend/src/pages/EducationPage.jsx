@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Headphones, Search, X, BookOpen, Clock, Users, Award, Filter } from 'lucide-react';
-import FarmerNavbar from '../components/FarmerNavbar';
+import FarmerNavbar from '../components/layout/FarmerNavbar';
 
 const EducationPage = () => {
   const [activeTab, setActiveTab] = useState("videos");

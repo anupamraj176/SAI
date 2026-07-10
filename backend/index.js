@@ -16,12 +16,34 @@ import wishlistRoutes from "./routes/wishlist.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import paymentRoutes from "./routes/payment.route.js";
 import { handleStripeWebhook } from "./controllers/payment.controller.js";
+import helmet from "helmet";
+import compression from "compression";
+import rateLimit from "express-rate-limit";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-const __dirname = path.resolve(); // Define __dirname
+
+// Define robust __dirname under ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Security & Compression Middlewares
+app.use(helmet({
+    contentSecurityPolicy: false, // Allow leaflet map tiles and cloudinary assets
+}));
+app.use(compression());
+
+// Auth Rate Limiting to prevent brute-force attacks
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per 15 minutes
+    message: { success: false, message: "Too many requests from this IP, please try again after 15 minutes" },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 // 2. Connect Cloudinary
 cloudinaryConnect();
@@ -85,7 +107,7 @@ app.get(["/health", "/api/health"], (req, res) => {
     });
 });
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/support", supportRoutes);
@@ -96,12 +118,22 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/payments", paymentRoutes);
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "/frontend/dist")));
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+        res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
     });
 }
+
+// Global Error Handler Middleware
+app.use((err, req, res, next) => {
+    console.error("Unhandled Error:", err.stack || err);
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        message: err.message || "Internal Server Error"
+    });
+});
 
 app.listen(PORT, () => {
   connectDB();

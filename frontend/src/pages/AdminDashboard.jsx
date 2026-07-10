@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import AdminSidebar from '../components/admin/AdminSidebar';
-import AdminDashboardOverview from '../components/admin/AdminDashboardOverview';
-import AdminUsers from '../components/admin/AdminUsers';
-import AdminSellers from '../components/admin/AdminSellers';
-import AdminProducts from '../components/admin/AdminProducts';
-import AdminOrders from '../components/admin/AdminOrders';
+import AdminSidebar from '../components/layout/AdminSidebar';
+import AdminDashboardOverview from '../components/features/admin/AdminDashboardOverview';
+import AdminUsers from '../components/features/admin/AdminUsers';
+import AdminSellers from '../components/features/admin/AdminSellers';
+import AdminProducts from '../components/features/admin/AdminProducts';
+import AdminOrders from '../components/features/admin/AdminOrders';
 import { Menu } from "lucide-react";
 
 const AdminDashboard = () => {
