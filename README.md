@@ -19,6 +19,7 @@
 
 - [About](#-about)
 - [Features](#-features)
+- [Screenshots Showcase](#-screenshots-showcase)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
@@ -73,6 +74,51 @@ The platform features three distinct user roles:
 - 🎥 **Video Tutorials** - Agricultural educational content
 - 🎧 **Audiobooks** - Listen to farming guides and tips
 - 🔍 **Searchable Content** - Find resources by category
+
+---
+
+## 📸 Screenshots Showcase
+
+Here are some highlights of the FarmerHub platform showing the user interfaces for consumers, farmers, and administrators:
+
+### 🏠 Homepage
+The landing page features a nature-inspired theme, introducing the marketplace, education hub, and crop analysis tools.
+![FarmerHub Homepage](frontend/public/assets/homepage.png)
+
+### 🛍️ User Marketplace & Dashboard (Consumer View)
+Consumers can browse organic produce, add items to their cart/wishlist, trace orders, and communicate with support.
+![User Dashboard](frontend/public/assets/user-dashboard.png)
+
+### 🌾 Seller Dashboard (Farmer View)
+Farmers get real-time sales and order analytics, and can easily manage listings, track pending orders, and configure their profile.
+![Seller Dashboard](frontend/public/assets/seller-dashboard.png)
+
+### 🤖 CropSense AI (Farming Assistant)
+Farmers can upload crop images to get AI-powered health diagnoses, treatment advice, and customized farming tips.
+![CropSense AI](frontend/public/assets/cropsense-ai.png)
+
+### 📚 Agricultural Education Hub
+A resource center offering video tutorials and audiobooks for modern farming practices.
+![Education Hub](frontend/public/assets/education.png)
+
+### 🔐 Admin Control Center
+Administrators can verify farmer registrations, manage all user accounts, and resolve customer support tickets.
+![Admin Dashboard](frontend/public/assets/admin-dashboard.png)
+
+### 🚪 Authentication Portal
+Clean and secure interfaces for login and registration across all user roles.
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>Login Interface</b></td>
+      <td align="center"><b>Signup Interface</b></td>
+    </tr>
+    <tr>
+      <td><img src="frontend/public/assets/login.png" width="450px" alt="Login Page" /></td>
+      <td><img src="frontend/public/assets/signup.png" width="450px" alt="Signup Page" /></td>
+    </tr>
+  </table>
+</div>
 
 ---
 
@@ -219,6 +265,16 @@ SAI/
 6. **Open your browser**
    - Frontend: `http://localhost:5173`
    - Backend API: `http://localhost:5001`
+
+7. **Seed Test Accounts (Optional)**
+   To quickly explore different dashboards without manually creating accounts, run the following utility script from the `/backend` directory:
+   ```bash
+   node createTestUsers.js
+   ```
+   This will create three pre-configured, verified test accounts with the password `password123`:
+   - **User**: `testuser@example.com`
+   - **Seller**: `testseller@example.com`
+   - **Admin**: `testadmin@example.com`
 
 ---
 
