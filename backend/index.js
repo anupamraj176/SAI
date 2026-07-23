@@ -49,7 +49,7 @@ const authLimiter = rateLimit({
 // 2. Connect Cloudinary
 cloudinaryConnect();
 
-const defaultOrigins = ["http://localhost:5173"];
+const defaultOrigins = ["http://localhost:5173", "https://farmerhub-henna.vercel.app"];
 const envOrigins = process.env.CORS_ORIGINS || process.env.CLIENT_URL;
 let allowedOrigins = envOrigins
     ? envOrigins.split(",").map((origin) => origin.trim()).filter(Boolean)
@@ -58,6 +58,9 @@ let allowedOrigins = envOrigins
 if (Array.isArray(allowedOrigins)) {
     if (!allowedOrigins.includes("http://localhost:5173")) {
         allowedOrigins.push("http://localhost:5173");
+    }
+    if (!allowedOrigins.includes("https://farmerhub-henna.vercel.app")) {
+        allowedOrigins.push("https://farmerhub-henna.vercel.app");
     }
 }
 
