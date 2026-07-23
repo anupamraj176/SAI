@@ -20,6 +20,7 @@ import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
 import { fileURLToPath } from "url";
+import { startKeepAlive } from "./utils/keepAlive.js";
 
 dotenv.config();
 
@@ -130,4 +131,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   connectDB();
   console.log("Server is running on port: ", PORT);
+  startKeepAlive();
 });

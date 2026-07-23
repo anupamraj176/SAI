@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://sai-backend.onrender.com/api/:path*"
+      "destination": "https://sai-backend-3upn.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
