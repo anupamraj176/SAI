@@ -2,18 +2,28 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
+const isProd = process.env.NODE_ENV === "production";
+
+const getCookieOptions = () => ({
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
+const getClearCookieOptions = () => ({
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+});
+
 // USER TOKEN
 export const generateUserToken = (res, userId) => {
   const token = jwt.sign({ id: userId, role: "user" }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
 
-  res.cookie("user_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+  res.cookie("user_token", token, getCookieOptions());
 
   return token;
 };
@@ -24,24 +34,19 @@ export const generateSellerToken = (res, sellerId) => {
     expiresIn: "7d",
   });
 
-  res.cookie("seller_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+  res.cookie("seller_token", token, getCookieOptions());
 
   return token;
 };
 
 // CLEAR USER TOKEN
 export const clearUserToken = (res) => {
-  res.clearCookie("user_token");
+  res.clearCookie("user_token", getClearCookieOptions());
 };
 
 // CLEAR SELLER TOKEN
 export const clearSellerToken = (res) => {
-  res.clearCookie("seller_token");
+  res.clearCookie("seller_token", getClearCookieOptions());
 };
 
 // GENERATE AUTH TOKEN
@@ -58,12 +63,7 @@ export const generateTokenAndSetCookie = (res, userId, role) => {
     expiresIn: "7d",
   });
 
-  res.cookie("token", token, {
-    httpOnly: true, // prevents XSS attacks
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict", // prevents CSRF attacks
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
+  res.cookie("token", token, getCookieOptions());
 
   return token;
 };
