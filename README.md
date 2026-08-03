@@ -317,6 +317,8 @@ This project includes Kubernetes configurations to run the entire stack (Fronten
 
 ### 📁 Kubernetes Files Structure
 All files are located in the `kubernetes/` folder:
+- `deploy.ps1` & `deploy.sh` - Automated deployment, teardown, and status scripts (PowerShell & Bash).
+- `kustomization.yaml` - Kustomize manifest for single-command `kubectl apply -k`.
 - `namespace.yml` - Defines the isolated `sai-app` namespace.
 - `mongodb-pv.yml` & `mongodb-pvc.yml` - Local persistent storage configuration for MongoDB.
 - `mongodb-deployment.yml` & `mongodb-service.yml` - MongoDB service and state.
@@ -335,27 +337,28 @@ cp ./kubernetes/secretes.example.yml ./kubernetes/secretes.yml
 *Note: `kubernetes/secretes.yml` is ignored by Git in `.gitignore` to prevent leaking passwords to GitHub. Update `kubernetes/secretes.yml` with your real Gemini, Gmail, Cloudinary, and Razorpay API secrets before proceeding.*
 
 #### 2. Deploy Everything to Cluster
-Apply the manifests to the cluster:
+You can deploy all resources using automated scripts, NPM commands, or a single `kubectl` command:
+
+##### **Option A: Automated Scripts (Recommended)**
 ```powershell
-# Create namespace
-kubectl apply -f .\kubernetes\namespace.yml
+# Windows PowerShell
+.\kubernetes\deploy.ps1
 
-# Apply configurations and secrets
-kubectl apply -f .\kubernetes\secretes.yml
-kubectl apply -f .\kubernetes\backend-configmap.yml
-
-# Apply Database (Persistent Volume -> Claim -> Deployment -> Service)
-kubectl apply -f .\kubernetes\mongodb-pv.yml
-kubectl apply -f .\kubernetes\mongodb-pvc.yml
-kubectl apply -f .\kubernetes\mongodb-deployment.yml
-kubectl apply -f .\kubernetes\mongodb-service.yml
-
-# Apply Backend & Frontend services
-kubectl apply -f .\kubernetes\backend-deployment.yml
-kubectl apply -f .\kubernetes\backend-service.yml
-kubectl apply -f .\kubernetes\frontend-deployment.yml
-kubectl apply -f .\kubernetes\frontend-service.yml
+# Linux / WSL / Git Bash / macOS
+./kubernetes/deploy.sh
 ```
+
+##### **Option B: NPM Commands**
+```bash
+npm run k8s:deploy
+```
+
+##### **Option C: Single-Command kubectl**
+```powershell
+kubectl apply -f .\kubernetes\
+```
+
+*Note: To teardown or remove all deployed resources later, run `.\kubernetes\deploy.ps1 -Delete` or `npm run k8s:delete`.*
 
 #### 3. Verify System Health
 Verify that all services and pods are running correctly:
