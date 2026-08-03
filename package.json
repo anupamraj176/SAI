@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node backend/index.js",
     "dev": "nodemon backend/index.js",
-    "build": "npm install && cd frontend && npm install && npm run build"
+    "build": "npm install && cd frontend && npm install && npm run build",
+    "k8s:deploy": "powershell -ExecutionPolicy Bypass -File ./kubernetes/deploy.ps1",
+    "k8s:delete": "powershell -ExecutionPolicy Bypass -File ./kubernetes/deploy.ps1 -Delete",
+    "k8s:status": "powershell -ExecutionPolicy Bypass -File ./kubernetes/deploy.ps1 -Status"
   },
   "keywords": [],
   "author": "",
