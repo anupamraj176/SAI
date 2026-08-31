@@ -31,6 +31,20 @@ graph.add_edge('chat_node',END)
 chatbot = graph.compile()
 
 
-intialState = {"messages": [HumanMessage(content='How are you')]}
+intialState = {"messages": [HumanMessage(content='What is the capital of india')]}
 result= chatbot.invoke(intialState)
 print(result['messages'][-1].content)
+
+
+while True :
+    user_message = input('Type Here : ')
+    print(f'You: {user_message}')
+
+    if user_message.strip().lower() in ['exit','quit']:
+        print("Chatbot Terminated")
+        break
+
+    intialState = {"messages": [HumanMessage(content=user_message)]}
+    result= chatbot.invoke(intialState)
+    print(result['messages'][-1].content)
+    
