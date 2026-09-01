@@ -7,7 +7,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 from dotenv import load_dotenv
 
 load_dotenv()
-from langchain_core.messages import BaseMessage, HumanMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
 from langgraph.graph.message import add_messages
 from langgraph.checkpoint.mongodb import MongoDBSaver
@@ -29,11 +29,24 @@ graph = StateGraph(ChatState)
 
 llm = ChatGroq(model="openai/gpt-oss-20b", streaming=True)
 def chat_node(state:ChatState):
-    #take user query from message
-    messages = state['messages']
-    #call llm
-    response = llm.invoke(messages)
-    return {"messages": [response]}
+   #.Take the conversion history from the state
+   messages = state["messages"]
+   #define the farmer persona using a systemmessage
+   farmer_instructions = SystemMessage(
+        content="You are CropSense AI, an expert agricultural advisor and farmer in India. "
+                "Your job is to help farmers with crop management, pest control, and farming techniques. "
+                "Always speak simply, practically, and politely. "
+                "If someone asks you about something not related to farming (like coding or movies), "
+                "politely remind them that you are a farming assistant."
+   )
+
+   #combine the instruction with the history 
+   #the ai must read the instruction first,so we put it at the front of the list 
+   messages_with_persona = [farmer_instructions] + messages
+   
+   #call the llm with our new persona-injected messages 
+   response=llm.invoke(messages_with_persona)
+   return{"messages":[response]}
 
 
 #add node
@@ -45,13 +58,13 @@ graph.add_edge('chat_node',END)
 chatbot = graph.compile(checkpointer=checkpointer)
 
 
-config = {'configurable' : {'thread_id' : '1'}}
-intialState = {"messages": [HumanMessage(content='What is the capital of india')]}
-result= chatbot.invoke(intialState, config=config)
-print(result['messages'][-1].content)
+thread_id = '2'
 
-
-thread_id = '1'
+print("="*50)
+print("CropSense AI: Namaste! I am CropSense AI, your expert agricultural assistant.")
+print("CropSense AI: You can ask me about crop management, weather impacts, or pest control.")
+print("CropSense AI: (Type 'exit' or 'quit' to close the chat)")
+print("="*50)
 
 while True :
     user_message = input('Type Here : ')
