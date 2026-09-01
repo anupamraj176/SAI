@@ -57,6 +57,7 @@ while True :
     
     config = {'configurable' : {'thread_id' : thread_id}}
     intialState = {"messages": [HumanMessage(content=user_message)]}
-    result= chatbot.invoke(intialState,config=config)
-    print(result['messages'][-1].content)
     
+    for event in chatbot.stream(intialState, config=config):
+        for value in event.values():
+            print(value['messages'][-1].content)
