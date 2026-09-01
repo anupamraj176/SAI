@@ -21,7 +21,7 @@ checkpointer = InMemorySaver()
 
 graph = StateGraph(ChatState)
 
-llm = ChatGroq(model="openai/gpt-oss-20b")
+llm = ChatGroq(model="openai/gpt-oss-20b", streaming=True)
 def chat_node(state:ChatState):
     #take user query from message
     messages = state['messages']
@@ -58,6 +58,8 @@ while True :
     config = {'configurable' : {'thread_id' : thread_id}}
     intialState = {"messages": [HumanMessage(content=user_message)]}
     
-    for event in chatbot.stream(intialState, config=config):
-        for value in event.values():
-            print(value['messages'][-1].content)
+    print("AI: ", end="", flush=True)
+    for msg, metadata in chatbot.stream(intialState, config=config, stream_mode="messages"):
+        if msg.content:
+            print(msg.content, end="", flush=True)
+    print() # print a newline when it finishes
