@@ -1,84 +1,84 @@
-from langgraph.graph import StateGraph, START, END
+from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from typing import TypedDict, Annotated
 import os
 import sys
 import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-from dotenv import load_dotenv
 
+# Fix for windows unicode errors
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+from dotenv import load_dotenv
 load_dotenv()
+
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
+from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.checkpoint.mongodb import MongoDBSaver
 from pymongo import MongoClient
 
-class ChatState(TypedDict) :
-    messages : Annotated[list[BaseMessage],add_messages]
+# ---------------------------------------------------------
+# 1. SETUP LANGGRAPH & MONGODB (Same as before)
+# ---------------------------------------------------------
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
 
-# Connect to MongoDB using the URI from your .env
 mongo_client = MongoClient(os.environ["MONGODB_URL"])
-
-# 5 days * 24 hours * 60 minutes * 60 seconds
 FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60
-
-# Use MongoDB to save the state, and set a TTL of 5 days so it automatically deletes old history
 checkpointer = MongoDBSaver(mongo_client, db_name="langgraph_chatbot", ttl=FIVE_DAYS_IN_SECONDS)
 
 graph = StateGraph(ChatState)
-
 llm = ChatGroq(model="openai/gpt-oss-20b", streaming=True)
-def chat_node(state:ChatState):
-   #.Take the conversion history from the state
-   messages = state["messages"]
-   #define the farmer persona using a systemmessage
-   farmer_instructions = SystemMessage(
+
+def chat_node(state: ChatState):
+    messages = state["messages"]
+    farmer_instructions = SystemMessage(
         content="You are CropSense AI, an expert agricultural advisor and farmer in India. "
                 "Your job is to help farmers with crop management, pest control, and farming techniques. "
                 "Always speak simply, practically, and politely. "
                 "If someone asks you about something not related to farming (like coding or movies), "
                 "politely remind them that you are a farming assistant."
-   )
+    )
+    messages_with_persona = [farmer_instructions] + messages
+    response = llm.invoke(messages_with_persona)
+    return {"messages": [response]}
 
-   #combine the instruction with the history 
-   #the ai must read the instruction first,so we put it at the front of the list 
-   messages_with_persona = [farmer_instructions] + messages
-   
-   #call the llm with our new persona-injected messages 
-   response=llm.invoke(messages_with_persona)
-   return{"messages":[response]}
-
-
-#add node
-graph.add_node('chat_node',chat_node)
-
-#ADD Edge
-graph.add_edge(START,'chat_node')
-graph.add_edge('chat_node',END)
+graph.add_node('chat_node', chat_node)
+graph.add_edge(START, 'chat_node')
+graph.add_edge('chat_node', END)
 chatbot = graph.compile(checkpointer=checkpointer)
 
+# ---------------------------------------------------------
+# 2. SETUP FASTAPI (The new web server part)
+# ---------------------------------------------------------
+app = FastAPI(title="CropSense AI API")
 
-thread_id = '2'
+# Enable CORS so your React frontend can communicate with this API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, change this to your React app's URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-print("="*50)
-print("CropSense AI: Namaste! I am CropSense AI, your expert agricultural assistant.")
-print("CropSense AI: You can ask me about crop management, weather impacts, or pest control.")
-print("CropSense AI: (Type 'exit' or 'quit' to close the chat)")
-print("="*50)
+# Define the data format we expect from React
+class ChatRequest(BaseModel):
+    message: str
+    thread_id: str
 
-while True :
-    user_message = input('Type Here : ')
-    print(f'You: {user_message}')
-
-    if user_message.strip().lower() in ['exit','quit']:
-        print("Chatbot Terminated")
-        break
+@app.post("/api/chat")
+async def chat_endpoint(request: ChatRequest):
+    # Setup configuration with the user's specific thread_id
+    config = {'configurable': {'thread_id': request.thread_id}}
+    intialState = {"messages": [HumanMessage(content=request.message)]}
     
-    config = {'configurable' : {'thread_id' : thread_id}}
-    intialState = {"messages": [HumanMessage(content=user_message)]}
+    # Process the message through our LangGraph chatbot
+    result = chatbot.invoke(intialState, config=config)
     
-    print("AI: ", end="", flush=True)
-    for msg, metadata in chatbot.stream(intialState, config=config, stream_mode="messages"):
-        if msg.content:
-            print(msg.content, end="", flush=True)
-    print() # print a newline when it finishes
+    # Extract the final AI response
+    ai_response = result['messages'][-1].content
+    
+    return {"response": ai_response}
