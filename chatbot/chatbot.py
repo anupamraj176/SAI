@@ -10,14 +10,20 @@ load_dotenv()
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_groq import ChatGroq
 from langgraph.graph.message import add_messages
-from langgraph.checkpoint.memory import InMemorySaver
-
+from langgraph.checkpoint.mongodb import MongoDBSaver
+from pymongo import MongoClient
 
 class ChatState(TypedDict) :
     messages : Annotated[list[BaseMessage],add_messages]
 
+# Connect to MongoDB using the URI from your .env
+mongo_client = MongoClient(os.environ["MONGODB_URL"])
 
-checkpointer = InMemorySaver()
+# 5 days * 24 hours * 60 minutes * 60 seconds
+FIVE_DAYS_IN_SECONDS = 5 * 24 * 60 * 60
+
+# Use MongoDB to save the state, and set a TTL of 5 days so it automatically deletes old history
+checkpointer = MongoDBSaver(mongo_client, db_name="langgraph_chatbot", ttl=FIVE_DAYS_IN_SECONDS)
 
 graph = StateGraph(ChatState)
 
