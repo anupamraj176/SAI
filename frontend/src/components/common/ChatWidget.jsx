@@ -27,20 +27,47 @@ const ChatWidget = () => {
         setIsLoading(true);
 
         try {
-            // Call your FastAPI backend!
-            const response = await fetch("http://localhost:8000/api/chat", {
+            // Call the new streaming FastAPI backend!
+            const response = await fetch("http://localhost:8000/api/chat/stream", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                     message: userText, 
-                    thread_id: "user_session_1" // In the future, you can generate a random ID per user
+                    thread_id: "user_session_1"
                 })
             });
 
-            const data = await response.json();
+            // Prepare to read the stream
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder("utf-8");
             
-            // Add AI response to UI
-            setMessages((prev) => [...prev, { sender: "ai", text: data.response }]);
+            // Add an empty AI message to the UI that we will append to token-by-token
+            setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
+            setIsLoading(false); // Stop loading spinner as soon as the first token arrives
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            setMessages((prev) => {
+                                const newMessages = [...prev];
+                                // Append the new token to the last message's text
+                                newMessages[newMessages.length - 1].text += data.content;
+                                return newMessages;
+                            });
+                        } catch (e) {
+                            // ignore partial JSON errors
+                        }
+                    }
+                }
+            }
             
         } catch (error) {
             setMessages((prev) => [...prev, { sender: "ai", text: "Sorry, I am offline right now. Please try again later!" }]);
@@ -54,7 +81,7 @@ const ChatWidget = () => {
             
             {/* THE CHAT WINDOW (Only visible if isOpen is true) */}
             {isOpen && (
-                <div className="bg-white w-80 sm:w-96 rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden mb-4 transition-all duration-300 transform origin-bottom-right">
+                <div className="bg-white w-80 sm:w-96 h-[500px] max-h-[80vh] rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden mb-4 transition-all duration-300 transform origin-bottom-right">
                     
                     {/* Header */}
                     <div className="bg-[#347B66] p-4 flex justify-between items-center text-white">
@@ -81,9 +108,11 @@ const ChatWidget = () => {
                                 {msg.sender === "user" ? (
                                     <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
                                 ) : (
-                                    <ReactMarkdown className="text-sm [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&>strong]:font-bold">
-                                        {msg.text}
-                                    </ReactMarkdown>
+                                    <div className="text-sm [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&>strong]:font-bold">
+                                        <ReactMarkdown>
+                                            {msg.text}
+                                        </ReactMarkdown>
+                                    </div>
                                 )}
                             </div>
                         ))}

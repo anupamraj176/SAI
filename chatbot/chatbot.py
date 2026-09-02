@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from typing import TypedDict, Annotated
@@ -82,3 +83,19 @@ async def chat_endpoint(request: ChatRequest):
     ai_response = result['messages'][-1].content
     
     return {"response": ai_response}
+
+import json
+
+@app.post("/api/chat/stream")
+async def chat_stream_endpoint(request: ChatRequest):
+    config = {'configurable': {'thread_id': request.thread_id}}
+    intialState = {"messages": [HumanMessage(content=request.message)]}
+    
+    async def event_generator():
+        # Use astream to stream the response asynchronously
+        async for msg, metadata in chatbot.astream(intialState, config=config, stream_mode="messages"):
+            if msg.content:
+                # Format as Server-Sent Events (SSE)
+                yield f"data: {json.dumps({'content': msg.content})}\n\n"
+                
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
