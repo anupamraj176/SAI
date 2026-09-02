@@ -6,6 +6,7 @@ from typing import TypedDict, Annotated
 import os
 import sys
 import io
+import asyncio
 
 # Fix for windows unicode errors
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -97,5 +98,6 @@ async def chat_stream_endpoint(request: ChatRequest):
             if msg.content:
                 # Format as Server-Sent Events (SSE)
                 yield f"data: {json.dumps({'content': msg.content})}\n\n"
+                await asyncio.sleep(0.015) # Artificial delay so it types smoothly like ChatGPT!
                 
     return StreamingResponse(event_generator(), media_type="text/event-stream")

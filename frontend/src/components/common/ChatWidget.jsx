@@ -9,12 +9,25 @@ const ChatWidget = () => {
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isUserScrolling, setIsUserScrolling] = useState(false);
     
-    // Automatically scroll to bottom when new messages arrive
     const messagesEndRef = useRef(null);
+    const chatContainerRef = useRef(null);
+
+    // Smart auto-scroll: only scroll to bottom if the user hasn't manually scrolled up
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+        if (!isUserScrolling) {
+            messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+        }
+    }, [messages, isUserScrolling]);
+
+    const handleScroll = () => {
+        if (chatContainerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+            // If user scrolls up more than 20px from bottom, they are manually reading
+            setIsUserScrolling(scrollHeight - scrollTop - clientHeight > 20);
+        }
+    };
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -43,23 +56,30 @@ const ChatWidget = () => {
             
             // Add an empty AI message to the UI that we will append to token-by-token
             setMessages((prev) => [...prev, { sender: "ai", text: "" }]);
-            setIsLoading(false); // Stop loading spinner as soon as the first token arrives
+            setIsLoading(false); // Stop loading spinner as soon as the stream connects
+            setIsUserScrolling(false); // Snap to bottom for the new message
 
+            let buffer = "";
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
                 
-                const chunk = decoder.decode(value, { stream: true });
-                const lines = chunk.split('\n');
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                
+                // Keep the last partial line in the buffer in case a chunk was split halfway
+                buffer = lines.pop() || "";
                 
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
                         try {
                             const data = JSON.parse(line.slice(6));
                             setMessages((prev) => {
+                                // FIX: Deep copy the last message so React Strict Mode doesn't duplicate text!
                                 const newMessages = [...prev];
-                                // Append the new token to the last message's text
-                                newMessages[newMessages.length - 1].text += data.content;
+                                const lastMsg = { ...newMessages[newMessages.length - 1] };
+                                lastMsg.text += data.content;
+                                newMessages[newMessages.length - 1] = lastMsg;
                                 return newMessages;
                             });
                         } catch (e) {
@@ -95,7 +115,11 @@ const ChatWidget = () => {
                     </div>
 
                     {/* Messages Area */}
-                    <div className="flex-1 h-96 p-4 overflow-y-auto bg-[#F9FAFB] flex flex-col gap-3">
+                    <div 
+                        ref={chatContainerRef}
+                        onScroll={handleScroll}
+                        className="flex-1 h-96 p-4 overflow-y-auto bg-[#F9FAFB] flex flex-col gap-3"
+                    >
                         {messages.map((msg, index) => (
                             <div 
                                 key={index} 
