@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Bot, X, Send, MessageCircle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -77,7 +78,13 @@ const ChatWidget = () => {
                                     : "bg-white border border-gray-200 text-gray-800 self-start rounded-tl-none shadow-sm"
                                 }`}
                             >
-                                <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                                {msg.sender === "user" ? (
+                                    <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                                ) : (
+                                    <ReactMarkdown className="text-sm [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&>strong]:font-bold">
+                                        {msg.text}
+                                    </ReactMarkdown>
+                                )}
                             </div>
                         ))}
                         

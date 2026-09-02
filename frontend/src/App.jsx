@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import FloatingShape from "./components/common/FloatingShape";
 import FarmerNavbar from "./components/layout/FarmerNavbar";
+import ChatWidget from "./components/common/ChatWidget";
 
 // Lazy-loaded Pages for optimization
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -175,6 +176,7 @@ export default function App() {
         </Routes>
       </Suspense>
       <Toaster />
+      <ChatWidget />
     </BrowserRouter>
   );
 }
