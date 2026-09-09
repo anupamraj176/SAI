@@ -31,6 +31,14 @@
 
 ---
 
+## 🌍 Live Deployments
+
+- **AWS EC2 (Full Stack)**: [http://ec2-3-7-55-93.ap-south-1.compute.amazonaws.com](http://ec2-3-7-55-93.ap-south-1.compute.amazonaws.com)
+- **Vercel (Frontend)**: [https://farmerhub-henna.vercel.app](https://farmerhub-henna.vercel.app)
+- **Render (Backend API)**: [https://sai-backend-3upn.onrender.com](https://sai-backend-3upn.onrender.com)
+
+---
+
 ## 🌱 About
 
 **FarmerHub** is a full-stack web application that bridges the gap between local farmers and consumers. It provides a platform where farmers can list their fresh produce, and consumers can purchase directly from them—ensuring fair prices for farmers and fresh, organic products for consumers.
