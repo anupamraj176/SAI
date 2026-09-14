@@ -42,7 +42,7 @@ export const createProduct = async (req, res) => {
         await product.save();
         console.log("Product saved:", product);
 
-        productCache.del("all_products"); // Invalidate cache
+       await productCache.del("all_products");
 
         res.status(201).json({ success: true, message: "Product created successfully", product });
     } catch (error) {
@@ -62,18 +62,28 @@ export const getSellerProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
     try {
-        const cachedProducts = productCache.get("all_products");
+        // 1. Try to get data from Redis cache first
+        const cachedProducts = await productCache.get("all_products");
+        
         if (cachedProducts) {
+            // 2. CACHE HIT: Return immediately without hitting MongoDB
             return res.status(200).json({ success: true, products: cachedProducts });
         }
+
+        // 3. CACHE MISS: Fetch from MongoDB (slower)
         const products = await Product.find({}).populate('seller', 'name location');
-        productCache.set("all_products", products, 5 * 60 * 1000); // Cache for 5 minutes
+        
+        // 4. Save to Redis for the next user (Cache-Aside pattern)
+        // Caching for 300 seconds (5 minutes)
+        await productCache.set("all_products", products, 300); 
+        
         res.status(200).json({ success: true, products });
     } catch (error) {
         console.error("Error fetching all products:", error);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
+
 
 export const deleteProduct = async (req, res) => {
     try {
