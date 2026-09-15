@@ -10,13 +10,14 @@ import {
   updateProfile,
 } from "../controllers/auth.controller.js";
 import { verifyAuth } from "../middleware/verifyAuth.js";
+import { loginRateLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
 router.get("/check-auth", verifyAuth, checkAuth);
 router.put("/profile", verifyAuth, updateProfile);
 router.post("/signup", signup);
-router.post("/login", login);
+router.post("/login", loginRateLimiter(5, 60), login);
 router.post("/logout", logout);
 router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
