@@ -21,6 +21,8 @@ import compression from "compression";
 import rateLimit from "express-rate-limit";
 import { fileURLToPath } from "url";
 import { startKeepAlive } from "./utils/keepAlive.js";
+import "./workers/emailWorker.js"; 
+
 
 dotenv.config();
 

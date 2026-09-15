@@ -31,7 +31,14 @@ export const signup = async (req, res) => {
 
     await user.save();
     generateTokenAndSetCookie(res, user._id, user.role);
-    await sendVerificationEmail(user.email, verificationToken);
+    
+    // Add task to queue (Instantly returns, doesn't block the API!)
+    await emailQueue.add('send-email', { 
+        type: 'verification', 
+        email: user.email, 
+        token: verificationToken 
+    });
+
 
     res.status(201).json({
       success: true,
@@ -112,7 +119,13 @@ export const verifyEmail = async (req, res) => {
     user.verificationTokenExpiresAt = undefined;
     await user.save();
 
-    await sendWelcomeEmail(user.email, user.name);
+    // Add welcome email to the BullMQ background queue
+    await emailQueue.add('send-email', { 
+      type: 'welcome', 
+      email: user.email, 
+      name: user.name 
+    });
+
     res.status(200).json({ success: true, message: "Email verified successfully", user: { ...user._doc, password: undefined } });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -154,7 +167,13 @@ export const forgotPassword = async (req, res) => {
     const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const resetURL = `${clientUrl}/reset/${resetToken}`;
 
-    await sendPasswordResetEmail(user.email, resetURL);
+    // Add password reset email to the BullMQ background queue
+    await emailQueue.add('send-email', { 
+      type: 'passwordReset', 
+      email: user.email, 
+      token: resetURL 
+    });
+
 
     res.status(200).json({ success: true, message: "Password reset link sent to your email" });
   } catch (error) {
@@ -184,7 +203,12 @@ export const resetPassword = async (req, res) => {
     user.resetPasswordExpiresAt = undefined;
     await user.save();
 
-    await sendResetSuccessEmail(user.email);
+    // Add reset success email to the BullMQ background queue
+    await emailQueue.add('send-email', { 
+      type: 'resetSuccess', 
+      email: user.email 
+    });
+
 
     res.status(200).json({ success: true, message: "Password reset successfully", role: user.role });
   } catch (error) {
