@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../mailer/mail.js"; // Adjust imports based on your mailer setup
+import { emailQueue } from "../workers/emailWorker.js";
 
 export const signup = async (req, res) => {
   const { email, password, name, role } = req.body;
