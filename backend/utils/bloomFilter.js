@@ -1,9 +1,9 @@
-import { BloomFilter } from "bloom-filters";
+import pkg from 'bloom-filters';
+const { BloomFilter } = pkg;
 import {Account} from "../models/account.model.js";
-import { addTransitionType } from "react";
 
 //create a bloom filter that can hold 100,000 emails with a 1% false positive rate
-export const emailBloomFilter = new BloomFilter(100000,0.01);
+export const emailBloomFilter = BloomFilter.create(100000, 0.01);
 
 export const initializeBloomFilter = async() => {
     try{
