@@ -20,9 +20,8 @@ export const getCropAdvice = async (req, res) => {
         // List of models to try in order of preference to handle rate limits
         // Including newer 2.5 models which might have separate quotas
         const modelsToTry = [
-            "gemini-2.5-flash",
-            "gemini-2.0-flash", 
-            "gemini-2.0-flash-exp"
+            "gemini-1.5-flash",
+            "gemini-1.5-pro", 
         ];
         
         let lastError = null;
