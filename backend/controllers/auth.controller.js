@@ -4,6 +4,8 @@ import crypto from "crypto";
 import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 import { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } from "../mailer/mail.js"; // Adjust imports based on your mailer setup
 import { emailQueue } from "../workers/emailWorker.js";
+import { emailBloomFilter } from "../utils/bloomFilter.js";
+
 
 export const signup = async (req, res) => {
   const { email, password, name, role } = req.body;
@@ -13,10 +15,17 @@ export const signup = async (req, res) => {
       throw new Error("All fields are required");
     }
 
-    const userAlreadyExists = await Account.findOne({ email, role }); // Check email within specific role if needed, or globally
-    if (userAlreadyExists) {
-      return res.status(400).json({ success: false, message: "User already exists" });
+    // 1. Check the lightning-fast in-memory Bloom Filter first (0 milliseconds!)
+    if (emailBloomFilter.has(email)) {
+    // 2. The filter says it MIGHT exist. Now we actually check the DB to be 100% sure.
+      const userAlreadyExists = await Account.findOne({ email, role });
+      if (userAlreadyExists) {
+        return res.status(400).json({ success: false, message: "User already exists" });
+      }
     }
+   // If Bloom Filter returns false, we are 100% GUARANTEED the email is not in the DB!
+   // We skipped the database query completely!
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -40,6 +49,8 @@ export const signup = async (req, res) => {
         token: verificationToken 
     });
 
+    // Extremely important: Add the new user to the Bloom Filter so the next person can't take this email!
+    emailBloomFilter.add(user.email);
 
     res.status(201).json({
       success: true,

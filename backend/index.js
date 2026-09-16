@@ -22,6 +22,7 @@ import rateLimit from "express-rate-limit";
 import { fileURLToPath } from "url";
 import { startKeepAlive } from "./utils/keepAlive.js";
 import "./workers/emailWorker.js"; 
+import { initializeBloomFilter } from "./utils/bloomFilter.js";
 
 
 dotenv.config();
@@ -133,8 +134,10 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-  connectDB();
+
+app.listen(PORT, async () => {
+  await connectDB();
+  await initializeBloomFilter();
   console.log("Server is running on port: ", PORT);
   startKeepAlive();
 });
