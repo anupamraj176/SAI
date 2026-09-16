@@ -9,7 +9,8 @@ import {
     CloudRain,
     Mountain,
     Layers,
-    MapPin
+    MapPin,
+    AlertCircle
 } from "lucide-react";
 import { useAiStore } from "../../../store/aiStore";
 import MapComponent from "../../common/MapComponent";
