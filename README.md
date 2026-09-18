@@ -393,6 +393,30 @@ kubectl port-forward svc/backend -n sai-app 5001:5001
 ```
 Then visit [http://localhost:5001/api/auth/check-auth](http://localhost:5001/api/auth/check-auth) to check API status.
 
+#### 5. Enterprise Monitoring (Helm & Grafana)
+This project uses the `kube-prometheus-stack` to provide enterprise-grade observability, including CPU/Memory utilization and pod health tracking.
+
+**1. Install the Monitoring Stack via Helm:**
+```powershell
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install my-kube-prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+```
+
+**2. Access the Grafana Dashboard:**
+Wait for the pods to fully start, then port-forward the Grafana service:
+```powershell
+kubectl port-forward svc/my-kube-prometheus-grafana 3000:80 -n monitoring
+```
+Visit `http://localhost:3000` in your browser.
+
+**3. Retrieve the Auto-Generated Admin Password:**
+The Helm chart generates a secure, randomized password. Fetch it directly from the Kubernetes secret vault using this PowerShell command:
+```powershell
+$encoded = kubectl get secret my-kube-prometheus-grafana -n monitoring -o jsonpath="{.data.admin-password}"; [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encoded))
+```
+*(Username is `admin`)*
+
 ---
 
 ## 📡 API Endpoints
