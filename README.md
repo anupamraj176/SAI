@@ -417,6 +417,24 @@ $encoded = kubectl get secret my-kube-prometheus-grafana -n monitoring -o jsonpa
 ```
 *(Username is `admin`)*
 
+#### 6. Horizontal Pod Autoscaling (HPA)
+The cluster is configured to automatically scale the backend pods if CPU utilization exceeds 50%.
+**1. Enable Metrics Server (Minikube):**
+```powershell
+minikube addons enable metrics-server
+```
+**2. Apply the Autoscaler Rules:**
+```powershell
+kubectl apply -f kubernetes/hpa.yml
+```
+**3. Run a Stress Test:**
+You can simulate a traffic spike by running a detached load-generator pod:
+```powershell
+kubectl run load-generator --image=busybox:1.28 --restart=Never -n sai-app -- /bin/sh -c "while true; do wget -q -O- http://backend:5001/api/products > /dev/null; sleep 0.01; done"
+```
+Monitor the autoscaling in real-time by running `kubectl get pods -n sai-app -w`.
+To stop the stress test: `kubectl delete pod load-generator -n sai-app`
+
 ---
 
 ## 📡 API Endpoints
