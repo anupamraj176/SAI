@@ -1,4 +1,4 @@
-name: CI Pipeline for FarmerHub
+name: CI/CD Pipeline for FarmerHub
 
 on:
   push:
@@ -82,3 +82,34 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/sai-frontend:latest
+
+  aws-deploy:
+    name: Deploy to AWS EC2
+    needs: docker-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Connect and Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Connected to AWS EC2 Server!"
+            
+            # 1. Pull the latest code we just built
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/sai-backend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/sai-frontend:latest
+            
+            # 2. Stop and remove the old containers (don't fail if they don't exist yet)
+            sudo docker stop sai-backend sai-frontend || true
+            sudo docker rm sai-backend sai-frontend || true
+            
+            # 3. Start the Backend Container (Runs on port 5001)
+            # Note: Assuming you have a .env file on the server at /home/ubuntu/.env
+            sudo docker run -d --name sai-backend -p 5001:5001 --env-file ~/.env --restart unless-stopped ${{ secrets.DOCKER_USERNAME }}/sai-backend:latest
+            
+            # 4. Start the Frontend Container (Runs on port 80)
+            sudo docker run -d --name sai-frontend -p 80:80 --restart unless-stopped ${{ secrets.DOCKER_USERNAME }}/sai-frontend:latest
+            
+            echo "Successfully deployed new version to Production!"
