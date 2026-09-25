@@ -13,17 +13,17 @@ jobs:
       matrix:
         node-version: [18.x, 20.x]
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
       
-      - name: ⚡ Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: './backend/package-lock.json'
           
-      - name: 📦 Install Backend Dependencies
+      - name: Install Backend Dependencies
         working-directory: ./backend
         run: npm ci
 
@@ -31,25 +31,25 @@ jobs:
     name: Frontend Build & Artifact
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v4
         
-      - name: ⚡ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
           cache-dependency-path: './frontend/package-lock.json'
           
-      - name: 📦 Install Dependencies
+      - name: Install Dependencies
         working-directory: ./frontend
         run: npm ci
         
-      - name: 🏗️ Build Frontend
+      - name: Build Frontend
         working-directory: ./frontend
         run: npm run build
         
-      - name: 💾 Upload Artifact
+      - name:  Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build-dist
@@ -60,23 +60,23 @@ jobs:
     needs: [backend-test, frontend-build]
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout Code
+      - name:  Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🐳 Log in to Docker Hub
+      - name:  Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 🏗️ Build & Push Backend Image
+      - name:  Build & Push Backend Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/sai-backend:latest
 
-      - name: 🏗️ Build & Push Frontend Image
+      - name:  Build & Push Frontend Image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
@@ -88,7 +88,7 @@ jobs:
     needs: docker-publish
     runs-on: ubuntu-latest
     steps:
-      - name: 🚀 Connect and Deploy via SSH
+      - name:  Connect and Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
