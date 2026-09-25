@@ -19,6 +19,7 @@ if ($Status) {
 
 if ($Delete) {
     Write-Host "=== Deleting Kubernetes Resources ===" -ForegroundColor Red
+    kubectl delete -f "$K8S_DIR/hpa.yml" --ignore-not-found
     kubectl delete -f "$K8S_DIR/ingress.yml" --ignore-not-found
     kubectl delete -f "$K8S_DIR/frontend-deployment.yml" --ignore-not-found
     kubectl delete -f "$K8S_DIR/frontend-service.yml" --ignore-not-found
@@ -75,9 +76,10 @@ Write-Host "[6/7] Applying Frontend Service and Deployment..." -ForegroundColor 
 kubectl apply -f "$K8S_DIR/frontend-service.yml"
 kubectl apply -f "$K8S_DIR/frontend-deployment.yml"
 
-# 7. Ingress
-Write-Host "[7/7] Applying Ingress..." -ForegroundColor Yellow
+# 7. Ingress & HPA
+Write-Host "[7/7] Applying Ingress and HPA..." -ForegroundColor Yellow
 kubectl apply -f "$K8S_DIR/ingress.yml"
+kubectl apply -f "$K8S_DIR/hpa.yml"
 
 Write-Host "`n=== Deployment Complete ===" -ForegroundColor Green
 Write-Host "Checking pod status:" -ForegroundColor Cyan

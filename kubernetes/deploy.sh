@@ -18,6 +18,7 @@ fi
 
 if [ "$1" == "--delete" ]; then
     echo "=== Deleting Kubernetes Resources ==="
+    kubectl delete -f "$SCRIPT_DIR/hpa.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/ingress.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/frontend-deployment.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/frontend-service.yml" --ignore-not-found
@@ -68,8 +69,9 @@ echo "[6/7] Applying Frontend Service and Deployment..."
 kubectl apply -f "$SCRIPT_DIR/frontend-service.yml"
 kubectl apply -f "$SCRIPT_DIR/frontend-deployment.yml"
 
-echo "[7/7] Applying Ingress..."
+echo "[7/7] Applying Ingress and HPA..."
 kubectl apply -f "$SCRIPT_DIR/ingress.yml"
+kubectl apply -f "$SCRIPT_DIR/hpa.yml"
 
 echo ""
 echo "=== Deployment Complete ==="
