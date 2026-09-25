@@ -9,8 +9,10 @@ resources:
   - mongodb-pvc.yml
   - mongodb-service.yml
   - mongodb-deployment.yml
+  - redis.yml
   - backend-service.yml
   - backend-deployment.yml
   - frontend-service.yml
   - frontend-deployment.yml
+  - hpa.yml
   - ingress.yml
