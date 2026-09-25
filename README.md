@@ -321,7 +321,7 @@ CLIENT_URL=http://localhost:5173
 
 ## ☸️ Kubernetes Deployment
 
-This project includes Kubernetes configurations to run the entire stack (Frontend, Backend, MongoDB, and Persistent Storage) locally or in a cluster.
+This project includes Kubernetes configurations to run the entire stack (Frontend, Backend, MongoDB, Redis, and Persistent Storage) locally or in a cluster.
 
 ### 📁 Kubernetes Files Structure
 All files are located in the `kubernetes/` folder:
@@ -330,6 +330,7 @@ All files are located in the `kubernetes/` folder:
 - `namespace.yml` - Defines the isolated `sai-app` namespace.
 - `mongodb-pv.yml` & `mongodb-pvc.yml` - Local persistent storage configuration for MongoDB.
 - `mongodb-deployment.yml` & `mongodb-service.yml` - MongoDB service and state.
+- `redis.yml` - Local Redis in-memory data structure store for caching and rate-limiting.
 - `backend-configmap.yml` & `secretes.example.yml` - Backend environment settings.
 - `backend-deployment.yml` & `backend-service.yml` - Node.js Express server.
 - `frontend-deployment.yml` & `frontend-service.yml` - Nginx static server and api proxy.

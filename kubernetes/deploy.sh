@@ -26,6 +26,7 @@ if [ "$1" == "--delete" ]; then
     kubectl delete -f "$SCRIPT_DIR/backend-service.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/mongodb-deployment.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/mongodb-service.yml" --ignore-not-found
+    kubectl delete -f "$SCRIPT_DIR/redis.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/mongodb-pvc.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/mongodb-pv.yml" --ignore-not-found
     kubectl delete -f "$SCRIPT_DIR/backend-configmap.yml" --ignore-not-found
@@ -57,9 +58,10 @@ echo "[3/7] Applying Persistent Storage..."
 kubectl apply -f "$SCRIPT_DIR/mongodb-pv.yml"
 kubectl apply -f "$SCRIPT_DIR/mongodb-pvc.yml"
 
-echo "[4/7] Applying MongoDB Service and Deployment..."
+echo "[4/7] Applying Database Services (MongoDB & Redis)..."
 kubectl apply -f "$SCRIPT_DIR/mongodb-service.yml"
 kubectl apply -f "$SCRIPT_DIR/mongodb-deployment.yml"
+kubectl apply -f "$SCRIPT_DIR/redis.yml"
 
 echo "[5/7] Applying Backend Service and Deployment..."
 kubectl apply -f "$SCRIPT_DIR/backend-service.yml"

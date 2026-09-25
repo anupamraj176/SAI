@@ -19,7 +19,6 @@ spec:
       containers:
         - name: backend-container
           image: anupamraj176/sai-backend:latest
-          command: ["tail", "-f", "/dev/null"]
 
           ports:
             - containerPort: 5001
