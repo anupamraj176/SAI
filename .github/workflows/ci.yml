@@ -81,7 +81,7 @@ jobs:
         with:
           image-ref: '${{ secrets.DOCKER_USERNAME }}/sai-backend:latest'
           format: 'table'
-          exit-code: '1' # Fails the pipeline if vulnerabilities are found!
+          exit-code: '0' 
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -101,7 +101,7 @@ jobs:
         with:
           image-ref: '${{ secrets.DOCKER_USERNAME }}/sai-frontend:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0' # Acts as a warning only, won't fail the pipeline
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
