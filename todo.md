@@ -23,6 +23,7 @@ This document tracks the system design concepts to be implemented in the FarmerH
 
 ## Phase 4: Infrastructure as Code (Terraform)
 - [ ] **AWS Provider & State Setup**: Configure the AWS provider and create an S3 bucket to store your `terraform.tfstate` file securely in the cloud (enterprise best practice).
+- [ ] **S3 Image Storage Bucket**: Write Terraform code (`s3.tf`) to create a public/private S3 bucket to replace your current Cloudinary setup for product image uploads.
 - [ ] **EC2 Provisioning (`main.tf`)**: Write Terraform code to completely automate the creation of an Ubuntu EC2 instance instead of clicking through the AWS Console.
 - [ ] **Automated Security Groups**: Write Terraform rules to automatically open ports `80` (Frontend), `5001` (Backend), and `22` (SSH) for your server.
 - [ ] **Server Bootstrapping (`user_data`)**: Add a bash script to your Terraform configuration that automatically installs Docker and Docker Compose the exact second the EC2 instance boots up.
