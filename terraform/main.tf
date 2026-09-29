@@ -26,6 +26,10 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 # 3. Attach a policy that allows anyone on the internet to read (GET) the images
 resource "aws_s3_bucket_policy" "allow_public_read" {
   bucket = aws_s3_bucket.product_images.id
+  
+  # Tell Terraform to WAIT until the public access block is removed!
+  depends_on = [aws_s3_bucket_public_access_block.public_access]
+  
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -39,6 +43,7 @@ resource "aws_s3_bucket_policy" "allow_public_read" {
     ]
   })
 }
+
 
 # 4. Output the bucket name so you know what it is called!
 output "s3_bucket_name" {
