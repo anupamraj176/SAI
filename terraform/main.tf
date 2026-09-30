@@ -1,51 +1,81 @@
-# Configure the AWS Provider
-provider "aws" {
-  region = "ap-south-1" # Mumbai Region
+# ==========================================
+# 5. AUTOMATED SECURITY GROUPS
+# ==========================================
+resource "aws_security_group" "server_sg" {
+  name        = "farmerhub_web_sg"
+  description = "Allow HTTP, SSH, and Backend ports"
+
+  # Allow HTTP (Frontend)
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow Custom Backend Port
+  ingress {
+    from_port   = 5001
+    to_port     = 5001
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow SSH (For you to log in)
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow all outgoing internet traffic (so the server can download Docker)
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
-# 1. Create the S3 Bucket for Product Images
-resource "aws_s3_bucket" "product_images" {
-  bucket = "sai-farmerhub-images-${random_id.bucket_id.hex}"
+# ==========================================
+# 6. EC2 PROVISIONING & SERVER BOOTSTRAPPING
+# ==========================================
+
+# Dynamically find the latest Ubuntu 22.04 Image in AWS
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Official Canonical account ID
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
 }
 
-# Generate a random ID so your bucket name is globally unique
-resource "random_id" "bucket_id" {
-  byte_length = 4
-}
-
-# 2. Make the bucket public so the Frontend can see the images
-resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket = aws_s3_bucket.product_images.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
-
-# 3. Attach a policy that allows anyone on the internet to read (GET) the images
-resource "aws_s3_bucket_policy" "allow_public_read" {
-  bucket = aws_s3_bucket.product_images.id
+# Create the EC2 Server
+resource "aws_instance" "farmerhub_server" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro" # Free Tier!
   
-  # Tell Terraform to WAIT until the public access block is removed!
-  depends_on = [aws_s3_bucket_public_access_block.public_access]
-  
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject"
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.product_images.arn}/*"
-      },
-    ]
-  })
+  # Attach the Security Group we just made
+  vpc_security_group_ids = [aws_security_group.server_sg.id]
+
+  # Server Bootstrapping: Run this bash script the second the server turns on
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt-get update -y
+              sudo apt-get install -y docker.io docker-compose
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker ubuntu
+              EOF
+
+  tags = {
+    Name = "SAI-FarmerHub-Production-Server"
+  }
 }
 
-
-# 4. Output the bucket name so you know what it is called!
-output "s3_bucket_name" {
-  value = aws_s3_bucket.product_images.bucket
+# Output the public IP address of your new server!
+output "ec2_public_ip" {
+  value = aws_instance.farmerhub_server.public_ip
 }

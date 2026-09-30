@@ -3,14 +3,14 @@
 This document tracks the system design concepts to be implemented in the FarmerHub project to demonstrate advanced architectural knowledge.
 
 ## Phase 1: Core System Design
-- [ ] **Caching Strategy (Redis)**: Implement Cache-aside for the `GET /api/products` endpoint.
-- [ ] **Message Queues (RabbitMQ/BullMQ)**: Offload order processing (emails, inventory update) to background workers.
-- [ ] **Rate Limiting**: Implement a custom Token Bucket or Sliding Window rate limiter using Redis to protect the `/api/auth/login` and AI endpoints.
-- [ ] **Circuit Breaker**: Add resilience to the Gemini AI API integration using the `opossum` library.
-- [ ] **Database Indexing**: Add compound indexes for marketplace search and implement cursor-based pagination.
+- [x] **Caching Strategy (Redis)**: Implement Cache-aside for the `GET /api/products` endpoint.
+- [x] **Message Queues (RabbitMQ/BullMQ)**: Offload order processing (emails, inventory update) to background workers.
+- [x] **Rate Limiting**: Implement a custom Token Bucket or Sliding Window rate limiter using Redis to protect the `/api/auth/login` and AI endpoints.
+- [x] **Circuit Breaker**: Add resilience to the Gemini AI API integration using the `opossum` library.
+- [x] **Database Indexing**: Add compound indexes for marketplace search and implement cursor-based pagination.
 
 ## Phase 2: Advanced Concepts
-- [ ] **Bloom Filter**: Implement a Bloom Filter to instantly check if an email/username is available during registration without hitting MongoDB.
+- [x] **Bloom Filter**: Implement a Bloom Filter to instantly check if an email/username is available during registration without hitting MongoDB.
 - [ ] **Real-time Pub/Sub**: Use `Socket.io` or Redis Pub/Sub to push real-time order status updates to the consumer's dashboard.
 - [ ] **Message Streams (Kafka/Redis Streams)**: Build a live "recent activity" feed for the Admin dashboard (e.g., "Farmer X just joined", "Order Y placed").
 - [ ] **CQRS (Command Query Responsibility Segregation)**: Separate the product write model (MongoDB) from the product search read model (e.g., sync products to Elasticsearch or a dedicated Redis search index).
