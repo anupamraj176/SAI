@@ -65,3 +65,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 .terraform.lock.hcl
+PROJECT_INTERVIEW_CONTEXT.md
+scratch_questions.txt
