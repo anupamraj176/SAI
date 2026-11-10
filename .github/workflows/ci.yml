@@ -264,11 +264,19 @@ jobs:
               --restart unless-stopped \
               "${FRONTEND_IMAGE}"
 
-            curl -fsS http://127.0.0.1/ >/dev/null || {
-              echo "Frontend health check failed!"
-              sudo docker logs --tail 30 sai-frontend || true
-              exit 1
-            }
+            echo "Waiting for frontend health check..."
+            for i in $(seq 1 15); do
+              if curl -fsS http://127.0.0.1/ >/dev/null 2>&1; then
+                echo "Frontend is healthy!"
+                break
+              fi
+              if [ "$i" -eq 15 ]; then
+                echo "Frontend health check failed!"
+                sudo docker logs --tail 30 sai-frontend || true
+                exit 1
+              fi
+              sleep 2
+            done
 
             sudo docker image prune -f >/dev/null 2>&1 || true
             echo "Successfully deployed ${IMAGE_TAG} to Production!"
