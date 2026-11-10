@@ -32,6 +32,11 @@ variable "ssh_public_key" {
   description = "Optional SSH public key content to create an EC2 key pair for SSH and GitHub Actions deploy"
   type        = string
   default     = ""
+
+  validation {
+    condition     = var.ssh_public_key == "" || can(regex("^(ssh-(ed25519|rsa)|ecdsa-sha2-)", trimspace(var.ssh_public_key)))
+    error_message = "ssh_public_key must be empty or a valid OpenSSH public key starting with ssh-ed25519, ssh-rsa, or ecdsa-sha2-."
+  }
 }
 
 variable "existing_key_name" {
