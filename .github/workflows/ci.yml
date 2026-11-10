@@ -177,7 +177,8 @@ jobs:
 
   aws-deploy:
     name: Deploy to AWS EC2
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Set repository variable ENABLE_EC2_DEPLOY=true once the new AWS EC2 secrets are configured
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_EC2_DEPLOY == 'true'
     needs: docker-publish
     runs-on: ubuntu-latest
     steps:
