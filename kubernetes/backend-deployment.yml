@@ -3,26 +3,32 @@ kind: Deployment
 metadata:
   name: backend-deployment
   namespace: sai-app
-
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: backend
-
   template:
     metadata:
       labels:
         app: backend
-
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5001"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
         - name: backend-container
           image: anupamraj176/sai-backend:latest
-
           ports:
             - containerPort: 5001
-
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           resources:
             requests:
               cpu: "100m"
@@ -30,13 +36,25 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
-
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5001
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5001
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
           env:
-            - name: MONGODB_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: MONGODB_URL
+            - name: PORT
+              value: "5001"
             - name: CLIENT_URL
               valueFrom:
                 configMapKeyRef:
@@ -47,21 +65,11 @@ spec:
                 configMapKeyRef:
                   name: backend-config
                   key: CORS_ORIGINS
-            - name: JWT_SECRET
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: JWT_SECRET
             - name: CLOUD_NAME
               valueFrom:
                 configMapKeyRef:
                   name: backend-config
                   key: CLOUD_NAME
-            - name: API_KEY
-              valueFrom:
-                configMapKeyRef:
-                  name: backend-config
-                  key: API_KEY
             - name: EMAIL_USER
               valueFrom:
                 configMapKeyRef:
@@ -87,8 +95,21 @@ spec:
                 configMapKeyRef:
                   name: backend-config
                   key: NODE_ENV
-            - name: PORT
-              value: "5001"
+            - name: MONGODB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sai-secret
+                  key: MONGODB_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sai-secret
+                  key: JWT_SECRET
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sai-secret
+                  key: API_KEY
             - name: API_SECRET
               valueFrom:
                 secretKeyRef:
@@ -134,5 +155,3 @@ spec:
                 secretKeyRef:
                   name: sai-secret
                   key: AWS_S3_BUCKET_NAME
-
-  

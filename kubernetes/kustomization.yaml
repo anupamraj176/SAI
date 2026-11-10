@@ -4,11 +4,11 @@ kind: Kustomization
 resources:
   - namespace.yml
   - backend-configmap.yml
-  - secretes.example.yml
+  - secrets.example.yml
   - mongodb-pv.yml
   - mongodb-pvc.yml
   - mongodb-service.yml
-  - mongodb-deployment.yml
+  - mongodb-statefulset.yml
   - redis.yml
   - backend-service.yml
   - backend-deployment.yml
@@ -16,3 +16,4 @@ resources:
   - frontend-deployment.yml
   - hpa.yml
   - ingress.yml
+  - monitoring.yml

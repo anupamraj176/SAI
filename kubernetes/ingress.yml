@@ -5,22 +5,25 @@ metadata:
   namespace: sai-app
   labels:
     app: sai-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
+  ingressClassName: nginx
   rules:
-  - host: sai-app.local
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: frontend
-            port: 
-              number: 80
-      - pathType: Prefix
-        path: "/api"
-        backend:
-          service:
-            name: backend
-            port: 
-              number: 5001
+    - host: sai-app.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: /api
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5001
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

@@ -23,6 +23,7 @@ import { fileURLToPath } from "url";
 import { startKeepAlive } from "./utils/keepAlive.js";
 import "./workers/emailWorker.js"; 
 import { initializeBloomFilter } from "./utils/bloomFilter.js";
+import { metricsMiddleware, metricsHandler } from "./utils/metrics.js";
 
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use(helmet({
     contentSecurityPolicy: false, // Allow leaflet map tiles and cloudinary assets
 }));
 app.use(compression());
+app.use(metricsMiddleware);
 
 // Auth Rate Limiting to prevent brute-force attacks
 const authLimiter = rateLimit({
@@ -113,6 +115,8 @@ app.get(["/health", "/api/health"], (req, res) => {
         uptime: process.uptime()
     });
 });
+
+app.get("/metrics", metricsHandler);
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/products", productRoutes);

@@ -49,6 +49,7 @@ coverage/
 .tmp/
 
 # Kubernetes local secrets
+kubernetes/secrets.yml
 kubernetes/secretes.yml
 # Terraform
 .terraform/
