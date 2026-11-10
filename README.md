@@ -33,7 +33,7 @@
 
 ## 🌍 Live Deployments
 
-- **AWS EC2 (Full Stack)**: [http://ec2-3-7-55-93.ap-south-1.compute.amazonaws.com](http://ec2-3-7-55-93.ap-south-1.compute.amazonaws.com)
+- **AWS EC2 (Full Stack)**: [http://ec2-54-252-212-204.ap-southeast-2.compute.amazonaws.com](http://ec2-54-252-212-204.ap-southeast-2.compute.amazonaws.com)
 - **Vercel (Frontend)**: [https://farmerhub-henna.vercel.app](https://farmerhub-henna.vercel.app)
 - **Render (Backend API)**: [https://sai-backend-3upn.onrender.com](https://sai-backend-3upn.onrender.com)
 
