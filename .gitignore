@@ -67,3 +67,6 @@ terraform.rc
 .terraform.lock.hcl
 PROJECT_INTERVIEW_CONTEXT.md
 scratch_questions.txt
+
+QUIZ_PLATFORM_INTERVIEW_CONTEXT.md
+PRODUCTION_ROADMAP.md
