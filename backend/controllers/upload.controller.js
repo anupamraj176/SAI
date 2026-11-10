@@ -9,11 +9,15 @@ const __dirname = path.dirname(__filename);
 
 // Initialize the AWS S3 Client
 const s3 = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    }
+    region: process.env.AWS_REGION || "ap-south-1",
+    ...(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
+        ? {
+            credentials: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            },
+        }
+        : {}),
 });
 
 // Helper: validate file type
@@ -123,5 +127,48 @@ export const audioUpload = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Audio upload failed", error: error.message });
+    }
+};
+
+export const imageReducerUpload = async (req, res) => {
+    try {
+        if (!req.files || !req.files.imageFile) {
+            return res.status(400).json({ success: false, message: "No image uploaded" });
+        }
+
+        const file = req.files.imageFile;
+        const supportedTypes = ["jpg", "jpeg", "png", "webp"];
+        const fileType = file.name.split(".").pop().toLowerCase();
+
+        if (!isFileTypeSupported(fileType, supportedTypes)) {
+            return res.status(400).json({ success: false, message: "File format not supported" });
+        }
+
+        const reducedBuffer = await sharp(file.tempFilePath)
+            .resize({ width: 800, withoutEnlargement: true })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+
+        const baseName = path.parse(file.name).name;
+        const fileName = `SAI/Images_Reduced/${Date.now()}-${baseName}.jpg`;
+
+        await s3.send(new PutObjectCommand({
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: fileName,
+            Body: reducedBuffer,
+            ContentType: "image/jpeg",
+        }));
+
+        const imageUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION || "ap-south-1"}.amazonaws.com/${fileName}`;
+
+        res.status(200).json({
+            success: true,
+            message: "Reduced image uploaded successfully",
+            imageUrl,
+            publicId: imageUrl,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Reduced upload failed", error: error.message });
     }
 };
