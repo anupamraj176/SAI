@@ -75,7 +75,7 @@ jobs:
           retention-days: 7
 
   infra-validate:
-    name: Validate Docker Compose Config
+    name: Validate Docker Compose, K8s & Terraform
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -86,6 +86,22 @@ jobs:
 
       - name: Validate Docker Compose Syntax
         run: docker compose config -q
+
+      - name: Validate Kubernetes Kustomize Manifests
+        run: kubectl kustomize kubernetes/ > /dev/null
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Format Check
+        run: terraform -chdir=terraform fmt -check -recursive
+
+      - name: Terraform Init & Validate
+        run: |
+          terraform -chdir=terraform init -backend=false
+          terraform -chdir=terraform validate
 
   docker-publish:
     name: Scan & Publish Docker Images

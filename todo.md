@@ -22,8 +22,8 @@ This document tracks the system design concepts to be implemented in the FarmerH
 - [x] **Blob Storage (S3)**: Migrate image uploads from Cloudinary to AWS S3 using pre-signed URLs.
 
 ## Phase 4: Infrastructure as Code (Terraform)
-- [ ] **AWS Provider & State Setup**: Configure the AWS provider and create an S3 bucket to store your `terraform.tfstate` file securely in the cloud (enterprise best practice).
-- [x] **S3 Image Storage Bucket**: Write Terraform code (`s3.tf`) to create a public/private S3 bucket to replace your current Cloudinary setup for product image uploads.
-- [ ] **EC2 Provisioning (`main.tf`)**: Write Terraform code to completely automate the creation of an Ubuntu EC2 instance instead of clicking through the AWS Console.
-- [ ] **Automated Security Groups**: Write Terraform rules to automatically open ports `80` (Frontend), `5001` (Backend), and `22` (SSH) for your server.
-- [ ] **Server Bootstrapping (`user_data`)**: Add a bash script to your Terraform configuration that automatically installs Docker and Docker Compose the exact second the EC2 instance boots up.
+- [ ] **AWS Provider & State Setup**: Configure the AWS provider and create an S3 bucket to store your `terraform.tfstate` file securely in the cloud (remote `backend "s3"` template ready in `terraform/versions.tf` — uncomment after bootstrapping the state bucket in your new AWS account).
+- [x] **S3 Image Storage Bucket**: Write Terraform code (`terraform/s3.tf`) to create a versioned, encrypted S3 bucket with CORS and public media read policy.
+- [x] **EC2 Provisioning & IAM (`terraform/ec2.tf`, `terraform/iam.tf`)**: Automate Ubuntu 24.04 EC2 provisioning with IMDSv2 enforced and a least-privilege IAM instance profile for S3 uploads.
+- [x] **Automated Security Groups**: Write Terraform rules (`terraform/ec2.tf`) for ports `80` (HTTP), `443` (HTTPS), `5001` (Backend), and `22` (SSH).
+- [x] **Server Bootstrapping (`user_data`)**: Automatically install Docker and Docker Compose (`docker-compose-v2`) when the EC2 instance boots.

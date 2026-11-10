@@ -326,27 +326,29 @@ This project includes Kubernetes configurations to run the entire stack (Fronten
 ### 📁 Kubernetes Files Structure
 All files are located in the `kubernetes/` folder:
 - `deploy.ps1` & `deploy.sh` - Automated deployment, teardown, and status scripts (PowerShell & Bash).
-- `kustomization.yaml` - Kustomize manifest for single-command `kubectl apply -k`.
+- `kustomization.yaml` - Kustomize manifest for single-command `kubectl apply -k ./kubernetes`.
 - `namespace.yml` - Defines the isolated `sai-app` namespace.
 - `mongodb-pv.yml` & `mongodb-pvc.yml` - Local persistent storage configuration for MongoDB.
-- `mongodb-deployment.yml` & `mongodb-service.yml` - MongoDB service and state.
-- `redis.yml` - Local Redis in-memory data structure store for caching and rate-limiting.
-- `backend-configmap.yml` & `secretes.example.yml` - Backend environment settings.
-- `backend-deployment.yml` & `backend-service.yml` - Node.js Express server.
-- `frontend-deployment.yml` & `frontend-service.yml` - Nginx static server and api proxy.
-- `ingress.yml` - Nginx Ingress Controller routing rules (optional).
+- `mongodb-statefulset.yml` & `mongodb-service.yml` - MongoDB StatefulSet and service.
+- `redis.yml` - Redis 7 Alpine cache and rate-limiting store.
+- `backend-configmap.yml` & `secrets.example.yml` - Non-secret config and secret template.
+- `backend-deployment.yml` & `backend-service.yml` - Node.js Express server with `/api/health` probes and `/metrics` annotations.
+- `frontend-deployment.yml` & `frontend-service.yml` - Nginx static server and API proxy.
+- `monitoring.yml` - Prometheus pod scraping (`sai-app`) and pre-provisioned Grafana datasource.
+- `hpa.yml` - HorizontalPodAutoscaler scaling backend pods at 60% CPU utilization.
+- `ingress.yml` - Nginx Ingress Controller routing rules (`/api` and `/`).
 
 ### 🚀 Getting Started with Kubernetes
 
 #### 1. Setup Local Secrets
 Before applying your Kubernetes files, create a copy of the secret template:
 ```powershell
-cp ./kubernetes/secretes.example.yml ./kubernetes/secretes.yml
+cp ./kubernetes/secrets.example.yml ./kubernetes/secrets.yml
 ```
-*Note: `kubernetes/secretes.yml` is ignored by Git in `.gitignore` to prevent leaking passwords to GitHub. Update `kubernetes/secretes.yml` with your real Gemini, Gmail, Cloudinary, and Razorpay API secrets before proceeding.*
+*Note: `kubernetes/secrets.yml` is ignored by Git in `.gitignore` to prevent leaking passwords to GitHub. Update `kubernetes/secrets.yml` with your MongoDB, Redis, JWT, Gemini, Gmail, Cloudinary, AWS S3, and Razorpay secrets before proceeding.*
 
 #### 2. Deploy Everything to Cluster
-You can deploy all resources using automated scripts, NPM commands, or a single `kubectl` command:
+You can deploy all resources using automated scripts, NPM commands, or Kustomize:
 
 ##### **Option A: Automated Scripts (Recommended)**
 ```powershell
@@ -362,9 +364,9 @@ You can deploy all resources using automated scripts, NPM commands, or a single 
 npm run k8s:deploy
 ```
 
-##### **Option C: Single-Command kubectl**
+##### **Option C: Single-Command Kustomize**
 ```powershell
-kubectl apply -f .\kubernetes\
+kubectl apply -k .\kubernetes\
 ```
 
 *Note: To teardown or remove all deployed resources later, run `.\kubernetes\deploy.ps1 -Delete` or `npm run k8s:delete`.*
@@ -388,38 +390,24 @@ kubectl port-forward svc/frontend -n sai-app 30080:80
 - Open [http://localhost:30080](http://localhost:30080) in your web browser.
 - Login, signup, products, and support tickets will route and function correctly.
 
-*(Optional)* If you want to check backend status directly:
+*(Optional)* If you want to check backend status or Prometheus metrics directly:
 ```powershell
 kubectl port-forward svc/backend -n sai-app 5001:5001
 ```
-Then visit [http://localhost:5001/api/auth/check-auth](http://localhost:5001/api/auth/check-auth) to check API status.
+Then visit [http://localhost:5001/api/health](http://localhost:5001/api/health) or [http://localhost:5001/metrics](http://localhost:5001/metrics).
 
-#### 5. Enterprise Monitoring (Helm & Grafana)
-This project uses the `kube-prometheus-stack` to provide enterprise-grade observability, including CPU/Memory utilization and pod health tracking.
+#### 5. Observability (Prometheus & Grafana)
+The backend exposes `prom-client` metrics on `/metrics` (`farmerhub_http_requests_total`, `farmerhub_http_request_duration_seconds`, and Node process metrics), and `kubernetes/monitoring.yml` deploys Prometheus (auto-discovering annotated `sai-app` pods) and Grafana (auto-configured with the Prometheus datasource).
 
-**1. Install the Monitoring Stack via Helm:**
+Access the dashboards via port-forward (or NodePort `30090` / `30030`):
 ```powershell
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install my-kube-prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+kubectl port-forward svc/prometheus-service 9090:9090 -n sai-app
+kubectl port-forward svc/grafana-service 3000:3000 -n sai-app
 ```
-
-**2. Access the Grafana Dashboard:**
-Wait for the pods to fully start, then port-forward the Grafana service:
-```powershell
-kubectl port-forward svc/my-kube-prometheus-grafana 3000:80 -n monitoring
-```
-Visit `http://localhost:3000` in your browser.
-
-**3. Retrieve the Auto-Generated Admin Password:**
-The Helm chart generates a secure, randomized password. Fetch it directly from the Kubernetes secret vault using this PowerShell command:
-```powershell
-$encoded = kubectl get secret my-kube-prometheus-grafana -n monitoring -o jsonpath="{.data.admin-password}"; [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encoded))
-```
-*(Username is `admin`)*
+Visit `http://localhost:9090` (Prometheus) and `http://localhost:3000` (Grafana).
 
 #### 6. Horizontal Pod Autoscaling (HPA)
-The cluster is configured to automatically scale the backend pods if CPU utilization exceeds 50%.
+The cluster is configured to automatically scale the backend pods (`1` to `5` replicas) if CPU utilization exceeds `60%`.
 **1. Enable Metrics Server (Minikube):**
 ```powershell
 minikube addons enable metrics-server
@@ -435,6 +423,29 @@ kubectl run load-generator --image=busybox:1.28 --restart=Never -n sai-app -- /b
 ```
 Monitor the autoscaling in real-time by running `kubectl get pods -n sai-app -w`.
 To stop the stress test: `kubectl delete pod load-generator -n sai-app`
+
+---
+
+## 🏗️ Infrastructure as Code (Terraform on AWS)
+
+All AWS infrastructure definitions live in `terraform/`:
+- `versions.tf` & `providers.tf` - Terraform version, AWS provider (`~> 6.0`), and optional S3 remote state backend template.
+- `variables.tf` & `terraform.tfvars.example` - Configurable region, instance type, SSH CIDR, key pair, and CORS origins.
+- `s3.tf` - Encrypted, versioned S3 bucket for product media with CORS and read-only `SAI/*` bucket policy.
+- `iam.tf` - Least-privilege EC2 IAM Role and Instance Profile scoped to the media S3 bucket.
+- `ec2.tf` - Security group (`80`, `443`, `5001`, `22`), Ubuntu 24.04 EC2 instance with IMDSv2 enforced, encrypted `gp3` volume, and Docker bootstrap `user_data`.
+- `outputs.tf` - Outputs bucket name, EC2 public IP/DNS, and IAM role ARN.
+
+### Provisioning on a New AWS Account
+1. Configure AWS CLI credentials for your new account (`aws configure`).
+2. Copy `terraform/terraform.tfvars.example` to `terraform/terraform.tfvars` and add your SSH public key and IP CIDR.
+3. Initialize, review, and apply:
+   ```bash
+   terraform -chdir=terraform init
+   terraform -chdir=terraform plan
+   terraform -chdir=terraform apply
+   ```
+4. Update GitHub repository secrets (`EC2_HOST`, `EC2_USERNAME=ubuntu`, `EC2_SSH_KEY`) and set repository variable `ENABLE_EC2_DEPLOY=true` to activate automated EC2 deployments in `.github/workflows/ci.yml`.
 
 ---
 
